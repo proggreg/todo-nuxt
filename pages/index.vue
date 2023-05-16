@@ -1,7 +1,6 @@
 <template>
     <div>
-      
-      <div>Nuxt Vite PWA</div>
+      <v-card text="..." variant="outlined"></v-card>
     </div>
   </template>
   

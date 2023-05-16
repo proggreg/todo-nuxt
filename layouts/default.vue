@@ -1,17 +1,66 @@
+import { ref } from 'vue'
 <script setup>
 // you don't need this: only for testing purposes
 const date = useAppConfig().buildDate
+
+
+var theme = ref("dark");
+
+function toggleDarkMode(params) {
+  console.log('toggleDarkMode')
+  if (theme.value === 'light') {
+    theme.value = 'dark'
+  } else {
+    theme.value = 'light'
+  }
+ }
 </script>
 
 <template>
   <main>
-    <slot />
-    <footer>Built Date: {{ date }}</footer>
-    <ClientOnly>
-      <div
+    <v-theme-provider :theme="theme" with-background class="pa-10">
+    <v-app :full-height="true">
+    <v-app-bar :elevation="0">
+      <v-btn class="btn" to="/">
+      <v-app-bar-title>Proggreg</v-app-bar-title>
+    </v-btn>
+    <NuxtLink v-slot="{ navigate }" to="/about" custom>
+      <v-btn @click="navigate">
+          about
+      </v-btn>
+    </NuxtLink>
+      
+    <template v-slot:append>
+      <v-switch label="Switch" inset @click="toggleDarkMode"></v-switch>
+    </template>
+  </v-app-bar>
+    <v-main>
+      <v-container full-height>
+        <slot />
+    </v-container>
+  </v-main>
+    <!-- <v-bottom-navigation :elevation="0" grow>
+  <v-btn value="recent">
+    <v-icon>mdi-history</v-icon>
+
+    Recent
+  </v-btn>
+
+  <v-btn value="favorites">
+    <v-icon>mdi-heart</v-icon>
+
+    Favorites
+  </v-btn>
+
+  <v-btn value="nearby">
+    <v-icon>mdi-map-marker</v-icon>
+
+    Nearby
+  </v-btn>
+</v-bottom-navigation> -->
+<ClientOnly>
+      <v-card
         v-if="$pwa?.offlineReady || $pwa?.needRefresh"
-        class="pwa-toast"
-        role="alert"
       >
         <div class="message">
           <span v-if="$pwa.offlineReady">
@@ -30,8 +79,8 @@ const date = useAppConfig().buildDate
         <button @click="$pwa.cancelPrompt()">
           Close
         </button>
-      </div>
-      <div
+      </v-card>
+      <v-card
         v-if="$pwa?.showInstallPrompt && !$pwa?.offlineReady && !$pwa?.needRefresh"
         class="pwa-toast"
         role="alert"
@@ -41,14 +90,18 @@ const date = useAppConfig().buildDate
             Install PWA
           </span>
         </div>
-        <button @click="$pwa.install()">
+        <v-btn @click="$pwa.install()">
           Install
-        </button>
-        <button @click="$pwa.cancelInstall()">
+        </v-btn>
+        <v-btn variant="tonal" @click="$pwa.cancelInstall()">
           Cancel
-        </button>
-      </div>
+        </v-btn>
+      </v-card>
     </ClientOnly>
+  </v-app>
+</v-theme-provider>
+ 
+  
   </main>
 </template>
 
@@ -63,7 +116,6 @@ const date = useAppConfig().buildDate
   border-radius: 4px;
   z-index: 1;
   text-align: left;
-  box-shadow: 3px 4px 5px 0 #8885;
 }
 .pwa-toast .message {
   margin-bottom: 8px;

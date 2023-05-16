@@ -8,9 +8,16 @@
     "postinstall": "nuxt prepare"
   },
   "devDependencies": {
-    "nuxt": "^3.0.0"
+    "@nuxt/eslint-config": "^0.1.1",
+    "@nuxtjs/eslint-module": "^4.0.2",
+    "eslint": "^8.40.0",
+    "eslint-config-prettier": "^8.8.0",
+    "eslint-plugin-prettier": "^4.2.1",
+    "nuxt": "^3.0.0",
+    "prettier": "^2.8.8"
   },
   "dependencies": {
+    "@invictus.codes/nuxt-vuetify": "^0.2.20",
     "@vite-pwa/nuxt": "^0.0.7"
   }
 }
