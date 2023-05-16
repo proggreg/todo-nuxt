@@ -1,6 +1,10 @@
 <template>
     <div>
-      <v-card text="..." variant="outlined"></v-card>
+      <NuxtLink v-slot="{ navigate }" to="/todo" custom>
+        <v-card @click="navigate" text="Todo" variant="outlined"></v-card>
+    </NuxtLink>
+      
+
     </div>
   </template>
   
