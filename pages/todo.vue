@@ -15,7 +15,9 @@ if (process.client) {
 const lists = reactive(listsArr);
 function newList() {
   console.log("new list");
-  lists.push({});
+  lists.push({
+    tasks: []
+  });
   cacheLists();
 }
 function deleteList(index) {
@@ -28,9 +30,7 @@ function addTask(list) {
   if (!list.tasks) {
     list.tasks = reactive([]);
   }
-  list.tasks.push({
-    name: "task",
-  });
+  list.tasks.push({});
   cacheLists();
 }
 
@@ -51,44 +51,65 @@ function showDesc(task) {
 </script>
 
 <template>
+  <v-container>
+    <v-row>
+      <v-col col="12">
   <v-card :variant="variant">
     <v-card-title>Todo List</v-card-title>
     <v-card-actions>
       <v-btn variant="outlined" @click="newList">New List</v-btn>
     </v-card-actions>
   </v-card>
-
-  <v-card
-    v-for="(list, index) in lists"
-    v-if="lists"
-    :key="index"
-    :variant="variant"
-  >
+</v-col>
+</v-row>
+  <v-row v-for="(list, index) in lists">
+    <v-col>
+      <v-card>
+      <v-list 
+        :items="list.tasks"
+        :key="index"
+        :variant="variant"
+        rounded
+        :opened="list.opened"
+      >
     <v-cart-title>
-      <v-text-field v-model="list.name" @input="cacheLists"></v-text-field>
+      <v-text-field v-model="list.name" placeholder="My List" @input="cacheLists()"></v-text-field>
     </v-cart-title>
-    <v-card v-for="(task, index) in list.tasks" variant="outlined">
-      <v-cart-title>
-        <v-text-field
-          v-model="task.name"
-          placeholder="My Task"
-          @input="cacheLists"
-        ></v-text-field>
-      </v-cart-title>
-
-      <v-card-text>
-        <!-- <v-icon @click="showDesc(task)">mdi-plus</v-icon> -->
-        <!-- <v-textarea v-if="task.showDescription" clearable label="" variant="solo-inverted"></v-textarea> -->
-      </v-card-text>
-      <v-checkbox></v-checkbox>
-      <v-card-actions>
-        <v-btn color="secondary" @click="deleteTask(list, index)">Delete</v-btn>
-      </v-card-actions>
-    </v-card>
+  <v-list-group value="list.tasks">
+    <template v-slot:activator="{ props }">
+          <v-list-item
+            v-bind="props"
+            prepend-icon="mdi-checkbox-multiple-marked-outline"
+          >
+          Tasks {{list.tasks.length }}
+        </v-list-item>
+        </template>
+        <v-list-item v-for="(task, index) in list.tasks">
+          <v-list-item-title>
+            <v-text-field
+            v-model="task.name"
+            placeholder="My Task"
+            variant="underlined"
+            @input="cacheLists"
+          >        
+          <template v-slot:append>
+            <v-checkbox density="compact" v-model="task.done" @change="cacheLists()"></v-checkbox>
+          </template>
+          </v-text-field>
+        </v-list-item-title>
+      </v-list-item>
+      <v-list-item>
+        <v-btn color="primary" @click="addTask(list)">New Task</v-btn>
+      </v-list-item>
+    </v-list-group>
+    
     <v-card-actions>
-      <v-btn color="primary" @click="addTask(list)">New Task</v-btn>
       <v-btn color="secondary" @click="deleteList(index)">Delete</v-btn>
     </v-card-actions>
-    <v-col> </v-col>
-  </v-card>
+    
+  </v-list>
+</v-card>
+</v-col>
+</v-row>
+</v-container>
 </template>
