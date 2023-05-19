@@ -18,8 +18,9 @@ function toggleDarkMode(params) {
 
 <template>
   <main>
-    <v-theme-provider :theme="theme" with-background class="pa-10">
+    <v-theme-provider :theme="theme" with-background>
     <v-app :full-height="true">
+      <v-layout>
     <v-app-bar :elevation="0">
       <v-btn class="btn" to="/">
       <v-app-bar-title>Proggreg</v-app-bar-title>
@@ -34,11 +35,13 @@ function toggleDarkMode(params) {
       <v-switch label="Switch" inset @click="toggleDarkMode"></v-switch>
     </template>
   </v-app-bar>
-    <v-main>
-      <v-container full-height>
-        <slot />
-    </v-container>
-  </v-main>
+    
+      <v-main>
+        <v-container>
+        <slot />  
+      </v-container>
+      </v-main>
+  
     <!-- <v-bottom-navigation :elevation="0" grow>
   <v-btn value="recent">
     <v-icon>mdi-history</v-icon>
@@ -98,6 +101,7 @@ function toggleDarkMode(params) {
         </v-btn>
       </v-card>
     </ClientOnly>
+  </v-layout>
   </v-app>
 </v-theme-provider>
  

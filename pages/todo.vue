@@ -51,8 +51,7 @@ function showDesc(task) {
 </script>
 
 <template>
-  <v-container>
-    <v-row>
+    <v-row dense>
       <v-col col="12">
   <v-card :variant="variant">
     <v-card-title>Todo List</v-card-title>
@@ -62,7 +61,7 @@ function showDesc(task) {
   </v-card>
 </v-col>
 </v-row>
-  <v-row v-for="(list, index) in lists">
+  <v-row v-for="(list, index) in lists" :key="index">
     <v-col>
       <v-card>
       <v-list 
@@ -75,7 +74,7 @@ function showDesc(task) {
     <v-cart-title>
       <v-text-field v-model="list.name" placeholder="My List" @input="cacheLists()"></v-text-field>
     </v-cart-title>
-  <v-list-group value="list.tasks">
+  <v-list-group value="list.tasks" fluid>
     <template v-slot:activator="{ props }">
           <v-list-item
             v-bind="props"
@@ -84,7 +83,7 @@ function showDesc(task) {
           Tasks {{list.tasks.length }}
         </v-list-item>
         </template>
-        <v-list-item v-for="(task, index) in list.tasks">
+        <v-list-item v-for="(task, index) in list.tasks" :key="index" density="compact">
           <v-list-item-title>
             <v-text-field
             v-model="task.name"
@@ -92,11 +91,12 @@ function showDesc(task) {
             variant="underlined"
             @input="cacheLists"
           >        
-          <template v-slot:append>
-            <v-checkbox density="compact" v-model="task.done" @change="cacheLists()"></v-checkbox>
-          </template>
+          
           </v-text-field>
         </v-list-item-title>
+        <template v-slot:append>
+            <v-checkbox density="compact" v-model="task.done" @change="cacheLists()"></v-checkbox>
+          </template>
       </v-list-item>
       <v-list-item>
         <v-btn color="primary" @click="addTask(list)">New Task</v-btn>
@@ -111,5 +111,5 @@ function showDesc(task) {
 </v-card>
 </v-col>
 </v-row>
-</v-container>
+
 </template>
