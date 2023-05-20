@@ -1,27 +1,51 @@
 <script setup>
-import { reactive } from "vue";
+import { reactive, ref, watch } from "vue";
 const variant = "tonal";
 let listsArr = [];
+let open = ref([]);
+
+let textFieldVariant = ref('solo')
+
+var dialog = ref(false);
+let newListName = ref('');
 function cacheLists() {
-  console.log("cacheLists");
   localStorage.setItem("lists", JSON.stringify(lists));
 }
 if (process.client) {
+  console.log(listsArr, typeof listsArr)
   listsArr = localStorage.getItem("lists")
     ? JSON.parse(localStorage.getItem("lists"))
-    : [];
+    : listsArr;
+
+    if (!Array.isArray(listsArr)) {
+      throw new Error('listsArr must be an array')
+    }
 }
 
-const lists = reactive(listsArr);
+let lists = reactive(listsArr);
+
+watch(open, (newOpen, oldOpen) => {
+  console.log('watch newOpen, oldOpen',newOpen, oldOpen)
+})
+
+watch(lists, (newValue, oldValue) => {
+  console.log('watch list', newValue, oldValue);
+})
 function newList() {
-  console.log("new list");
+ console.log('newlist')
+ dialog.value = false;
+
+ if (newListName.value) { 
   lists.push({
-    tasks: []
+    name: newListName,
+    tasks: [{}]
   });
+  open.value.push(lists[lists.length - 1].name)
+  newListName = '';
   cacheLists();
+  } 
 }
 function deleteList(index) {
-  console.log("delete list ", index);
   lists.splice(index, 1);
   cacheLists();
 }
@@ -53,62 +77,110 @@ function showDesc(task) {
 <template>
     <v-row dense>
       <v-col col="12">
-  <v-card :variant="variant">
-    <v-card-title>Todo List</v-card-title>
-    <v-card-actions>
-      <v-btn variant="outlined" @click="newList">New List</v-btn>
-    </v-card-actions>
-  </v-card>
+  <v-toolbar>
+    <v-toolbar-title>Todo Lists</v-toolbar-title>
+    
+      <v-dialog
+      v-model="dialog"
+      persistent
+      transition="dialog-bottom-transition"
+    >
+      <template v-slot:activator="{ props }">
+        <v-btn
+          color="primary"
+          v-bind="props"
+          >
+          New list
+        </v-btn>
+      </template>
+      <v-container>
+      <v-card rounded>
+        <v-card-text>
+          <v-text-field placeholder="My list" 
+                        v-model="newListName" 
+                        @keyup.enter="newList"
+                        :variant="textFieldVariant"
+          ></v-text-field>
+        </v-card-text>
+        <v-card-actions>
+          <v-btn color="primary" block @click="newList" >Close</v-btn>
+        </v-card-actions>
+      </v-card>
+    </v-container>
+  </v-dialog>
+  </v-toolbar>
 </v-col>
 </v-row>
-  <v-row v-for="(list, index) in lists" :key="index">
-    <v-col>
-      <v-card>
-      <v-list 
-        :items="list.tasks"
-        :key="index"
-        :variant="variant"
-        rounded
-        :opened="list.opened"
-      >
-    <v-cart-title>
-      <v-text-field v-model="list.name" placeholder="My List" @input="cacheLists()"></v-text-field>
-    </v-cart-title>
-  <v-list-group value="list.tasks" fluid>
-    <template v-slot:activator="{ props }">
-          <v-list-item
-            v-bind="props"
-            prepend-icon="mdi-checkbox-multiple-marked-outline"
-          >
-          Tasks {{list.tasks.length }}
-        </v-list-item>
-        </template>
-        <v-list-item v-for="(task, index) in list.tasks" :key="index" density="compact">
-          <v-list-item-title>
-            <v-text-field
-            v-model="task.name"
-            placeholder="My Task"
-            variant="underlined"
-            @input="cacheLists"
-          >        
-          
-          </v-text-field>
-        </v-list-item-title>
-        <template v-slot:append>
-            <v-checkbox density="compact" v-model="task.done" @change="cacheLists()"></v-checkbox>
-          </template>
+
+<v-row v-for="(list, index) in lists" :key="index" :id="'list-' + index">
+  <v-col>
+    <v-list 
+      :items="list.tasks"
+      :key="index"
+      elevation="10"
+      density="comfortable"
+      :opened="open"
+      rounded
+    >
+  <v-list-item rounded>
+    <v-text-field 
+    v-model="list.name" 
+    placeholder="My List" 
+    @input="cacheLists()"
+    clearable
+    density="compact"
+    type="title"
+    hide-details
+    :variant="textFieldVariant"
+    ></v-text-field>
+  </v-list-item>
+<v-list-group :value="list.name" fluid>
+  <template v-slot:activator="{ props }">
+        <v-list-item
+          v-bind="props"
+          prepend-icon="mdi-checkbox-multiple-marked-outline"        
+        >
+        Tasks {{list.tasks.length }}
       </v-list-item>
-      <v-list-item>
-        <v-btn color="primary" @click="addTask(list)">New Task</v-btn>
-      </v-list-item>
-    </v-list-group>
-    
-    <v-card-actions>
-      <v-btn color="secondary" @click="deleteList(index)">Delete</v-btn>
-    </v-card-actions>
-    
+      </template>
+      <v-list-item v-for="(task, index) in list.tasks" :key="index" density="compact">
+        <v-list-item-title>
+          <v-text-field
+          v-model="task.name"
+          placeholder="My Task"
+          :variant="textFieldVariant"
+          density="compact"
+          @input="cacheLists"
+          @keyup.enter="addTask(list)"
+          clearable
+          :class="task.done ? 'text-decoration-line-through' : ''"
+          :disabled="task.done"
+          hide-details
+        >        
+        
+        </v-text-field>
+      </v-list-item-title>
+      <template v-slot:prepend="{ isActive }">
+        <v-list-item-action start>
+          <v-checkbox-btn  v-model="task.done" @change="cacheLists()"></v-checkbox-btn>
+        </v-list-item-action>
+      </template>
+      <template v-slot:append="{ isActive }">
+        <v-list-item-action end>
+          <v-btn variant="tonal" size="x-small" color="red"  @click="deleteTask(list, task)">Delete</v-btn>
+        </v-list-item-action>
+      </template>
+    </v-list-item>
+    <v-list-item>
+      <v-btn color="primary" size="x-small" @click="addTask(list)">New Task</v-btn>
+    </v-list-item>
+  </v-list-group>
+  
+  <v-card-actions>
+    <v-btn color="secondary" size="x-small" @click="deleteList(index)">Delete</v-btn>
+    <v-btn v-if="dialog" color="primary" @click="dialog = false">Close</v-btn>
+  </v-card-actions>
   </v-list>
-</v-card>
 </v-col>
 </v-row>
 
