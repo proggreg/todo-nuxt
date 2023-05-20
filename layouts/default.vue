@@ -52,7 +52,7 @@ function toggleDarkMode(params) {
       </v-container>
       </v-main>
   
-      //TODO finish bottom nav
+      <!-- TODO finish bottom nav -->
     <!-- <v-bottom-navigation :elevation="0" grow>
   <v-btn value="recent">
     <v-icon>mdi-history</v-icon>
