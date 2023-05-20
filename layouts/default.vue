@@ -2,9 +2,14 @@ import { ref } from 'vue'
 <script setup>
 // you don't need this: only for testing purposes
 const date = useAppConfig().buildDate
+let darkMode = 'light';
+if (process.client && window.matchMedia && window.matchMedia('(prefers-color-scheme: dark)').matches) {
+    // dark mode
+    darkMode = 'dark';
+}
 
+var theme = ref(darkMode);
 
-var theme = ref("dark");
 
 function toggleDarkMode(params) {
   console.log('toggleDarkMode')
@@ -32,7 +37,12 @@ function toggleDarkMode(params) {
     </NuxtLink>
       
     <template v-slot:append>
-      <v-switch label="Switch" inset @click="toggleDarkMode"></v-switch>
+      <v-switch inset @click="toggleDarkMode">
+        <template v-slot:prepend>
+          <v-icon v-if="theme === 'light'">mdi-weather-night</v-icon>
+          <v-icon v-else>mdi-weather-sunny</v-icon>
+        </template>
+      </v-switch>
     </template>
   </v-app-bar>
     
@@ -42,6 +52,7 @@ function toggleDarkMode(params) {
       </v-container>
       </v-main>
   
+      //TODO finish bottom nav
     <!-- <v-bottom-navigation :elevation="0" grow>
   <v-btn value="recent">
     <v-icon>mdi-history</v-icon>
