@@ -4,13 +4,16 @@ import {ref} from 'vue'
 import { useListsStore } from '~/stores/lists';
 
 const listsStore = useListsStore()
+const open = ref(false)
 
 function newList() {
-  console.log("newList")
-  listsStore.addList('ads')
+  listsStore.addList()
 }
 
-const open = ref(false)
+function openMobileNav() {
+  open.value = !open.value ;
+}
+
 </script>
 <template>
     <v-row class="">
@@ -19,7 +22,7 @@ const open = ref(false)
           <v-btn
           color="accent"
           class="d-md-none"
-          @click="open = !open"
+          @click="openMobileNav"
         >
           Lists
         </v-btn>  
@@ -34,13 +37,13 @@ const open = ref(false)
           <Lists :lists="listsStore.lists"></Lists>
         </v-col>
         </v-sheet>
-        <MobileListsNav :open="open" :lists="lists"></MobileListsNav>
+        <MobileListsNav v-if="open" :open="open" @close="open = false" :lists="lists"></MobileListsNav>
       </v-col>
       <v-col class="fill-height">
         <v-sheet class="fill-height rounded-lg pa-2">
-          <v-row>
+          <v-row v-if="listsStore.currentList">
             <v-col cols="12">
-              <!-- <h2>{{ listsStore.currentList.name }}</h2> -->
+               <h2><input placeholder="My List" class="primary" color="primary" v-model="listsStore.currentList.name"/></h2>
             </v-col>
             <v-col>
               <Todos v-if="listsStore.currentList" :list="listsStore.currentList"></Todos>
