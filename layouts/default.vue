@@ -11,7 +11,6 @@ if (process.client && window.matchMedia && window.matchMedia('(prefers-color-sch
 var theme = ref(darkMode);
 
 function toggleDarkMode(params) {
-  console.log('toggleDarkMode')
   if (theme.value === 'light') {
     theme.value = 'dark'
   } else {
