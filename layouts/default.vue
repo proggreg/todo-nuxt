@@ -2,7 +2,7 @@ import { ref } from 'vue'
 <script setup>
 // you don't need this: only for testing purposes
 const date = useAppConfig().buildDate
-let darkMode = 'dark';
+let darkMode = 'light';
 if (process.client && window.matchMedia && window.matchMedia('(prefers-color-scheme: dark)').matches) {
     // dark mode
     darkMode = 'dark';

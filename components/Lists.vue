@@ -1,23 +1,14 @@
 <script setup>
-import { defineProps, defineEmits } from 'vue'
-import { useListsStore } from '~/stores/lists';
+  import { defineProps, defineEmits } from 'vue'
+  import { useListsStore } from '~/stores/lists';
 
-const listsStore = useListsStore()
-const emit= defineEmits(['selectList'])
-
+  const listsStore = useListsStore()
+  const emit= defineEmits(['selectList'])
   const props = defineProps({
     lists: Array
   })
 
-  function showTasks(list) {
-    console.log('show tasks', list)
-  }
-
-  function cacheLists() {
-    console.debug('cache lists')
-  }
   function selectList(list) {
-    console.log("selectList", list)
     listsStore.setCurrentList(list)
     emit('selectList', list)
   }
@@ -25,7 +16,8 @@ const emit= defineEmits(['selectList'])
 
 <template>
  <v-list>
-    <v-list-item
+    <v-list-item v-if="!lists.length">No lists yet :(</v-list-item>
+    <v-list-item v-else
       v-for="(list, i) in lists"
       :key="i"
       color="accent"

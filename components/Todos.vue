@@ -1,41 +1,24 @@
 <script setup>
 import { reactive, ref} from "vue";
-
+import { useListsStore } from '~/stores/lists';
+const listsStore = useListsStore()
 const props = defineProps({
     list: Object
   })
 
 let textFieldVariant = ref('solo')
+let showTodo = ref(false);
 
-function cacheLists() {
-  // localStorage.setItem("lists", JSON.stringify(lists));
-}
-
-
-// function newList() {
- 
-//  dialog.value = false;
- 
-//  if (newListName.value) { 
-//   lists.push({
-//     name: newListName.value,
-//     tasks: [{}]
-//   });
-//   open.value.push(lists[lists.length - 1].name)
-//   newListName.value = ''
-//   cacheLists();
-//   } 
-// }
-// function deleteList(index) {
-//   lists.splice(index, 1);
-//   cacheLists();
-// }
 
 function addTask(list) {
   if (!list.tasks) {
     list.tasks = reactive([]);
   }
-  list.tasks.push({});
+  list.tasks.push({
+    name: ''
+  });
+  listsStore.setCurrentTask(list.tasks[list.tasks.length - 1])
+  showTodo.value = true;
 }
 
 function deleteTask(list, index) {
@@ -44,33 +27,31 @@ function deleteTask(list, index) {
   }
 }
 
+function todoClick(todo) {
+  listsStore.setCurrentTask(todo);
+  showTodo.value = true;
+}
+
 </script>
 
 <template>
-  <h2>Tasks</h2>
+  <Todo @close="showTodo = false" v-if="showTodo"></Todo>
   <v-list
+      v-else
       :items="list.tasks"
       :key="index"
       elevation="0"
-      density="comfortable"
-      :opened="open"
       rounded
     >
-
-    <v-list-item v-for="(task, index) in list.tasks" :key="index" density="compact" fluid>
-      <v-list-item-title>
-        <v-text-field
-        v-model="task.name"
-        placeholder="My Task"
-        :variant="textFieldVariant"
-        density="compact"
-        @input="cacheLists"
-        @keyup.enter="addTask(list)"
-        clearable
-        :class="task.done ? 'text-decoration-line-through' : ''"
-        :disabled="task.done"
-        hide-details
-      ></v-text-field>
+    <v-list-subheader>Tasks</v-list-subheader>
+    <v-list-item v-for="(task, index) in list.tasks" 
+      :key="index" density="compact" 
+      variant="tonal" 
+      width="100%"
+      
+      >
+      <v-list-item-title @click="todoClick(task)">
+        {{ task.name }}
       </v-list-item-title>
       <template v-slot:prepend="{ isActive }">
         <v-list-item-action start>
@@ -84,7 +65,16 @@ function deleteTask(list, index) {
       </template>
     </v-list-item>
     <v-list-item>
-      <v-btn color="success" size="x-small" @click="addTask(list)">New Task</v-btn>
+      <v-spacer></v-spacer>
+      <template v-slot:append>
+      <v-btn 
+            :disabled="!listsStore.currentList.name ? true : false" 
+            color="success" 
+            size="x-small" 
+            @click="addTask(list)">
+            New Task
+            </v-btn>
+          </template>
     </v-list-item>
   </v-list>
 </template>
