@@ -26,7 +26,7 @@ function openMobileNav() {
         class="pa-2 fill-height rounded-lg d-none d-xs-none d-sm-none d-md-flex"
       >
         <v-col cols="12">
-          <v-btn @click="newList">New List</v-btn>
+          <v-btn color="green" @click="newList">New List</v-btn>
           <list-items v-if="data" :lists="data"></list-items>
         </v-col>
       </v-sheet>
