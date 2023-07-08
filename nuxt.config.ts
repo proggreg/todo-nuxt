@@ -1,8 +1,5 @@
 export default defineNuxtConfig({
-  modules: [
-    "@invictus.codes/nuxt-vuetify",
-    "@pinia/nuxt"
-  ],
+  modules: ["@invictus.codes/nuxt-vuetify", "@pinia/nuxt"],
 
   experimental: {
     payloadExtraction: false,
@@ -19,9 +16,9 @@ export default defineNuxtConfig({
   },
   imports: {
     autoImport: true,
-    dirs: ['./stores'],
+    dirs: ["./stores"],
   },
   pinia: {
-    autoImports: ['defineStore', 'acceptHMRUpdate'],
+    autoImports: ["defineStore", "acceptHMRUpdate"],
   },
 });
