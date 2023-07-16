@@ -19,15 +19,13 @@ function openMobileNav() {
 <template>
   <v-row class="">
     <v-col class="rounded-lg" cols="12" md="4">
-      <v-btn color="green" class="d-md-none" no-gutters @click="openMobileNav">
-        Lists
-      </v-btn>
+      <v-btn class="d-md-none" no-gutters @click="openMobileNav"> Lists </v-btn>
       <v-sheet
         class="pa-2 fill-height rounded-lg d-none d-xs-none d-sm-none d-md-flex"
       >
         <v-col cols="12">
           <v-btn @click="newList">New List</v-btn>
-          <list-items v-if="data" :lists="data"></list-items>
+          <app-lists v-if="data" :lists="data"></app-lists>
         </v-col>
       </v-sheet>
       <mobile-lists-nav
@@ -39,7 +37,7 @@ function openMobileNav() {
     </v-col>
     <v-col class="fill-height">
       <v-sheet class="fill-height rounded-lg">
-        <list-item></list-item>
+        <app-list></app-list>
       </v-sheet>
     </v-col>
   </v-row>

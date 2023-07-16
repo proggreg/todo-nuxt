@@ -1,7 +1,7 @@
 <template>
   <main>
     <v-theme-provider :theme="theme" with-background>
-      <v-app :full-height="true">
+      <v-app>
         <v-layout>
           <v-app-bar :elevation="0">
             <NuxtLink to="/about" custom>
@@ -32,7 +32,7 @@
   </main>
 </template>
 <script setup>
-let darkMode = "dark";
+let darkMode = "myCustomLightTheme";
 if (
   process.client &&
   window.matchMedia &&
@@ -45,10 +45,10 @@ if (
 const theme = ref(darkMode);
 
 function toggleDarkMode() {
-  if (theme.value === "light") {
-    theme.value = "dark";
+  if (theme.value === "myCustomDarkTheme") {
+    theme.value = "myCustomLightTheme";
   } else {
-    theme.value = "light";
+    theme.value = "myCustomDarkTheme";
   }
 }
 </script>

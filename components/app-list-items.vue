@@ -1,6 +1,10 @@
 <script setup>
 import { reactive, ref } from "vue";
 import { useListsStore } from "~/stores/lists";
+
+const itemRefs = ref([]);
+const inputRefs = ref([]);
+const newTaskDisabled = ref(false);
 const listsStore = useListsStore();
 const props = defineProps({
   list: {
@@ -13,6 +17,15 @@ const props = defineProps({
 
 const showTodo = ref(false);
 
+function validateTaskName(input) {
+  newTaskDisabled.value = !input.target.value;
+}
+
+watch(inputRefs.value, (newInputRefs) => {
+  const input = newInputRefs[newInputRefs.length - 1];
+  input.focus();
+});
+
 function addTask(list) {
   if (!list.tasks) {
     list.tasks = reactive([]);
@@ -20,8 +33,7 @@ function addTask(list) {
   list.tasks.push({
     name: "",
   });
-  listsStore.setCurrentTask(list.tasks[list.tasks.length - 1]);
-  showTodo.value = true;
+  newTaskDisabled.value = true;
 }
 
 function deleteTask(list, index) {
@@ -37,22 +49,25 @@ function editTask(todo) {
 </script>
 
 <template>
-  <todo-item v-if="showTodo" @close="showTodo = false"></todo-item>
+  <app-list-item v-if="showTodo" @close="showTodo = false"></app-list-item>
   <v-list v-else :key="index" :items="props.list.tasks" elevation="0" rounded>
     <v-list-subheader>Tasks</v-list-subheader>
     <v-list-item
       v-for="(task, index) in list.tasks"
       :key="index"
+      ref="itemRefs"
       density="compact"
       variant="tonal"
-      width="100%"
     >
       <v-list-item-title>
         <v-text-field
+          ref="inputRefs"
           v-model="task.name"
           :class="task.done ? 'text-decoration-line-through' : ''"
           :disabled="task.done"
-        ></v-text-field>
+          @input="validateTaskName"
+        >
+        </v-text-field>
       </v-list-item-title>
       <template #prepend="{}">
         <v-list-item-action start>
@@ -82,10 +97,11 @@ function editTask(todo) {
       <v-spacer></v-spacer>
       <template #append>
         <v-btn
-          :disabled="!listsStore.currentList.name ? true : false"
-          color="success"
+          :disabled="
+            !listsStore.currentList.name ? true : false || newTaskDisabled
+          "
           size="x-small"
-          @click="addTask(list)"
+          @click="addTask(list, index)"
         >
           New Task
         </v-btn>
