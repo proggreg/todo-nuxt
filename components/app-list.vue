@@ -19,10 +19,10 @@ onUpdated(() => {
       />
     </v-col>
     <v-col>
-      <todo-items
+      <app-list-items
         v-if="listsStore.currentList"
         :list="listsStore.currentList"
-      ></todo-items>
+      ></app-list-items>
     </v-col>
   </v-row>
 </template>

@@ -1,7 +1,7 @@
 <template>
   <main>
     <v-theme-provider :theme="theme" with-background>
-      <v-app :full-height="true">
+      <v-app>
         <v-layout>
           <v-app-bar :elevation="0">
             <NuxtLink to="/about" custom>
