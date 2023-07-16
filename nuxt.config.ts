@@ -18,6 +18,11 @@ export default defineNuxtConfig({
     autoImport: true,
     dirs: ["./stores"],
   },
+  vuetify: {
+    moduleOptions: {
+      treeshaking: true,
+    },
+  },
   pinia: {
     autoImports: ["defineStore", "acceptHMRUpdate"],
   },
