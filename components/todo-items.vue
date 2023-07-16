@@ -1,6 +1,8 @@
 <script setup>
 import { reactive, ref } from "vue";
 import { useListsStore } from "~/stores/lists";
+
+const itemRefs = ref([]);
 const listsStore = useListsStore();
 const props = defineProps({
   list: {
@@ -20,8 +22,14 @@ function addTask(list) {
   list.tasks.push({
     name: "",
   });
-  listsStore.setCurrentTask(list.tasks[list.tasks.length - 1]);
-  showTodo.value = true;
+  const taskId = "task-" + list.tasks.length - 1;
+  list.tasks[list.tasks.length - 1].id = taskId;
+  itemRefs.value.push(taskId);
+  const currentTask = list.tasks[list.tasks.length - 1];
+  listsStore.setCurrentTask(currentTask);
+
+  const lastItem = itemRefs.value[itemRefs.value.length - 1];
+  lastItem.value.focus();
 }
 
 function deleteTask(list, index) {
@@ -43,12 +51,14 @@ function editTask(todo) {
     <v-list-item
       v-for="(task, index) in list.tasks"
       :key="index"
+      ref="itemRefs"
       density="compact"
       variant="tonal"
       width="100%"
     >
       <v-list-item-title>
         <v-text-field
+          :ref="task.id"
           v-model="task.name"
           :class="task.done ? 'text-decoration-line-through' : ''"
           :disabled="task.done"
