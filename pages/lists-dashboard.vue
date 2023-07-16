@@ -19,9 +19,7 @@ function openMobileNav() {
 <template>
   <v-row class="">
     <v-col class="rounded-lg" cols="12" md="4">
-      <v-btn color="green" class="d-md-none" no-gutters @click="openMobileNav">
-        Lists
-      </v-btn>
+      <v-btn class="d-md-none" no-gutters @click="openMobileNav"> Lists </v-btn>
       <v-sheet
         class="pa-2 fill-height rounded-lg d-none d-xs-none d-sm-none d-md-flex"
       >

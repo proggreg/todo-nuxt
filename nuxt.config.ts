@@ -1,3 +1,16 @@
+const myCustomLightTheme = {
+  dark: false,
+  colors: {
+    primary: "#0000FF",
+  },
+};
+const myCustomDarkTheme = {
+  dark: true,
+  colors: {
+    primary: "#FF0000",
+  },
+};
+
 export default defineNuxtConfig({
   modules: ["@invictus.codes/nuxt-vuetify", "@pinia/nuxt"],
 
@@ -19,11 +32,28 @@ export default defineNuxtConfig({
     dirs: ["./stores"],
   },
   vuetify: {
+    vuetifyOptions: {
+      defaults: {
+        VBtn: {
+          color: "primary",
+        },
+      },
+      theme: {
+        defaultTheme: "myCustomLightTheme",
+        themes: {
+          myCustomLightTheme,
+          myCustomDarkTheme,
+        },
+      },
+    },
     moduleOptions: {
       treeshaking: true,
     },
   },
   pinia: {
     autoImports: ["defineStore", "acceptHMRUpdate"],
+  },
+  devtools: {
+    enabled: true,
   },
 });

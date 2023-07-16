@@ -30,7 +30,7 @@ function selectList() {
     ></list-items>
     <template #append>
       <div class="pa-2">
-        <v-btn color="primary" @click="newList">New List</v-btn>
+        <v-btn @click="newList">New List</v-btn>
       </div>
     </template>
   </v-navigation-drawer>

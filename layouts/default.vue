@@ -32,7 +32,7 @@
   </main>
 </template>
 <script setup>
-let darkMode = "dark";
+let darkMode = "myCustomLightTheme";
 if (
   process.client &&
   window.matchMedia &&
@@ -45,10 +45,10 @@ if (
 const theme = ref(darkMode);
 
 function toggleDarkMode() {
-  if (theme.value === "light") {
-    theme.value = "dark";
+  if (theme.value === "myCustomDarkTheme") {
+    theme.value = "myCustomLightTheme";
   } else {
-    theme.value = "light";
+    theme.value = "myCustomDarkTheme";
   }
 }
 </script>
