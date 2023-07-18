@@ -37,6 +37,7 @@ function addTask(list) {
 }
 
 function deleteTask(list, index) {
+  
   if (list.tasks) {
     list.tasks.splice(index, 1);
   }
@@ -87,7 +88,7 @@ function editTask(todo) {
             variant="tonal"
             size="x-small"
             color="red"
-            @click="deleteTask(list, task)"
+            @click="deleteTask(list, index)"
             >Delete</v-btn
           >
         </v-list-item-action>
