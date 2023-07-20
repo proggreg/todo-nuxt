@@ -26,7 +26,7 @@ const programmingLanguages = ref([
     "MATLAB",
     "Shell"
 ]);
-let query = 'stars';
+let query = ref('stars');
 let {data, refresh} = await useFetch(url, {
   transform: (data) => data.items,
   query: { 
@@ -59,24 +59,7 @@ function nextPage() {
 
 </script>
 <template>
-<v-row>
-  <v-col v-for="repo in data" cols="12" xs="6" sm="6" md="4" >
-    <v-card :title="repo.name" >
-      <v-card-text class="line-clamp">         
-          {{ repo.description }}
-      </v-card-text>
-      <v-card-actions>
-        <a :href="repo.html_url" target="_blank">
-        <v-btn>Open</v-btn>
-            </a>
-            <a :href="repo.stargazers_url">
-              {{ repo.stargazers_count }} <v-icon icon="mdi-star" color="yellow"/>
-            </a>
-          </v-card-actions>
-    </v-card>
-  </v-col>
-</v-row>
-<v-row>
+  <v-row>
   <v-col>
     <v-menu>
       <template v-slot:activator="{ props }">
@@ -105,7 +88,7 @@ function nextPage() {
           color="primary"
           v-bind="props"
         >
-          {{ language }}
+          language 
         </v-btn>
       </template>
       <v-list>
@@ -113,7 +96,7 @@ function nextPage() {
           v-for="(option, index) in programmingLanguages"
           :key="index"
           :value="option"
-          @click="query = 'stars&language='+ option;console.log(query); refresh()"
+          @click="query = 'stars+language:'+ option;console.log(query); refresh()"
         >
           <v-list-item-title>{{ option }}</v-list-item-title>
         </v-list-item>
@@ -130,6 +113,24 @@ function nextPage() {
     </v-btn>
   </v-col>
 </v-row>
+<v-row>
+  <v-col v-for="repo in data" cols="12" xs="6" sm="6" md="4" >
+    <v-card :title="repo.name" >
+      <v-card-text class="line-clamp">         
+          {{ repo.description }}
+      </v-card-text>
+      <v-card-actions>
+        <a :href="repo.html_url" target="_blank">
+        <v-btn>Open</v-btn>
+            </a>
+            <a :href="repo.stargazers_url">
+              {{ repo.stargazers_count }} <v-icon icon="mdi-star" color="yellow"/>
+            </a>
+          </v-card-actions>
+    </v-card>
+  </v-col>
+</v-row>
+
 
 </template>
 <style>
