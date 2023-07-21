@@ -3,6 +3,7 @@ let url = 'https://api.github.com/search/repositories'
 let pageNumber = ref(1)
 let perPage = ref('12')
 let repos = reactive([])
+let currentLanguage = ref(null)
 let language = ref('')
 const programmingLanguages = ref([
     "Python",
@@ -67,27 +68,6 @@ function nextPage() {
           color="primary"
           v-bind="props"
         >
-          {{ perPage }}
-        </v-btn>
-      </template>
-      <v-list>
-        <v-list-item
-          v-for="(option, index) in pageOptions"
-          :key="index"
-          :value="option"
-          @click="perPage = option; refresh()"
-        >
-          <v-list-item-title>{{ option }}</v-list-item-title>
-        </v-list-item>
-      </v-list>
-    </v-menu>
-
-    <v-menu>
-      <template v-slot:activator="{ props }">
-        <v-btn
-          color="primary"
-          v-bind="props"
-        >
           language 
         </v-btn>
       </template>
@@ -96,22 +76,18 @@ function nextPage() {
           v-for="(option, index) in programmingLanguages"
           :key="index"
           :value="option"
-          @click="query = 'stars+language:'+ option;console.log(query); refresh()"
+          @click="query = 'stars+language:'+ option; currentLanguage = option;console.log(query); refresh()"
         >
           <v-list-item-title>{{ option }}</v-list-item-title>
         </v-list-item>
       </v-list>
     </v-menu>
+    
+    <v-chip v-if="currentLanguage" @click="currentLanguage = null;query = 'stars'; refresh()">
+      {{ currentLanguage}}
+    </v-chip>
   </v-col>
-  <v-col>
-    {{ pageNumber }}
-    <v-btn @click="backPage()">
-      Back Page
-    </v-btn>
-    <v-btn @click="nextPage()">
-      Next Page
-    </v-btn>
-  </v-col>
+  
 </v-row>
 <v-row>
   <v-col v-for="repo in data" cols="12" xs="6" sm="6" md="4" >
@@ -130,6 +106,37 @@ function nextPage() {
     </v-card>
   </v-col>
 </v-row>
+<v-bottom-navigation position="absolute" style="position: fixed;">
+    <v-menu>
+      <template v-slot:activator="{ props }">
+        <v-btn
+          color="primary"
+          v-bind="props"
+        >
+          {{ perPage }}
+        </v-btn>
+      </template>
+      <v-list>
+        <v-list-item
+          v-for="(option, index) in pageOptions"
+          :key="index"
+          :value="option"
+          @click="perPage = option; refresh()"
+        >
+          <v-list-item-title>{{ option }}</v-list-item-title>
+        </v-list-item>
+      </v-list>
+    </v-menu>
+    {{ pageNumber }}
+    <v-btn @click="backPage()">
+      Back Page
+    </v-btn>
+    <v-btn @click="nextPage()">
+      Next Page
+    </v-btn>
+  
+
+</v-bottom-navigation>
 
 
 </template>
