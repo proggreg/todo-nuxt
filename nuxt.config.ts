@@ -1,8 +1,20 @@
+const myCustomLightTheme = {
+  dark: false,
+  colors: {
+    primary: '#0000FF'
+  }
+}
+const myCustomDarkTheme = {
+  dark: true,
+  colors: {
+    primary: '#FF0000'
+  }
+}
+
 export default defineNuxtConfig({
   modules: [
     '@invictus.codes/nuxt-vuetify',
-    '@pinia/nuxt',
-    '@nuxtjs/eslint-module'
+    '@pinia/nuxt'
   ],
 
   experimental: {
