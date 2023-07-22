@@ -1,59 +1,40 @@
 const myCustomLightTheme = {
   dark: false,
   colors: {
-    primary: "#0000FF",
-  },
-};
+    primary: '#0000FF'
+  }
+}
 const myCustomDarkTheme = {
   dark: true,
   colors: {
-    primary: "#FF0000",
-  },
-};
+    primary: '#FF0000'
+  }
+}
 
 export default defineNuxtConfig({
-  modules: ["@invictus.codes/nuxt-vuetify", "@pinia/nuxt"],
+  modules: [
+    '@invictus.codes/nuxt-vuetify',
+    '@pinia/nuxt'
+  ],
 
   experimental: {
-    payloadExtraction: false,
+    payloadExtraction: false
   },
   nitro: {
     esbuild: {
       options: {
-        target: "esnext",
-      },
+        target: 'esnext'
+      }
     },
     prerender: {
-      routes: [],
-    },
+      routes: []
+    }
   },
   imports: {
     autoImport: true,
-    dirs: ["./stores"],
-  },
-  vuetify: {
-    vuetifyOptions: {
-      defaults: {
-        VBtn: {
-          color: "primary",
-        },
-      },
-      theme: {
-        defaultTheme: "myCustomLightTheme",
-        themes: {
-          myCustomLightTheme,
-          myCustomDarkTheme,
-        },
-      },
-    },
-    moduleOptions: {
-      treeshaking: true,
-    },
+    dirs: ['./stores']
   },
   pinia: {
-    autoImports: ["defineStore", "acceptHMRUpdate"],
-  },
-  devtools: {
-    enabled: true,
-  },
-});
+    autoImports: ['defineStore', 'acceptHMRUpdate']
+  }
+})

@@ -1,13 +1,13 @@
-import { defineStore } from "pinia";
+import { defineStore } from 'pinia';
 
 export const useListsStore = defineStore("lists", {
   state: () => ({
     lists: [],
     currentList: null,
-    currentTask: null,
+    currentTask: null
   }),
   actions: {
-    addList() {
+    addList () {
       this.lists.push({
         name: "",
         tasks: [],
