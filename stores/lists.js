@@ -1,26 +1,26 @@
-import { defineStore } from "pinia"
+import { defineStore } from 'pinia'
 
 export const useListsStore = defineStore('lists', {
   state: () => ({
     lists: [],
     currentList: null,
-    currentTask: null,
+    currentTask: null
   }),
   actions: {
-    addList() {
+    addList () {
       this.lists.push({
         name: '',
         tasks: []
       })
     },
-    setCurrentList(currentList) {
+    setCurrentList (currentList) {
       this.currentList = currentList
     },
-    setCurrentTask(currentTask) {
+    setCurrentTask (currentTask) {
       this.currentTask = currentTask
     },
-    setTaskName(name) {
-      this.currentList.tasks[currentTask].name = name;
+    setTaskName (name) {
+      this.currentList.tasks[currentTask].name = name
     }
   },
   getters: {
