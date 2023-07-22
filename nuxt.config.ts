@@ -1,27 +1,28 @@
 export default defineNuxtConfig({
   modules: [
-    "@invictus.codes/nuxt-vuetify",
-    "@pinia/nuxt"
+    '@invictus.codes/nuxt-vuetify',
+    '@pinia/nuxt',
+    '@nuxtjs/eslint-module'
   ],
 
   experimental: {
-    payloadExtraction: false,
+    payloadExtraction: false
   },
   nitro: {
     esbuild: {
       options: {
-        target: "esnext",
-      },
+        target: 'esnext'
+      }
     },
     prerender: {
-      routes: [],
-    },
+      routes: []
+    }
   },
   imports: {
     autoImport: true,
-    dirs: ['./stores'],
+    dirs: ['./stores']
   },
   pinia: {
-    autoImports: ['defineStore', 'acceptHMRUpdate'],
-  },
-});
+    autoImports: ['defineStore', 'acceptHMRUpdate']
+  }
+})
