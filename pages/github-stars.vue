@@ -37,7 +37,7 @@ const programmingLanguages = ref([
   'Shell'
 ])
 const query = ref('stars')
-const { data, refresh } = await useFetch(url, {
+const { data, refresh, error } = await useFetch(url, {
   transform: (data: RepoData) => data.items,
   query: {
     page: pageNumber,
@@ -45,20 +45,24 @@ const { data, refresh } = await useFetch(url, {
     sort: 'stars',
     order: 'desc',
     q: query
+  },
+  onRequestError: ({ error }) => {
+    console.log(
+      'here is an error', error
+    )
   }
+
 })
 
 const pageOptions = ['12', '24', '48']
 function backPage () {
   if (pageNumber.value > 1) {
     pageNumber.value--
-    refresh()
   }
 }
 
 function nextPage () {
   pageNumber.value++
-  refresh()
 }
 </script>
 <template>
@@ -145,11 +149,10 @@ function nextPage () {
         </v-list-item>
       </v-list>
     </v-menu>
-    {{ pageNumber }}
-    <v-btn @click="backPage()">
+    <v-btn @click="backPage">
       Back Page
     </v-btn>
-    <v-btn @click="nextPage()">
+    <v-btn @click="nextPage">
       Next Page
     </v-btn>
   </v-bottom-navigation>
