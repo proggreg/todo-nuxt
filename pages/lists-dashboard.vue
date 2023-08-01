@@ -18,19 +18,24 @@ function openMobileNav () {
 </script>
 <template>
   <v-row class="">
-    <v-col class="rounded-lg" cols="12" md="4">
+    <v-col class="rounded-lg" cols="12" md="2">
       <v-btn class="d-md-none" no-gutters @click="openMobileNav">
         Lists
       </v-btn>
       <v-sheet
         class="pa-2 fill-height rounded-lg d-none d-xs-none d-sm-none d-md-flex"
       >
-        <v-col cols="12">
-          <v-btn @click="newList">
-            New List
-          </v-btn>
-          <app-lists v-if="data" :lists="data" />
-        </v-col>
+        <v-row>
+          <v-col cols="12">
+            <v-btn rounded prepend-icon="mdi-plus" @click="newList">
+              New List
+            </v-btn>
+          </v-col>
+          <v-divider />
+          <v-col cols="12">
+            <app-lists v-if="data" :lists="data" />
+          </v-col>
+        </v-row>
       </v-sheet>
       <mobile-lists-nav
         v-if="open"
