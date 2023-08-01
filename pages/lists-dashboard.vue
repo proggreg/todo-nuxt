@@ -35,16 +35,18 @@ function updateDrawer (el) {
         class="pa-2 fill-height rounded-lg d-none d-xs-none d-sm-none d-md-flex"
         @update:rail="updateDrawer"
       >
-        <v-list-item>
-          <v-btn @click="newList">
-            New List
-          </v-btn>
-        </v-list-item>
-        <v-col cols="12">
-          <app-lists v-if="data" :lists="data" />
-        </v-col>
-      </v-navigation-drawer>
-      <app-list />
+        <v-row>
+          <v-col cols="12">
+            <v-btn rounded prepend-icon="mdi-plus" @click="newList">
+              New List
+            </v-btn>
+          </v-col>
+          <v-divider />
+          <v-col cols="12">
+            <app-lists v-if="data" :lists="data" />
+          </v-col>
+        </v-row>
+      </v-sheet>
       <mobile-lists-nav
         v-if="open"
         :open="open"

@@ -15,6 +15,7 @@ function addTask () {
 }
 
 function deleteTask (list, index) {
+function deleteTask (list, index) {
   if (list.tasks) {
     list.tasks.splice(index, 1)
   }
@@ -48,6 +49,7 @@ function openContextMenu () {
       <template #prepend="{}">
         <v-list-item-action start>
           <v-checkbox-btn v-model="task.done" />
+          <v-checkbox-btn v-model="task.done" />
         </v-list-item-action>
       </template>
       <template #append="{}">
@@ -57,6 +59,8 @@ function openContextMenu () {
             size="x-small"
             @click="deleteTask(list, index)"
           >
+            Delete
+          </v-btn>
             Delete
           </v-btn>
         </v-list-item-action>

@@ -1,12 +1,16 @@
 <script setup>
 // import { defineProps, defineEmits } from "vue";
 import { useListsStore } from '~/stores/lists'
+import { useListsStore } from '~/stores/lists'
 
+const listsStore = useListsStore()
+const emit = defineEmits(['selectList'])
 const listsStore = useListsStore()
 const emit = defineEmits(['selectList'])
 const props = defineProps({
   lists: {
     type: Array,
+    default () {
     default () {
       return [
         {
@@ -16,7 +20,16 @@ const props = defineProps({
     }
   }
 })
+          name: ''
+        }
+      ]
+    }
+  }
+})
 
+function selectList (list) {
+  listsStore.setCurrentList(list)
+  emit('selectList', list)
 function selectList (list) {
   listsStore.setCurrentList(list)
   emit('selectList', list)
@@ -39,7 +52,7 @@ function selectList (list) {
       placeholder="My List"
       @click="selectList(list)"
     >
-      <v-title>{{ list.name }}</v-title>
+      <v-list-item-title>{{ list.name }}</v-list-item-title>
     </v-list-item>
   </v-list>
 </template>
