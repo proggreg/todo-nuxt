@@ -1,6 +1,6 @@
-import { defineStore } from 'pinia';
+import { defineStore } from 'pinia'
 
-export const useListsStore = defineStore("lists", {
+export const useListsStore = defineStore('lists', {
   state: () => ({
     lists: [],
     currentList: null,
@@ -9,26 +9,32 @@ export const useListsStore = defineStore("lists", {
   actions: {
     addList () {
       this.lists.push({
-        name: "",
-        tasks: [],
-      });
-      this.currentList = this.lists[this.lists.length - 1];
+        name: '',
+        tasks: []
+      })
+      this.currentList = this.lists[this.lists.length - 1]
     },
-    setCurrentList(currentList) {
-      this.currentList = currentList;
+    addTask (taskName) {
+      this.currentList.tasks.push({
+        name: taskName.value
+      })
     },
-    setCurrentTask(currentTask) {
-      this.currentTask = currentTask;
+
+    setCurrentList (currentList) {
+      this.currentList = currentList
     },
-    setTaskName(name) {
-      this.currentList.tasks[currentTask].name = name;
+    setCurrentTask (currentTask) {
+      this.currentTask = currentTask
     },
+    setTaskName (name) {
+      this.currentList.tasks[currentTask].name = name
+    }
   },
   getters: {
-    getLists: (state) => state.lists,
+    getLists: state => state.lists
     // getListsTasks: (state) => { },
     // getTask: (state) => {
     //   return state.currentList.tasks.length > 0 ? state.currentList.tasks[state.currentList.tasks.length - 1]
     // }
-  },
-});
+  }
+})
