@@ -25,34 +25,31 @@ function updateDrawer (el) {
 </script>
 <template>
   <v-row class="">
-    <v-col class="rounded-lg" cols="6">
-      <v-btn class="d-md-none" no-gutters @click="openMobileNav">
+    <v-navigation-drawer
+      app
+      class="pa-2 fill-height rounded-lg d-none d-md-flex"
+      @update:rail="updateDrawer"
+    >
+      <v-list>
+        <v-list-item density="comfortable">
+          <v-btn rounded @click="newList">
+            <template #prepend>
+              <v-icon>mdi-plus</v-icon>
+            </template>
+            New List
+          </v-btn>
+        </v-list-item>
+      </v-list>
+      <v-divider />
+      <app-lists v-if="data" :lists="data" />
+    </v-navigation-drawer>
+    <v-col class="rounded-lg d-lg-none" cols="1">
+      <v-btn class="" no-gutters @click="openMobileNav">
         Lists
       </v-btn>
-      <v-navigation-drawer
-        app
-
-        class="pa-2 fill-height rounded-lg d-none d-xs-none d-sm-none d-md-flex"
-        @update:rail="updateDrawer"
-      >
-        <v-row>
-          <v-col cols="12">
-            <v-btn rounded prepend-icon="mdi-plus" @click="newList">
-              New List
-            </v-btn>
-          </v-col>
-          <v-divider />
-          <v-col cols="12">
-            <app-lists v-if="data" :lists="data" />
-          </v-col>
-        </v-row>
-      </v-sheet>
-      <mobile-lists-nav
-        v-if="open"
-        :open="open"
-        :lists="listsStore.lists"
-        @close="open = false"
-      />
+    </v-col>
+    <v-col>
+      <app-list />
     </v-col>
     <v-col class="fill-height">
       <v-sheet class="fill-height rounded-lg">
