@@ -1,13 +1,13 @@
 <script setup>
-import { useListsStore } from "~/stores/lists";
+import { useListsStore } from '~/stores/lists'
 
-const listTitle = ref(false);
+const listTitle = ref(false)
 
-const listsStore = useListsStore();
+const listsStore = useListsStore()
 
 onUpdated(() => {
-  listTitle.value.focus();
-});
+  listTitle.value.focus()
+})
 </script>
 <template>
   <v-row v-if="listsStore.currentList" no-gutters>
@@ -22,7 +22,7 @@ onUpdated(() => {
       <app-list-items
         v-if="listsStore.currentList"
         :list="listsStore.currentList"
-      ></app-list-items>
+      />
     </v-col>
   </v-row>
 </template>
