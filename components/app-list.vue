@@ -16,7 +16,8 @@ onUpdated(() => {
         ref="listTitle"
         v-model="listsStore.currentList.name"
         rounded
-        variant="solo-filled"
+        class="font-weight-bold"
+        variant="underlined"
       />
     </v-col>
     <v-col>
