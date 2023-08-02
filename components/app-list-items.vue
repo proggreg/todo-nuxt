@@ -34,7 +34,7 @@ function openContextMenu () {
     v-model="taskName"
     variant="solo-filled"
     rounded
-    placeholder="Task"
+    :placeholder="'Add task to ' + listsStore.currentList.name"
     @keyup.enter="addTask()"
   />
   <v-list :key="index" :items="listsStore.currentList.tasks" elevation="0" rounded>
@@ -44,7 +44,7 @@ function openContextMenu () {
       :key="index"
       ref="itemRefs"
       density="compact"
-      variant="tonal"
+      variant="text"
       @click="editTask(task)"
       @click.right.prevent="openContextMenu"
     >
