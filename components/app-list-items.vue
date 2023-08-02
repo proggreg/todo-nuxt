@@ -30,7 +30,13 @@ function openContextMenu () {
 </script>
 
 <template>
-  <v-text-field v-model="taskName" placeholder="Task" @keyup.enter="addTask()" />
+  <v-text-field
+    v-model="taskName"
+    variant="solo-filled"
+    rounded
+    placeholder="Task"
+    @keyup.enter="addTask()"
+  />
   <v-list :key="index" :items="listsStore.currentList.tasks" elevation="0" rounded>
     <v-list-subheader>Tasks</v-list-subheader>
     <v-list-item
@@ -55,6 +61,7 @@ function openContextMenu () {
           <v-btn
             variant="tonal"
             size="x-small"
+            rounded
             @click="deleteTask(list, index)"
           >
             Delete

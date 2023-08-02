@@ -15,6 +15,7 @@ onUpdated(() => {
       <v-text-field
         ref="listTitle"
         v-model="listsStore.currentList.name"
+        rounded
         variant="solo-filled"
       />
     </v-col>
