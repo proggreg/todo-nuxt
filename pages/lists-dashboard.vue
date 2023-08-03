@@ -9,7 +9,9 @@ const { data } = await useAsyncData('lists', () => listsStore.lists)
 const open = ref(false)
 
 function newList () {
-  listsStore.addList()
+  if (!listsStore.currentList || listsStore.currentList.name) {
+    listsStore.addList()
+  }
 }
 
 function openMobileNav () {
