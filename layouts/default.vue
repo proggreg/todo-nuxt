@@ -31,7 +31,7 @@
           </v-app-bar>
           <v-main>
             <v-container fluid>
-              <slot />
+              <NuxtPage />
             </v-container>
           </v-main>
         </v-layout>
@@ -53,7 +53,6 @@ if (
 const theme = ref(darkMode)
 
 function toggleDarkMode () {
-  console.log('Toggling dark mode', theme.value)
   if (theme.value === 'myCustomDarkTheme') {
     theme.value = 'myCustomLightTheme'
   } else {

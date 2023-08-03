@@ -1,10 +1,14 @@
 <template>
-  <div>
-    <NuxtLink v-slot="{ navigate }" to="/lists-dashboard" custom>
-      <v-card text="Todo list" variant="outlined" @click="navigate" />
-    </NuxtLink>
-    <NuxtLink v-slot="{ navigate }" to="/github-stars" custom>
-      <v-card text="Github Stars" variant="outlined" @click="navigate" />
-    </NuxtLink>
-  </div>
+  <v-row>
+    <v-col>
+      <NuxtLink v-slot="{ navigate }" to="/lists-dashboard" custom>
+        <v-card text="Todo list" variant="outlined" @click="navigate" />
+      </NuxtLink>
+    </v-col>
+    <v-col>
+      <NuxtLink v-slot="{ navigate }" to="/github-stars" custom>
+        <v-card text="Github Stars" variant="outlined" @click="navigate" />
+      </NuxtLink>
+    </v-col>
+  </v-row>
 </template>

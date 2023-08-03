@@ -1,33 +1,33 @@
 <script setup>
 // import { defineProps, defineEmits } from "vue";
-import { useListsStore } from "~/stores/lists";
+import { useListsStore } from '~/stores/lists'
 
-const listsStore = useListsStore();
-const emit = defineEmits(["selectList"]);
+const listsStore = useListsStore()
+const emit = defineEmits(['selectList'])
 const props = defineProps({
   lists: {
     type: Array,
-    default() {
+    default () {
       return [
         {
-          name: "",
-        },
-      ];
-    },
-  },
-});
+          name: ''
+        }
+      ]
+    }
+  }
+})
 
-function selectList(list) {
-  listsStore.setCurrentList(list);
-  emit("selectList", list);
+function selectList (list) {
+  listsStore.setCurrentList(list)
+  emit('selectList', list)
 }
 </script>
 
 <template>
   <v-list>
-    <v-list-item v-if="!props.lists.length"
-      ><v-title>No lists yet</v-title></v-list-item
-    >
+    <v-list-item v-if="!props.lists.length">
+      <v-list-item-title>No lists yet</v-list-item-title>
+    </v-list-item>
     <v-list-item
       v-for="(list, i) in props.lists"
       v-else
@@ -39,7 +39,7 @@ function selectList(list) {
       placeholder="My List"
       @click="selectList(list)"
     >
-      <v-title>{{ list.name }}</v-title>
+      <v-list-item-title>{{ list.name }}</v-list-item-title>
     </v-list-item>
   </v-list>
 </template>
