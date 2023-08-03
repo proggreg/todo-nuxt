@@ -47,7 +47,7 @@ if (
   window.matchMedia('(prefers-color-scheme: dark)').matches
 ) {
   // dark mode
-  darkMode = 'dark'
+  darkMode = 'myCustomDarkTheme'
 }
 
 const theme = ref(darkMode)
