@@ -36,5 +36,15 @@ export default defineNuxtConfig({
   },
   pinia: {
     autoImports: ['defineStore', 'acceptHMRUpdate']
+  },
+  vuetify: {
+    vuetifyOptions: {
+      theme: {
+        themes: {
+          myCustomDarkTheme,
+          myCustomLightTheme
+        }
+      }
+    }
   }
 })

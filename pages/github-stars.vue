@@ -15,6 +15,7 @@ const pageNumber = ref(1)
 const perPage = ref('12')
 const currentLanguage = ref('')
 const programmingLanguages = ref([
+  'Vue',
   'Python',
   'JavaScript',
   'Java',
@@ -38,7 +39,9 @@ const programmingLanguages = ref([
 ])
 const query = ref('stars')
 const { data, refresh } = await useFetch(url, {
-  transform: (data: RepoData) => data.items,
+  transform: (data: RepoData) => {
+    return data.items
+  },
   query: {
     page: pageNumber,
     per_page: perPage,
@@ -46,20 +49,25 @@ const { data, refresh } = await useFetch(url, {
     order: 'desc',
     q: query
   }
+
 })
 
 const pageOptions = ['12', '24', '48']
 function backPage () {
   if (pageNumber.value > 1) {
     pageNumber.value--
-    refresh()
   }
 }
 
 function nextPage () {
   pageNumber.value++
+}
+function changeLanguage (option : string) {
+  query.value = 'stars+language:' + option
+  currentLanguage.value = option
   refresh()
 }
+
 </script>
 <template>
   <v-row>
@@ -75,12 +83,7 @@ function nextPage () {
             v-for="(option, index) in programmingLanguages"
             :key="index"
             :value="option"
-            @click="
-              query = 'stars+language:' + option;
-              currentLanguage = option;
-              console.log(query);
-              refresh();
-            "
+            @click="changeLanguage(option)"
           >
             <v-list-item-title>{{ option }}</v-list-item-title>
           </v-list-item>
@@ -145,11 +148,10 @@ function nextPage () {
         </v-list-item>
       </v-list>
     </v-menu>
-    {{ pageNumber }}
-    <v-btn @click="backPage()">
+    <v-btn @click="backPage">
       Back Page
     </v-btn>
-    <v-btn @click="nextPage()">
+    <v-btn @click="nextPage">
       Next Page
     </v-btn>
   </v-bottom-navigation>
