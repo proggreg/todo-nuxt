@@ -1,9 +1,8 @@
 name: Set issue status to In Progress when branch is created
 
 on:
-  push:
-    branches:
-      - develop
+  issues:
+    types: [assigned]
 
 jobs:
   set_status:
