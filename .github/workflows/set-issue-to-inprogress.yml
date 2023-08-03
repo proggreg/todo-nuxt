@@ -1,0 +1,22 @@
+name: Set issue status to In Progress when branch is created
+
+on:
+  push:
+    branches:
+      - develop
+
+jobs:
+  set_status:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Set issue status
+        uses: actions/github-script@v3
+        with:
+          script: |
+            const issue = await github.issues.get({
+              issue_number: context.issue.number,
+            });
+
+            await issue.update({
+              status: 'In Progress',
+            });
