@@ -8,15 +8,11 @@ const { data } = await useAsyncData('lists', () => listsStore.lists)
 
 const open = ref(false)
 const desktopNavOpen = ref(true)
-const rail = ref(false)
 
 function newList () {
   if (!listsStore.currentList || listsStore.currentList.name) {
     listsStore.addList()
   }
-}
-  rail.value = false
-  listsStore.addList()
 }
 
 function openMobileNav () {
