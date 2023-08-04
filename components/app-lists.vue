@@ -1,5 +1,4 @@
 <script setup>
-// import { defineProps, defineEmits } from "vue";
 import { useListsStore } from '~/stores/lists'
 
 const listsStore = useListsStore()
@@ -24,9 +23,9 @@ function selectList (list) {
 </script>
 
 <template>
-  <v-list>
+  <v-list nav>
     <v-list-item v-if="!props.lists.length">
-      <v-list-item-title>No lists yet</v-list-item-title>
+      <v-title>No lists yet</v-title>
     </v-list-item>
     <v-list-item
       v-for="(list, i) in props.lists"

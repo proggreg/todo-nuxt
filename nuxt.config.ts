@@ -14,12 +14,14 @@ const myCustomDarkTheme = {
 export default defineNuxtConfig({
   modules: [
     '@invictus.codes/nuxt-vuetify',
-    '@pinia/nuxt'
+    '@pinia/nuxt',
+    '@nuxt/devtools'
   ],
 
   experimental: {
     payloadExtraction: false
   },
+
   nitro: {
     esbuild: {
       options: {
@@ -30,10 +32,12 @@ export default defineNuxtConfig({
       routes: []
     }
   },
+
   imports: {
     autoImport: true,
     dirs: ['./stores']
   },
+
   pinia: {
     autoImports: ['defineStore', 'acceptHMRUpdate']
   },
@@ -46,5 +50,9 @@ export default defineNuxtConfig({
         }
       }
     }
+  },
+
+  devtools: {
+    enabled: true
   }
 })

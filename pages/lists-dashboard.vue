@@ -7,6 +7,7 @@ const listsStore = useListsStore()
 const { data } = await useAsyncData('lists', () => listsStore.lists)
 
 const open = ref(false)
+const desktopNavOpen = ref(true)
 
 function newList () {
   if (!listsStore.currentList || listsStore.currentList.name) {
@@ -17,38 +18,44 @@ function newList () {
 function openMobileNav () {
   open.value = !open.value
 }
+
+function updateDrawer (el) {
+  desktopNavOpen.value = !el
+}
 </script>
 <template>
-  <v-row class="">
-    <v-col class="rounded-lg" cols="12" md="2">
-      <v-btn class="d-md-none" no-gutters @click="openMobileNav">
-        Lists
-      </v-btn>
-      <v-sheet
-        class="pa-2 fill-height rounded-lg d-none d-xs-none d-sm-none d-md-flex"
-      >
-        <v-row>
-          <v-col cols="12">
-            <v-btn rounded prepend-icon="mdi-plus" @click="newList">
+  <v-row>
+    <v-navigation-drawer
+      app
+      class="pa-2 fill-height rounded-lg d-none d-md-flex"
+      @update:rail="updateDrawer"
+    >
+      <v-list>
+        <v-list-item>
+          <template #prepend>
+            <v-btn rounded @click="newList">
+              <template #prepend>
+                <v-icon>mdi-plus</v-icon>
+              </template>
               New List
             </v-btn>
-          </v-col>
-          <v-divider />
-          <v-col cols="12">
-            <app-lists v-if="data" :lists="data" />
-          </v-col>
-        </v-row>
-      </v-sheet>
-      <mobile-lists-nav
-        v-if="open"
-        :open="open"
-        :lists="listsStore.lists"
-        @close="open = false"
-      />
+          </template>
+        </v-list-item>
+      </v-list>
+      <v-divider />
+      <app-lists v-if="data" :lists="data" />
+    </v-navigation-drawer>
+    <v-col class="rounded-lg d-lg-none" cols="1">
+      <v-btn class="" no-gutters @click="openMobileNav">
+        Lists
+      </v-btn>
     </v-col>
-    <v-col class="fill-height">
+    <v-col cols="6">
+      <app-list />
+    </v-col>
+    <v-col class="fill-height" cols="6">
       <v-sheet class="fill-height rounded-lg">
-        <app-list />
+        <app-list-item />
       </v-sheet>
     </v-col>
   </v-row>
