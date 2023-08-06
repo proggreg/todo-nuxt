@@ -19,12 +19,6 @@ function newList () {
   }
 }
 
-if (process.browser) {
-  if (width.value >= 1280) {
-    drawer.value = true
-  }
-}
-
 function openMobileNav () {
   drawer.value = !drawer.value
 }
