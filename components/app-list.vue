@@ -23,7 +23,6 @@ onUpdated(() => {
     <v-col>
       <app-list-items
         v-if="listsStore.currentList"
-        :list="listsStore.currentList"
       />
     </v-col>
   </v-row>
