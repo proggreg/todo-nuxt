@@ -12,6 +12,7 @@ const listsStore = useListsStore()
         :class="
           listsStore.currentTask.done ? 'text-decoration-line-through' : ''
         "
+        :disabled="listsStore.currentTask.done"
       />
     </v-card-title>
     <v-card-item>
@@ -19,6 +20,7 @@ const listsStore = useListsStore()
         v-model="listsStore.currentTask.desc"
         label="description"
         variant="solo-inverted"
+        :disabled="listsStore.currentTask.done"
       />
     </v-card-item>
     <v-card-actions>
@@ -28,6 +30,7 @@ const listsStore = useListsStore()
         variant="solo-inverted"
         density="compact"
         hide-details
+        :disabled="listsStore.currentTask.done"
       />
     </v-card-actions>
   </v-card>
