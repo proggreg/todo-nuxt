@@ -1,10 +1,9 @@
 <script setup>
 import { useListsStore } from '~/stores/lists'
-
-const itemRefs = ref([])
 const taskName = ref('')
 const listsStore = useListsStore()
 const showContextMenu = ref(false)
+const emit = defineEmits(['selectTodo'])
 
 function addTask () {
   if (taskName.value) {
@@ -22,6 +21,7 @@ function deleteTask (list, index) {
 
 function editTask (todo) {
   listsStore.setCurrentTask(todo)
+  emit('selectTodo')
 }
 
 function openContextMenu () {
@@ -37,18 +37,19 @@ function openContextMenu () {
     :placeholder="'Add task to ' + listsStore.currentList.name"
     @keyup.enter="addTask()"
   />
-  <v-list :key="index" :items="listsStore.currentList.tasks" elevation="0" rounded>
+  <v-list :items="listsStore.currentList.tasks" elevation="0" rounded>
     <v-list-subheader>Tasks</v-list-subheader>
     <v-list-item
       v-for="(task, index) in listsStore.currentList.tasks"
       :key="index"
-      ref="itemRefs"
       density="compact"
       variant="text"
-      @click="editTask(task)"
       @click.right.prevent="openContextMenu"
     >
-      <v-list-item-title :class="task.done ? 'text-decoration-line-through' : ''">
+      <v-list-item-title
+        :class="task.done ? 'text-decoration-line-through' : ''"
+        @click="editTask(task)"
+      >
         {{ task.name }}
       </v-list-item-title>
       <template #prepend="{}">
