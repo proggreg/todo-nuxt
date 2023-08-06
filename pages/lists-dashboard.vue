@@ -19,6 +19,12 @@ function newList () {
   }
 }
 
+if (process.browser) {
+  if (width.value >= 1280) {
+    drawer.value = true
+  }
+}
+
 function openMobileNav () {
   drawer.value = !drawer.value
 }
@@ -31,6 +37,12 @@ function todoSelected () {
     dialog.value = true
   }
 }
+
+onMounted(() => {
+  if (width.value >= 1280) {
+    drawer.value = true
+  }
+})
 </script>
 <template>
   <client-only>
