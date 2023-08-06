@@ -38,7 +38,7 @@ function openContextMenu () {
     @keyup.enter="addTask()"
   />
   <v-list :items="listsStore.currentList.tasks" elevation="0" rounded>
-    <v-list-subheader>Tasks</v-list-subheader>
+    <v-list-subheader>Todo</v-list-subheader>
     <v-list-item
       v-for="(task, index) in listsStore.currentList.tasks"
       :key="index"
