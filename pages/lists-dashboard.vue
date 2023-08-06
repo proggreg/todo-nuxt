@@ -3,22 +3,20 @@ import { ref } from 'vue'
 import { useWindowSize } from '@vueuse/core'
 import { useListsStore } from '~/stores/lists'
 
-const { width, height } = useWindowSize()
-
-console.log(width, height)
-
+const { width } = useWindowSize()
 const listsStore = useListsStore()
-
 const { data } = await useAsyncData('lists', () => listsStore.lists)
-
 const drawer = ref(false)
 const desktopNavOpen = ref(true)
 const dialog = ref(false)
+
 function newList () {
   if (!listsStore.currentList || listsStore.currentList.name) {
     listsStore.addList()
   }
-  drawer.value = false
+  if (width.value < 1280) { // https://vuetifyjs.com/en/styles/spacing/#breakpoints
+    drawer.value = false
+  }
 }
 
 function openMobileNav () {
@@ -66,7 +64,7 @@ function todoSelected () {
       <v-col cols="12" sm="6">
         <app-list @todoSelected="todoSelected()" />
       </v-col>
-      <v-col class="fill-height d-none d-sm-block " cols="12" sm="5" lg="6">
+      <v-col class="fill-height d-none d-sm-block " cols="12" sm="5">
         <v-dialog v-model="dialog">
           <v-sheet class="fill-height rounded-lg">
             <app-list-item />
