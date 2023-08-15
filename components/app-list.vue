@@ -5,6 +5,8 @@ const listTitle = ref(false)
 
 const listsStore = useListsStore()
 
+const emit = defineEmits(['todoSelected'])
+
 onUpdated(() => {
   listTitle.value.focus()
 })
@@ -23,7 +25,7 @@ onUpdated(() => {
     <v-col>
       <app-list-items
         v-if="listsStore.currentList"
-        :list="listsStore.currentList"
+        @select-todo="emit('todoSelected')"
       />
     </v-col>
   </v-row>
