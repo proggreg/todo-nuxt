@@ -16,7 +16,8 @@ export default defineNuxtConfig({
     '@invictus.codes/nuxt-vuetify',
     '@pinia/nuxt',
     '@nuxt/devtools',
-    '@vueuse/nuxt'
+    '@vueuse/nuxt',
+    'nuxt-mongoose'
   ],
 
   experimental: {

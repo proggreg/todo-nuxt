@@ -5,10 +5,20 @@ const listsStore = useListsStore()
 const showContextMenu = ref(false)
 const emit = defineEmits(['selectTodo'])
 
-function addTask () {
+async function addTask () {
   if (taskName.value) {
     listsStore.addTask(taskName)
   }
+
+  // const data = await $fetch('/api/todo/hello')
+  const data = await $fetch('/api/todo/create', {
+    method: 'POST',
+    body: {
+      name: taskName.value,
+      done: false
+    }
+  })
+  console.log(data)
 
   taskName.value = ''
 }
@@ -27,6 +37,12 @@ function editTask (todo) {
 function openContextMenu () {
   showContextMenu.value = true
 }
+
+onMounted(async () => {
+  const data = await fetch('/api/todo/hello')
+  console.log(
+    'todos ', data)
+})
 </script>
 
 <template>
