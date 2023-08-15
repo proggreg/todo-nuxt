@@ -5,6 +5,8 @@ const listTitle = ref(false)
 
 const listsStore = useListsStore()
 
+const emit = defineEmits(['todoSelected'])
+
 onUpdated(() => {
   listTitle.value.focus()
 })
@@ -15,13 +17,15 @@ onUpdated(() => {
       <v-text-field
         ref="listTitle"
         v-model="listsStore.currentList.name"
-        variant="solo-filled"
+        rounded
+        class="font-weight-bold"
+        variant="underlined"
       />
     </v-col>
     <v-col>
       <app-list-items
         v-if="listsStore.currentList"
-        :list="listsStore.currentList"
+        @select-todo="emit('todoSelected')"
       />
     </v-col>
   </v-row>

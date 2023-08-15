@@ -1,20 +1,11 @@
 <script setup>
-import { useListsStore } from "~/stores/lists";
-const listsStore = useListsStore();
-const emit = defineEmits("close");
+import { useListsStore } from '~/stores/lists'
+const listsStore = useListsStore()
 
-function closeTask() {
-  emit("close");
-  if (
-    !listsStore.currentList.tasks[listsStore.currentList.tasks.length - 1].name
-  ) {
-    listsStore.currentList.tasks.pop();
-  }
-}
 </script>
 
 <template>
-  <v-card>
+  <v-card v-if="listsStore.currentTask">
     <v-card-title>
       <v-text-field
         v-model="listsStore.currentTask.name"
@@ -22,26 +13,31 @@ function closeTask() {
           listsStore.currentTask.done ? 'text-decoration-line-through' : ''
         "
         :disabled="listsStore.currentTask.done"
-      >
-      </v-text-field>
+      />
     </v-card-title>
     <v-card-item>
       <v-textarea
         v-model="listsStore.currentTask.desc"
         label="description"
         variant="solo-inverted"
-      ></v-textarea>
+        :disabled="listsStore.currentTask.done"
+      />
     </v-card-item>
     <v-card-actions>
-      <v-spacer></v-spacer>
+      <v-spacer />
       <v-file-input
         label="File input"
         variant="solo-inverted"
         density="compact"
         hide-details
-      ></v-file-input>
-      <v-btn color="error" @click="closeTask">Close</v-btn>
+        :disabled="listsStore.currentTask.done"
+      />
     </v-card-actions>
+  </v-card>
+  <v-card v-else>
+    <v-card-title>
+      Select a task to view details
+    </v-card-title>
   </v-card>
 </template>
 

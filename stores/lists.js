@@ -15,9 +15,16 @@ export const useListsStore = defineStore('lists', {
         })
         this.currentList = this.lists[this.lists.length - 1]
       }
+
+      this.currentList = this.lists[this.lists.length - 1]
     },
     setCurrentList (currentList) {
       this.currentList = currentList
+    },
+    addTask (taskName) {
+      this.currentList.tasks.push({
+        name: taskName.value
+      })
     },
     setCurrentTask (currentTask) {
       this.currentTask = currentTask
@@ -33,4 +40,5 @@ export const useListsStore = defineStore('lists', {
     //   return state.currentList.tasks.length > 0 ? state.currentList.tasks[state.currentList.tasks.length - 1]
     // }
   }
+
 })

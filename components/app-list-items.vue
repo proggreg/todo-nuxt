@@ -1,39 +1,16 @@
 <script setup>
-import { reactive, ref } from 'vue'
 import { useListsStore } from '~/stores/lists'
-
-const itemRefs = ref([])
-const inputRefs = ref([])
-const newTaskDisabled = ref(false)
+const taskName = ref('')
 const listsStore = useListsStore()
-const props = defineProps({
-  list: {
-    type: Object,
-    default () {
-      return {}
-    }
+const showContextMenu = ref(false)
+const emit = defineEmits(['selectTodo'])
+
+function addTask () {
+  if (taskName.value) {
+    listsStore.addTask(taskName)
   }
-})
 
-const showTodo = ref(false)
-
-function validateTaskName (input) {
-  newTaskDisabled.value = !input.target.value
-}
-
-watch(inputRefs.value, (newInputRefs) => {
-  const input = newInputRefs[newInputRefs.length - 1]
-  input.focus()
-})
-
-function addTask (list) {
-  if (!list.tasks) {
-    list.tasks = reactive([])
-  }
-  list.tasks.push({
-    name: ''
-  })
-  newTaskDisabled.value = true
+  taskName.value = ''
 }
 
 function deleteTask (list, index) {
@@ -44,29 +21,36 @@ function deleteTask (list, index) {
 
 function editTask (todo) {
   listsStore.setCurrentTask(todo)
-  showTodo.value = true
+  emit('selectTodo')
+}
+
+function openContextMenu () {
+  showContextMenu.value = true
 }
 </script>
 
 <template>
-  <app-list-item v-if="showTodo" @close="showTodo = false" />
-  <v-list v-else :items="props.list.tasks" elevation="0" rounded>
-    <v-list-subheader>Tasks</v-list-subheader>
+  <v-text-field
+    v-model="taskName"
+    variant="solo-filled"
+    rounded
+    :placeholder="'Add task to ' + listsStore.currentList.name"
+    @keyup.enter="addTask()"
+  />
+  <v-list :items="listsStore.currentList.tasks" elevation="0" rounded>
+    <v-list-subheader>Todo</v-list-subheader>
     <v-list-item
-      v-for="(task, index) in list.tasks"
+      v-for="(task, index) in listsStore.currentList.tasks"
       :key="index"
-      ref="itemRefs"
       density="compact"
-      variant="tonal"
+      variant="text"
+      @click.right.prevent="openContextMenu"
     >
-      <v-list-item-title>
-        <v-text-field
-          ref="inputRefs"
-          v-model="task.name"
-          :class="task.done ? 'text-decoration-line-through' : ''"
-          :disabled="task.done"
-          @input="validateTaskName"
-        />
+      <v-list-item-title
+        :class="task.done ? 'text-decoration-line-through' : ''"
+        @click="editTask(task)"
+      >
+        {{ task.name }}
       </v-list-item-title>
       <template #prepend="{}">
         <v-list-item-action start>
@@ -78,15 +62,7 @@ function editTask (todo) {
           <v-btn
             variant="tonal"
             size="x-small"
-            color="yellow"
-            @click="editTask(task)"
-          >
-            edit
-          </v-btn>
-          <v-btn
-            variant="tonal"
-            size="x-small"
-            color="red"
+            rounded
             @click="deleteTask(list, index)"
           >
             Delete
@@ -94,19 +70,6 @@ function editTask (todo) {
         </v-list-item-action>
       </template>
     </v-list-item>
-    <v-list-item>
-      <v-spacer />
-      <template #append>
-        <v-btn
-          :disabled="
-            !listsStore.currentList.name ? true : false || newTaskDisabled
-          "
-          size="x-small"
-          @click="addTask(list, index)"
-        >
-          New Task
-        </v-btn>
-      </template>
-    </v-list-item>
   </v-list>
+  <app-context-menu :menu-items="[{label:'one'}, {label:'two'}]" />
 </template>

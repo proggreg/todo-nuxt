@@ -39,6 +39,7 @@
     </v-theme-provider>
   </main>
 </template>
+
 <script setup>
 let darkMode = 'myCustomLightTheme'
 if (
