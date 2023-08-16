@@ -4,13 +4,13 @@ const taskName = ref('')
 const listsStore = useListsStore()
 const showContextMenu = ref(false)
 const emit = defineEmits(['selectTodo'])
+const debug = ref('')
 
 async function addTask () {
   if (taskName.value) {
     listsStore.addTask(taskName)
   }
 
-  // const data = await $fetch('/api/todo/hello')
   const data = await $fetch('/api/todo/create', {
     method: 'POST',
     body: {
@@ -18,7 +18,6 @@ async function addTask () {
       done: false
     }
   })
-  console.log(data)
 
   taskName.value = ''
 }
@@ -39,13 +38,15 @@ function openContextMenu () {
 }
 
 onMounted(async () => {
-  const data = await fetch('/api/todo/hello')
-  console.log(
-    'todos ', data)
+  const { data } = await useFetch('/api/todo')
+
+  listsStore.setCurrentListTasks(data.value)
 })
+
 </script>
 
 <template>
+  <h1>{{ debug }}</h1>
   <v-text-field
     v-model="taskName"
     variant="solo-filled"

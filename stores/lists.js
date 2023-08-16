@@ -21,6 +21,9 @@ export const useListsStore = defineStore('lists', {
     setCurrentList (currentList) {
       this.currentList = currentList
     },
+    setCurrentListTasks (tasks) {
+      this.currentList.tasks = tasks
+    },
     addTask (taskName) {
       this.currentList.tasks.push({
         name: taskName.value
