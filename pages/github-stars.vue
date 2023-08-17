@@ -10,6 +10,7 @@ interface RepoData extends Array<Repo>{
   items: Array<Repo>
 }
 
+// https://docs.github.com/en/free-pro-team@latest/rest/search/search?apiVersion=2022-11-28#search-repositories
 const url = 'https://api.github.com/search/repositories'
 const pageNumber = ref(1)
 const perPage = ref('12')
