@@ -15,6 +15,7 @@ const url = 'https://api.github.com/search/repositories'
 const pageNumber = ref(1)
 const perPage = ref('12')
 const currentLanguage = ref('')
+const language = ref('')
 const programmingLanguages = ref([
   'Vue',
   'Python',
@@ -38,7 +39,7 @@ const programmingLanguages = ref([
   'MATLAB',
   'Shell'
 ])
-const query = ref('stars')
+const query = ref('stars:>1000 archived:false')
 const { data, refresh } = await useFetch(url, {
   transform: (data: RepoData) => {
     return data.items
@@ -48,7 +49,13 @@ const { data, refresh } = await useFetch(url, {
     per_page: perPage,
     sort: 'stars',
     order: 'desc',
-    q: query
+    archived: false,
+    q: query,
+    language
+  },
+  onRequest ({ request, options }) {
+    // eslint-disable-next-line no-console
+    console.debug(request, options)
   }
 
 })
@@ -64,8 +71,14 @@ function nextPage () {
   pageNumber.value++
 }
 function changeLanguage (option : string) {
-  query.value = 'stars+language:' + option
+  language.value = option
+  query.value = query.value + ' language:' + option
   currentLanguage.value = option
+  refresh()
+}
+function removeLanguage () {
+  query.value = query.value.replace(' language:' + currentLanguage.value, '')
+  currentLanguage.value = ''
   refresh()
 }
 
@@ -93,11 +106,7 @@ function changeLanguage (option : string) {
 
       <v-chip
         v-if="currentLanguage"
-        @click="
-          currentLanguage = '';
-          query = 'stars';
-          refresh();
-        "
+        @click="removeLanguage"
       >
         {{ currentLanguage }}
       </v-chip>
