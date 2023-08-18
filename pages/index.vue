@@ -15,9 +15,7 @@ const cardData = ref([{
 </script>
 
 <template>
-  <v-row justify="center">
-    <AboutmeSection />
-  </v-row>
+  <AboutmeSection />
   <v-row>
     <v-col v-for="data in cardData" :key="data.title">
       <NuxtLink v-slot="{ navigate }" :to="data.route" custom>
