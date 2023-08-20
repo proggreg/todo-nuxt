@@ -1,4 +1,4 @@
-<script setup>
+<script setup lang="ts">
 const cardData = ref([{
   title: 'Todo list',
   icon: 'mdi-checkbox-marked-outline',
