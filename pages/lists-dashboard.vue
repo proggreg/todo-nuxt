@@ -1,4 +1,4 @@
-<script setup>
+<script setup lang="ts">
 import { ref } from 'vue'
 import { useWindowSize } from '@vueuse/core'
 import { useListsStore } from '~/stores/lists'
