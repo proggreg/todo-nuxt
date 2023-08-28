@@ -1,15 +1,23 @@
 <script setup>
 import { useListsStore } from '~/stores/lists'
-
-const itemRefs = ref([])
 const taskName = ref('')
 const listsStore = useListsStore()
 const showContextMenu = ref(false)
+const emit = defineEmits(['selectTodo'])
+const debug = ref('')
 
-function addTask () {
+async function addTask () {
   if (taskName.value) {
     listsStore.addTask(taskName)
   }
+
+  const data = await $fetch('/api/todo/create', {
+    method: 'POST',
+    body: {
+      name: taskName.value,
+      done: false
+    }
+  })
 
   taskName.value = ''
 }
@@ -22,14 +30,23 @@ function deleteTask (list, index) {
 
 function editTask (todo) {
   listsStore.setCurrentTask(todo)
+  emit('selectTodo')
 }
 
 function openContextMenu () {
   showContextMenu.value = true
 }
+
+onMounted(async () => {
+  const { data } = await useFetch('/api/todo')
+
+  listsStore.setCurrentListTasks(data.value)
+})
+
 </script>
 
 <template>
+  <h1>{{ debug }}</h1>
   <v-text-field
     v-model="taskName"
     variant="solo-filled"
@@ -37,18 +54,19 @@ function openContextMenu () {
     :placeholder="'Add task to ' + listsStore.currentList.name"
     @keyup.enter="addTask()"
   />
-  <v-list :key="index" :items="listsStore.currentList.tasks" elevation="0" rounded>
-    <v-list-subheader>Tasks</v-list-subheader>
+  <v-list :items="listsStore.currentList.tasks" elevation="0" rounded>
+    <v-list-subheader>Todo</v-list-subheader>
     <v-list-item
       v-for="(task, index) in listsStore.currentList.tasks"
       :key="index"
-      ref="itemRefs"
       density="compact"
       variant="text"
-      @click="editTask(task)"
       @click.right.prevent="openContextMenu"
     >
-      <v-list-item-title :class="task.done ? 'text-decoration-line-through' : ''">
+      <v-list-item-title
+        :class="task.done ? 'text-decoration-line-through' : ''"
+        @click="editTask(task)"
+      >
         {{ task.name }}
       </v-list-item-title>
       <template #prepend="{}">

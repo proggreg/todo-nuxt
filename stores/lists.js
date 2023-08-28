@@ -4,6 +4,7 @@ export const useListsStore = defineStore('lists', {
   state: () => ({
     lists: [],
     currentList: null,
+    currentListId: null,
     currentTask: null
   }),
   actions: {
@@ -21,17 +22,24 @@ export const useListsStore = defineStore('lists', {
     setCurrentList (currentList) {
       this.currentList = currentList
     },
-    addTask (taskName) {
-      this.currentList.tasks.push({
-        name: taskName.value
-      })
+    setCurrentListTasks (tasks) {
+      this.currentList.tasks = tasks
     },
     setCurrentTask (currentTask) {
       this.currentTask = currentTask
     },
     setTaskName (name) {
       this.currentList.tasks[currentTask].name = name
+    },
+    setListId (listId) {
+      this.listId = listId
+    },
+    addTask (taskName) {
+      this.currentList.tasks.push({
+        name: taskName.value
+      })
     }
+
   },
   getters: {
     getLists: state => state.lists

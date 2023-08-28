@@ -5,6 +5,20 @@ const listTitle = ref(false)
 
 const listsStore = useListsStore()
 
+const emit = defineEmits(['todoSelected'])
+
+function updateListName () {
+  console.log('update list name', listsStore.currentList.name)
+  if (listsStore.currentList.name) {
+    $fetch('/api/list/update', {
+      method: 'PUT',
+      body: {
+        name: listsStore.currentList.name,
+        _id: listsStore.listId
+      }
+    })
+  }
+}
 onUpdated(() => {
   listTitle.value.focus()
 })
@@ -18,12 +32,13 @@ onUpdated(() => {
         rounded
         class="font-weight-bold"
         variant="underlined"
+        @input="updateListName"
       />
     </v-col>
     <v-col>
       <app-list-items
         v-if="listsStore.currentList"
-        :list="listsStore.currentList"
+        @select-todo="emit('todoSelected')"
       />
     </v-col>
   </v-row>
