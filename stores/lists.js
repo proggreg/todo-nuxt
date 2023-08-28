@@ -12,7 +12,7 @@ export const useListsStore = defineStore('lists', {
       if (!this.lists.length || this.lists[this.lists.length - 1].name) {
         this.lists.push({
           name: '',
-          tasks: []
+          todos: []
         })
         this.currentList = this.lists[this.lists.length - 1]
       }
@@ -22,8 +22,8 @@ export const useListsStore = defineStore('lists', {
     setCurrentList (currentList) {
       this.currentList = currentList
     },
-    setCurrentListTasks (tasks) {
-      this.currentList.tasks = tasks
+    setCurrentListTasks (todos) {
+      this.currentList.todos = todos
     },
     setCurrentTask (currentTask) {
       this.currentTask = currentTask
@@ -35,7 +35,10 @@ export const useListsStore = defineStore('lists', {
       this.listId = listId
     },
     addTask (taskName) {
-      this.currentList.tasks.push({
+      if (!this.currentList.todos) {
+        this.currentList.todos = []
+      }
+      this.currentList.todos.push({
         name: taskName.value
       })
     }

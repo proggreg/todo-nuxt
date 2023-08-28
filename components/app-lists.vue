@@ -1,20 +1,10 @@
 <script setup>
 import { useListsStore } from '~/stores/lists'
 
+const { data: lists } = await useFetch('/api/lists')
+
 const listsStore = useListsStore()
 const emit = defineEmits(['selectList'])
-const props = defineProps({
-  lists: {
-    type: Array,
-    default () {
-      return [
-        {
-          name: ''
-        }
-      ]
-    }
-  }
-})
 
 function selectList (list) {
   listsStore.setCurrentList(list)
@@ -24,11 +14,11 @@ function selectList (list) {
 
 <template>
   <v-list nav>
-    <v-list-item v-if="!props.lists.length">
+    <v-list-item v-if="!lists || !lists.length">
       <v-list-item-title>No lists yet</v-list-item-title>
     </v-list-item>
     <v-list-item
-      v-for="(list, i) in props.lists"
+      v-for="(list, i) in lists"
       v-else
       :key="i"
       color="accent"

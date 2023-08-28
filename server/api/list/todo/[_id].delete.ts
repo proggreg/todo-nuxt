@@ -6,11 +6,20 @@ export default defineEventHandler(async (event) => {
     if (!event.context.params || !event.context.params._id) {
       throw new Error('no id')
     }
-    return await ListSchema.updateOne({
+    await ListSchema.findOneAndUpdate({
       _id: event.context.params._id
-    }, body)
+    }, {
+      $pull: {
+        todos: {
+          name: body.name
+        }
+      }
+    })
+    return await ListSchema.findOne({
+      _id: event.context.params._id
+    })
   } catch (e) {
-    console.error(e)
+    console.error('delete todo', e)
     return e
   }
 })

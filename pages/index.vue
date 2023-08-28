@@ -1,7 +1,7 @@
 <template>
   <v-row>
     <v-col>
-      <NuxtLink v-slot="{ navigate }" to="/lists-dashboard" custom>
+      <NuxtLink v-slot="{ navigate }" to="/lists" custom>
         <v-card text="Todo list" variant="outlined" @click="navigate" />
       </NuxtLink>
     </v-col>

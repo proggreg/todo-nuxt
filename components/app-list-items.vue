@@ -9,26 +9,42 @@ const debug = ref('')
 async function addTask () {
   if (taskName.value) {
     listsStore.addTask(taskName)
+    const { data } = await useFetch(`/api/list/todo/${listsStore.currentList._id}`, {
+      method: 'PUT',
+      body: {
+        name: taskName.value,
+        done: false
+      }
+    })
+    console.log(data)
+    listsStore.setCurrentListTasks(data.value.todos)
   }
-
-  const data = await $fetch('/api/todo/create', {
-    method: 'POST',
-    body: {
-      name: taskName.value,
-      done: false
-    }
-  })
 
   taskName.value = ''
 }
 
-function deleteTask (list, index) {
-  if (list.tasks) {
-    list.tasks.splice(index, 1)
+async function deleteTask (taskName) {
+  const data = await $fetch(`/api/list/todo/${listsStore.currentList._id}`, {
+    method: 'DELETE',
+    body: {
+      name: taskName
+    }
+  })
+  if (data && data.todos) {
+    listsStore.setCurrentListTasks(data.todos)
+  } else {
+    listsStore.setCurrentListTasks([])
   }
 }
 
-function editTask (todo) {
+async function editTask (todo) {
+  console.log('edit ', todo)
+  const { data } = await useFetch(`/api/list/todo/${listsStore.currentList._id}`, {
+    method: 'PUT',
+    body: todo
+
+  })
+  listsStore.setCurrentListTasks(data.value.todos)
   listsStore.setCurrentTask(todo)
   emit('selectTodo')
 }
@@ -38,9 +54,9 @@ function openContextMenu () {
 }
 
 onMounted(async () => {
-  const { data } = await useFetch('/api/todo')
+  // const { data } = await useFetch('/api/todo')
 
-  listsStore.setCurrentListTasks(data.value)
+  // listsStore.setCurrentListTasks(data.value)
 })
 
 </script>
@@ -54,10 +70,10 @@ onMounted(async () => {
     :placeholder="'Add task to ' + listsStore.currentList.name"
     @keyup.enter="addTask()"
   />
-  <v-list :items="listsStore.currentList.tasks" elevation="0" rounded>
+  <v-list :items="listsStore.currentList.todos" elevation="0" rounded>
     <v-list-subheader>Todo</v-list-subheader>
     <v-list-item
-      v-for="(task, index) in listsStore.currentList.tasks"
+      v-for="(task, index) in listsStore.currentList.todos"
       :key="index"
       density="compact"
       variant="text"
@@ -80,7 +96,7 @@ onMounted(async () => {
             variant="tonal"
             size="x-small"
             rounded
-            @click="deleteTask(list, index)"
+            @click="deleteTask(task.name, index)"
           >
             Delete
           </v-btn>
@@ -88,5 +104,4 @@ onMounted(async () => {
       </template>
     </v-list-item>
   </v-list>
-  <app-context-menu :menu-items="[{label:'one'}, {label:'two'}]" />
 </template>

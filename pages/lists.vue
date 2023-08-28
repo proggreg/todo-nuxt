@@ -9,21 +9,29 @@ const { data } = await useAsyncData('lists', () => listsStore.lists)
 const drawer = ref(false)
 const desktopNavOpen = ref(true)
 const dialog = ref(false)
+const listName = ref('')
 
 async function newList () {
   if (!listsStore.currentList || listsStore.currentList.name) {
     listsStore.addList()
   }
 
-  const data = await $fetch('/api/list/create', { method: 'POST' })
+  const data = await $fetch('/api/list/create', {
+    method: 'POST',
+    body: {
+      name: listName.value
+    }
+  })
   if (data) {
-    console.log('list creatlistIdasd', data)
     listsStore.setListId(data._id)
+    listName.value = ''
   }
 
   if (width.value < 1280) { // https://vuetifyjs.com/en/styles/spacing/#breakpoints
     drawer.value = false
   }
+
+  dialog.value = false
 }
 
 function openMobileNav () {
@@ -57,21 +65,28 @@ onMounted(() => {
         <v-list>
           <v-list-item>
             <template #prepend>
-              <app-dialog>
-                <v-text-field>New List</v-text-field>
-              </app-dialog>
-              <!-- <v-btn rounded @click="newList">
-                <template #prepend>
-                  <v-icon>mdi-plus</v-icon>
+              <app-dialog :open="dialog">
+                <template #open>
+                  <v-btn
+                    color="primary"
+                    @click="dialog = true"
+                  >
+                    New List
+                  </v-btn>
                 </template>
-                New List
-              </v-btn>
-            </template> -->
+
+                <v-text-field v-model="listName" placeholder="New List" @keyup.enter="newList" />
+                <template #buttons>
+                  <v-btn @click="newList">
+                    Save
+                  </v-btn>
+                </template>
+              </app-dialog>
             </template>
           </v-list-item>
         </v-list>
         <v-divider />
-        <app-lists v-if="data" :lists="data" />
+        <app-lists v-if="data" :lists="data" /> <!--TODO don't use data as name-->
       </v-navigation-drawer>
       <v-col class="rounded-lg d-lg-none" cols="12" md="1">
         <v-btn class="" no-gutters @click="openMobileNav">
@@ -82,7 +97,7 @@ onMounted(() => {
         <app-list @todoSelected="todoSelected()" />
       </v-col>
       <v-col class="fill-height d-none d-sm-block " cols="12" sm="5">
-        <v-dialog v-model="dialog">
+        <v-dialog>
           <v-sheet class="fill-height rounded-lg">
             <app-list-item />
           </v-sheet>

@@ -1,27 +1,30 @@
 <script setup lang="ts">
-const dialog = ref(false)
 const size = useWindowSize()
+const dialogProps = defineProps<{
+  title: string,
+  open: boolean
+}>()
+
+onUpdated(() => {
+  console.log('open:', dialogProps.open)
+})
 
 </script>
 
 <template>
-  <v-dialog v-model="dialog" :fullscreen="size.width.value <= 400" transition="dialog-bottom-transition">
-    <template #activator="{ props }">
-      <v-btn
-        color="primary"
-        v-bind="props"
-      >
-        Open Dialog
-      </v-btn>
+  <v-dialog :model-value="dialogProps.open" :fullscreen="size.width.value <= 400" transition="dialog-bottom-transition">
+    <template #activator>
+      <slot name="open" />
     </template>
 
     <v-card>
+      <slot />
       <v-card-actions>
-        <v-btn @click="dialog = false">
+        <v-btn>
           Close
         </v-btn>
+        <slot name="buttons" />
       </v-card-actions>
-      <slot />
     </v-card>
   </v-dialog>
 </template>
