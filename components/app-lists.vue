@@ -1,10 +1,12 @@
 <script setup>
 import { useListsStore } from '~/stores/lists'
-
 const { data: lists } = await useFetch('/api/lists')
-
 const listsStore = useListsStore()
 const emit = defineEmits(['selectList'])
+
+if (lists) {
+  listsStore.setLists(lists)
+}
 
 function selectList (list) {
   listsStore.setCurrentList(list)

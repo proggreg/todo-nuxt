@@ -27,6 +27,7 @@ function updateListName () { // TODO use edit button to edit title
       <app-list-items
         v-if="listsStore.currentList"
         @select-todo="emit('todoSelected')"
+        @delete=""
       />
     </v-col>
   </v-row>

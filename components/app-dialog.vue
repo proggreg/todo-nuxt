@@ -1,13 +1,9 @@
 <script setup lang="ts">
 const size = useWindowSize()
 const dialogProps = defineProps<{
-  title: string,
-  open: boolean
+  title?: string,
+  open?: boolean
 }>()
-
-onUpdated(() => {
-  console.log('open:', dialogProps.open)
-})
 
 </script>
 

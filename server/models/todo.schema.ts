@@ -10,6 +10,9 @@ export const TodoSchema = defineMongooseModel({
     done: {
       type: 'boolean',
       required: true
+    },
+    list_id: {
+      type: 'string'
     }
   }
 })

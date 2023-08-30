@@ -19,6 +19,9 @@ export const useListsStore = defineStore('lists', {
 
       this.currentList = this.lists[this.lists.length - 1]
     },
+    setLists (lists) {
+      this.lists = lists
+    },
     setCurrentList (currentList) {
       this.currentList = currentList
     },

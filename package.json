@@ -25,6 +25,7 @@
   "dependencies": {
     "@invictus.codes/nuxt-vuetify": "^0.2.20",
     "@pinia/nuxt": "^0.4.11",
+    "mongoose": "^7.5.0",
     "nuxt-mongoose": "^0.0.9",
     "pinia": "^2.1.4"
   }

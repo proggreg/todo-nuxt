@@ -1,93 +1,67 @@
 <script setup>
 import { useListsStore } from '~/stores/lists'
-const taskName = ref('')
+const todoName = ref('')
 const listsStore = useListsStore()
-const showContextMenu = ref(false)
-const emit = defineEmits(['selectTodo'])
-const debug = ref('')
+const url = computed(() => `/api/list/todo/${listsStore.currentList._id}`)
+const { data: todos, refresh } = await useFetch(url)
 
-async function addTask () {
-  if (taskName.value) {
-    listsStore.addTask(taskName)
-    const { data } = await useFetch(`/api/list/todo/${listsStore.currentList._id}`, {
-      method: 'PUT',
+async function addTodo () {
+  if (todoName.value) {
+    await $fetch(`/api/list/todo/${listsStore.currentList._id}`, {
+      method: 'POST',
       body: {
-        name: taskName.value,
-        done: false
+        name: todoName.value,
+        done: false,
+        list_id: listsStore.currentList._id
       }
     })
-    console.log(data)
-    listsStore.setCurrentListTasks(data.value.todos)
+    refresh()
   }
 
-  taskName.value = ''
+  todoName.value = ''
 }
 
-async function deleteTask (taskName) {
-  const data = await $fetch(`/api/list/todo/${listsStore.currentList._id}`, {
-    method: 'DELETE',
-    body: {
-      name: taskName
-    }
+async function deleteTodo (todo) {
+  await $fetch(`/api/list/todo/${todo._id}`, {
+    method: 'DELETE'
   })
-  if (data && data.todos) {
-    listsStore.setCurrentListTasks(data.todos)
-  } else {
-    listsStore.setCurrentListTasks([])
-  }
+  refresh()
 }
 
-async function editTask (todo) {
-  console.log('edit ', todo)
-  const { data } = await useFetch(`/api/list/todo/${listsStore.currentList._id}`, {
+function editTodo (todo) {
+  todo.done = !todo.done
+  $fetch(`/api/list/todo/${todo._id}`, {
     method: 'PUT',
     body: todo
-
   })
-  listsStore.setCurrentListTasks(data.value.todos)
-  listsStore.setCurrentTask(todo)
-  emit('selectTodo')
 }
-
-function openContextMenu () {
-  showContextMenu.value = true
-}
-
-onMounted(async () => {
-  // const { data } = await useFetch('/api/todo')
-
-  // listsStore.setCurrentListTasks(data.value)
-})
 
 </script>
 
 <template>
-  <h1>{{ debug }}</h1>
   <v-text-field
-    v-model="taskName"
+    v-model="todoName"
     variant="solo-filled"
     rounded
-    :placeholder="'Add task to ' + listsStore.currentList.name"
-    @keyup.enter="addTask()"
+    :placeholder="'Add todo to ' + listsStore.currentList.name"
+    @keyup.enter="addTodo()"
   />
-  <v-list :items="listsStore.currentList.todos" elevation="0" rounded>
+  <v-list :items="todos" elevation="0" rounded>
     <v-list-subheader>Todo</v-list-subheader>
     <v-list-item
-      v-for="(task, index) in listsStore.currentList.todos"
+      v-for="(todo, index) in todos"
       :key="index"
       density="compact"
       variant="text"
-      @click.right.prevent="openContextMenu"
     >
       <v-list-item-title
-        :class="task.done ? 'text-decoration-line-through' : ''"
-        @click="editTask(task)"
+        :class="todo.done ? 'text-decoration-line-through' : ''"
       >
-        {{ task.name }}
+        {{ todo.name }}
       </v-list-item-title>
       <template #prepend="{}">
         <v-list-item-action start>
-          <v-checkbox-btn v-model="task.done" />
+          <v-checkbox-btn v-model="todo.done" @click="editTodo(todo)" />
         </v-list-item-action>
       </template>
       <template #append="{}">
@@ -96,7 +70,7 @@ onMounted(async () => {
             variant="tonal"
             size="x-small"
             rounded
-            @click="deleteTask(task.name, index)"
+            @click="deleteTodo(todo)"
           >
             Delete
           </v-btn>
