@@ -30,16 +30,20 @@ export const useListsStore = defineStore('lists', {
   }),
   actions: {
     addList () {
-      if (!this.lists.length || this.lists[this.lists.length - 1].name) {
-        const newList = {
-          name: '',
-          tasks: []
-        }
-        this.lists.push(newList)
-        this.currentList = this.lists[this.lists.length - 1]
+      // if (!this.lists.length || this.lists[this.lists.length - 1].name) {
+      const newList = {
+        name: '',
+        tasks: []
       }
+      this.lists.push(newList)
+      console.log('add list ', this.lists.length)
+      this.currentList = this.lists[this.lists.length - 1]
+      // }
 
       this.currentList = this.lists[this.lists.length - 1]
+    },
+    setLists (lists: Array<list>) {
+      this.lists = lists
     },
     setCurrentList (currentList: list) {
       this.currentList = currentList

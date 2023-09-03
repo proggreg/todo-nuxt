@@ -43,10 +43,10 @@ function editTodo (todo) {
     v-model="todoName"
     variant="solo-filled"
     rounded
-    :placeholder="'Add todo to ' + listsStore.currentList.name"
+    :placeholder="'Add todo to 2' + listsStore.currentList.name"
     @keyup.enter="addTodo()"
   />
-  <v-list :items="todos" elevation="0" rounded>
+  <v-list elevation="0" rounded>
     <v-list-subheader>Todo</v-list-subheader>
     <v-list-item
       v-for="(todo, index) in todos"
