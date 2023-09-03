@@ -1,13 +1,32 @@
+<script setup lang="ts">
+const cardData = ref([{
+  title: 'Todo list',
+  icon: 'mdi-checkbox-marked-outline',
+  route: 'lists-dashboard',
+  description: 'A simple Todo app to get tasks done.'
+}, {
+  title: 'Github Stars',
+  icon: 'mdi-star',
+  route: 'github-stars',
+  description: 'Explore the most popular github repos.'
+}
+])
+
+</script>
+
 <template>
+  <AboutmeSection />
   <v-row>
-    <v-col>
-      <NuxtLink v-slot="{ navigate }" to="/lists-dashboard" custom>
-        <v-card text="Todo list" variant="outlined" @click="navigate" />
-      </NuxtLink>
-    </v-col>
-    <v-col>
-      <NuxtLink v-slot="{ navigate }" to="/github-stars" custom>
-        <v-card text="Github Stars" variant="outlined" @click="navigate" />
+    <v-col v-for="data in cardData" :key="data.title">
+      <NuxtLink v-slot="{ navigate }" :to="data.route" custom>
+        <v-card
+          :title="data.title"
+          :text="data.description"
+          variant="outlined"
+          :prepend-icon="data.icon"
+          width="400"
+          @click="navigate"
+        />
       </NuxtLink>
     </v-col>
   </v-row>
