@@ -1,18 +1,17 @@
 import { defineMongooseModel } from '#nuxt/mongoose'
 
-export const TodoSchema = defineMongooseModel({
-  name: 'Todo',
+export const ListSchema = defineMongooseModel({
+  name: 'List',
   schema: {
     name: {
       type: 'string',
       required: true
     },
-    done: {
-      type: 'boolean',
-      required: true
-    },
-    list_id: {
+    descriptions: {
       type: 'string'
+    },
+    todos: {
+      type: 'array'
     }
   }
 })
