@@ -1,77 +1,67 @@
 <script setup>
 import { useListsStore } from '~/stores/lists'
-const taskName = ref('')
+const todoName = ref('')
 const listsStore = useListsStore()
-const showContextMenu = ref(false)
-const emit = defineEmits(['selectTodo'])
-const debug = ref('')
+const url = computed(() => `/api/list/todo/${listsStore.currentList._id}`)
+const { data: todos, refresh } = await useFetch(url)
 
-async function addTask () {
-  if (taskName.value) {
-    listsStore.addTask(taskName)
+async function addTodo () {
+  if (todoName.value) {
+    await $fetch(`/api/list/todo/${listsStore.currentList._id}`, {
+      method: 'POST',
+      body: {
+        name: todoName.value,
+        done: false,
+        list_id: listsStore.currentList._id
+      }
+    })
+    refresh()
   }
 
-  const data = await $fetch('/api/todo/create', {
-    method: 'POST',
-    body: {
-      name: taskName.value,
-      done: false
-    }
+  todoName.value = ''
+}
+
+async function deleteTodo (todo) {
+  await $fetch(`/api/list/todo/${todo._id}`, {
+    method: 'DELETE'
   })
-
-  taskName.value = ''
+  refresh()
 }
 
-function deleteTask (list, index) {
-  if (list.tasks) {
-    list.tasks.splice(index, 1)
-  }
+function editTodo (todo) {
+  todo.done = !todo.done
+  $fetch(`/api/list/todo/${todo._id}`, {
+    method: 'PUT',
+    body: todo
+  })
 }
-
-function editTask (todo) {
-  listsStore.setCurrentTask(todo)
-  emit('selectTodo')
-}
-
-function openContextMenu () {
-  showContextMenu.value = true
-}
-
-onMounted(async () => {
-  const { data } = await useFetch('/api/todo')
-
-  listsStore.setCurrentListTasks(data.value)
-})
 
 </script>
 
 <template>
-  <h1>{{ debug }}</h1>
   <v-text-field
-    v-model="taskName"
+    v-model="todoName"
     variant="solo-filled"
     rounded
-    :placeholder="'Add task to ' + listsStore.currentList.name"
-    @keyup.enter="addTask()"
+    :placeholder="'Add todo to ' + listsStore.currentList.name"
+    @keyup.enter="addTodo()"
   />
-  <v-list :items="listsStore.currentList.tasks" elevation="0" rounded>
+  <v-list :items="todos" elevation="0" rounded>
     <v-list-subheader>Todo</v-list-subheader>
     <v-list-item
-      v-for="(task, index) in listsStore.currentList.tasks"
+      v-for="(todo, index) in todos"
       :key="index"
       density="compact"
       variant="text"
-      @click.right.prevent="openContextMenu"
     >
       <v-list-item-title
-        :class="task.done ? 'text-decoration-line-through' : ''"
-        @click="editTask(task)"
+        :class="todo.done ? 'text-decoration-line-through' : ''"
       >
-        {{ task.name }}
+        {{ todo.name }}
       </v-list-item-title>
       <template #prepend="{}">
         <v-list-item-action start>
-          <v-checkbox-btn v-model="task.done" />
+          <v-checkbox-btn v-model="todo.done" @click="editTodo(todo)" />
         </v-list-item-action>
       </template>
       <template #append="{}">
@@ -80,7 +70,7 @@ onMounted(async () => {
             variant="tonal"
             size="x-small"
             rounded
-            @click="deleteTask(list, index)"
+            @click="deleteTodo(todo)"
           >
             Delete
           </v-btn>
@@ -88,5 +78,4 @@ onMounted(async () => {
       </template>
     </v-list-item>
   </v-list>
-  <app-context-menu :menu-items="[{label:'one'}, {label:'two'}]" />
 </template>
