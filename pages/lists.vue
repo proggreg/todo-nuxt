@@ -12,10 +12,7 @@ const dialog = ref(false)
 const listName = ref('')
 
 async function newList () {
-  if (!listsStore.currentList || listsStore.currentList.name) {
-    listsStore.addList()
-  }
-
+  listsStore.addList(listName.value)
   const data = await $fetch('/api/list/create', {
     method: 'POST',
     body: {

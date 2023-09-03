@@ -27,8 +27,10 @@ function updateListName () { // TODO use edit button to edit title
       <app-list-items
         v-if="listsStore.currentList"
         @select-todo="emit('todoSelected')"
-        @delete=""
       />
+    </v-col>
+    <v-col cols="2" class="pa-4">
+      <list-delete-button :_id="listsStore.currentList._id" />
     </v-col>
   </v-row>
 </template>

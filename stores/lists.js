@@ -44,8 +44,11 @@ export const useListsStore = defineStore('lists', {
       this.currentList.todos.push({
         name: taskName.value
       })
+    },
+    removeList (listId) {
+      debugger
+      this.lists = this.lists.filter(list => list.id === listId)
     }
-
   },
   getters: {
     getLists: state => state.lists
