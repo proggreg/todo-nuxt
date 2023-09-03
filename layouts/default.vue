@@ -6,13 +6,7 @@
           <v-app-bar :elevation="0">
             <NuxtLink to="/about" custom>
               <v-btn class="btn pl-1" to="/">
-                Proggreg
-              </v-btn>
-            </NuxtLink>
-
-            <NuxtLink v-slot="{ navigate }" to="/about" custom>
-              <v-btn class="d-none d-sm-flex" @click="navigate">
-                about
+                Todo
               </v-btn>
             </NuxtLink>
 
