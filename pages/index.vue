@@ -11,9 +11,8 @@ const desktopNavOpen = ref(true)
 const dialog = ref(false)
 
 function newList () {
-  if (!listsStore.currentList || listsStore.currentList.name) {
-    listsStore.addList()
-  }
+  listsStore.addList()
+
   if (width.value < 1280) { // https://vuetifyjs.com/en/styles/spacing/#breakpoints
     drawer.value = false
   }

@@ -24,7 +24,7 @@
             </template>
           </v-app-bar>
           <v-main>
-            <v-container fluid>
+            <v-container>
               <NuxtPage />
             </v-container>
           </v-main>
