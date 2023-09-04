@@ -5,8 +5,8 @@ export default defineEventHandler(async (event) => {
     if (!event.context.params || !event.context.params._id) {
       throw new Error('no id')
     }
-    await new TodoSchema(body).save()
-    return await TodoSchema.find({ list_id: event.context.params._id })
+    body.list_id = event.context.params._id
+    return await new TodoSchema(body).save()
   } catch (e) {
     console.error(e)
     return e
