@@ -23,10 +23,12 @@ function addTodo () {
   todoName.value = ''
 }
 
-async function deleteTodo (todo: Todo) {
-  await $fetch(`/api/list/todo/${todo._id}`, {
-    method: 'DELETE'
-  })
+function deleteTodo (todo: Todo) {
+  if (!todo._id) {
+    console.warn('no id to delete')
+    return
+  }
+  listsStore.deleteTodo(todo._id)
 }
 
 function editTodo (todo: Todo) {

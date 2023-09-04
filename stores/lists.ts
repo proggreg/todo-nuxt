@@ -3,11 +3,12 @@ import { defineStore } from 'pinia'
 interface todo {
   name: string;
   done: boolean;
+  _id?: string;
 }
 interface list {
   name: string;
-  todos: todo[],
-  _id?: string
+  todos: todo[];
+  _id?: string;
 }
 
 interface listsState {
@@ -47,6 +48,13 @@ export const useListsStore = defineStore('lists', {
         this.lists = this.lists.filter(list => list._id !== data._id)
       }
     },
+    async deleteTodo (todoId : string) {
+      await $fetch(`/api/list/todo/${todoId}`, {
+        method: 'DELETE'
+      })
+      if (!this.currentList) { return }
+      this.currentList.todos = this.currentList.todos.filter(todo => todo._id !== todoId)
+    },
     setCurrentList (currentList: list) {
       this.currentList = currentList
     },
@@ -68,7 +76,6 @@ export const useListsStore = defineStore('lists', {
       this.currentList.todos.push(todo)
     },
     async getTodos (listId: string) {
-      console.log('get todos', listId)
       const todos = await $fetch<todo[]>(`/api/list/todo/${listId}`)
       if (!this.currentList || !todos) { return }
       this.setCurrentListTasks(todos)
