@@ -1,34 +1,23 @@
 <script setup>
 import { useListsStore } from '~/stores/lists'
-
 const listsStore = useListsStore()
-const emit = defineEmits(['selectList'])
-const props = defineProps({
-  lists: {
-    type: Array,
-    default () {
-      return [
-        {
-          name: ''
-        }
-      ]
-    }
-  }
-})
 
 function selectList (list) {
   listsStore.setCurrentList(list)
-  emit('selectList', list)
+  listsStore.getTodos(list._id)
 }
+onMounted(() => {
+  listsStore.getLists() // TODO get on server (useFetch)
+})
 </script>
 
 <template>
   <v-list nav>
-    <v-list-item v-if="!props.lists.length">
+    <v-list-item v-if="!listsStore.lists || !listsStore.lists.length">
       <v-list-item-title>No lists yet</v-list-item-title>
     </v-list-item>
     <v-list-item
-      v-for="(list, i) in props.lists"
+      v-for="(list, i) in listsStore.lists"
       v-else
       :key="i"
       color="accent"
@@ -39,6 +28,9 @@ function selectList (list) {
       @click="selectList(list)"
     >
       <v-list-item-title>{{ list.name }}</v-list-item-title>
+      <template #append>
+        <options-menu :list-id="list._id" />
+      </template>
     </v-list-item>
   </v-list>
 </template>

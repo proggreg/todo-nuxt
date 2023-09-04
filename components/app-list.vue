@@ -1,31 +1,30 @@
-<script setup>
+<script setup lang="ts">
 import { useListsStore } from '~/stores/lists'
+const store = useListsStore()
+const list = computed(() => store.currentList)
 
-const listTitle = ref(false)
-
-const listsStore = useListsStore()
-
-const emit = defineEmits(['todoSelected'])
-
-onUpdated(() => {
-  listTitle.value.focus()
-})
+// function updateListName () { // TODO use edit button to edit title
+//   if (store.currentList.name) {
+//     $fetch('/api/list/update', {
+//       method: 'PUT',
+//       body: {
+//         name: store.currentList.name,
+//         _id: store.listId
+//       }
+//     })
+//   }
+// }
 </script>
 <template>
-  <v-row v-if="listsStore.currentList" no-gutters>
-    <v-col cols="12">
-      <v-text-field
-        ref="listTitle"
-        v-model="listsStore.currentList.name"
-        rounded
-        class="font-weight-bold"
-        variant="underlined"
-      />
+  <v-row v-if="list" no-gutters>
+    <v-col class="py-4" cols="12">
+      <h1>
+        {{ list.name }}
+      </h1>
     </v-col>
     <v-col>
       <app-list-items
-        v-if="listsStore.currentList"
-        @select-todo="emit('todoSelected')"
+        v-if="list"
       />
     </v-col>
   </v-row>

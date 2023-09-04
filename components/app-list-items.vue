@@ -1,60 +1,75 @@
-<script setup>
+<script setup lang="ts">
 import { useListsStore } from '~/stores/lists'
-const taskName = ref('')
+const todoName = ref('')
 const listsStore = useListsStore()
-const showContextMenu = ref(false)
-const emit = defineEmits(['selectTodo'])
 
-function addTask () {
-  if (taskName.value) {
-    listsStore.addTask(taskName)
-  }
-
-  taskName.value = ''
+interface Todo {
+  name: string;
+  done: boolean;
+  _id?: string;
 }
 
-function deleteTask (list, index) {
-  if (list.tasks) {
-    list.tasks.splice(index, 1)
+onMounted(() => {
+  if (listsStore.currentList && listsStore.currentList._id) {
+    listsStore.getTodos(listsStore.currentList._id)
   }
+})
+
+function addTodo () {
+  if (todoName.value && listsStore.currentList) {
+    listsStore.addTodo(todoName.value)
+  }
+
+  todoName.value = ''
 }
 
-function editTask (todo) {
+function deleteTodo (todo: Todo) {
+  if (!todo._id) {
+    console.warn('no id to delete')
+    return
+  }
+  listsStore.deleteTodo(todo._id)
+}
+
+function editTodo (todo: Todo) {
+  todo.done = !todo.done
+  $fetch(`/api/list/todo/${todo._id}`, {
+    method: 'PUT',
+    body: todo
+  })
+}
+function selectTodo (todo: Todo) {
   listsStore.setCurrentTask(todo)
-  emit('selectTodo')
 }
 
-function openContextMenu () {
-  showContextMenu.value = true
-}
 </script>
 
 <template>
   <v-text-field
-    v-model="taskName"
+    v-if="listsStore.currentList"
+    v-model="todoName"
     variant="solo-filled"
     rounded
-    :placeholder="'Add task to ' + listsStore.currentList.name"
-    @keyup.enter="addTask()"
+    :placeholder="'Add todo to ' + listsStore.currentList.name"
+    @keyup.enter="addTodo()"
   />
-  <v-list :items="listsStore.currentList.tasks" elevation="0" rounded>
+  <v-list v-if="listsStore.currentList" elevation="0" rounded>
     <v-list-subheader>Todo</v-list-subheader>
     <v-list-item
-      v-for="(task, index) in listsStore.currentList.tasks"
+      v-for="(todo, index) in listsStore.currentList.todos"
       :key="index"
       density="compact"
       variant="text"
-      @click.right.prevent="openContextMenu"
     >
       <v-list-item-title
-        :class="task.done ? 'text-decoration-line-through' : ''"
-        @click="editTask(task)"
+        :class="todo.done ? 'text-decoration-line-through' : ''"
+        @click="selectTodo(todo)"
       >
-        {{ task.name }}
+        {{ todo.name }}
       </v-list-item-title>
       <template #prepend="{}">
         <v-list-item-action start>
-          <v-checkbox-btn v-model="task.done" />
+          <v-checkbox-btn v-model="todo.done" @click="editTodo(todo)" />
         </v-list-item-action>
       </template>
       <template #append="{}">
@@ -63,7 +78,7 @@ function openContextMenu () {
             variant="tonal"
             size="x-small"
             rounded
-            @click="deleteTask(list, index)"
+            @click="deleteTodo(todo)"
           >
             Delete
           </v-btn>
@@ -71,5 +86,4 @@ function openContextMenu () {
       </template>
     </v-list-item>
   </v-list>
-  <app-context-menu :menu-items="[{label:'one'}, {label:'two'}]" />
 </template>
