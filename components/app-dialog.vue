@@ -4,11 +4,12 @@ const dialogProps = defineProps<{
   title?: string,
   open?: boolean
 }>()
+const emit = defineEmits(['close'])
 
 </script>
 
 <template>
-  <v-dialog :model-value="dialogProps.open" :fullscreen="size.width.value <= 400" transition="dialog-bottom-transition">
+  <v-dialog max-width="50vw" :model-value="dialogProps.open" :fullscreen="size.width.value <= 400" transition="dialog-bottom-transition">
     <template #activator>
       <slot name="open" />
     </template>
@@ -16,7 +17,7 @@ const dialogProps = defineProps<{
     <v-card>
       <slot />
       <v-card-actions>
-        <v-btn>
+        <v-btn @click="emit('close')">
           Close
         </v-btn>
         <slot name="buttons" />
