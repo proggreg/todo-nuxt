@@ -1,10 +1,11 @@
 <script setup>
 import { useListsStore } from '~/stores/lists'
 const listsStore = useListsStore()
-
+const navOpen = useNav()
 function selectList (list) {
   listsStore.setCurrentList(list)
   listsStore.getTodos(list._id)
+  navOpen.value = false
 }
 onMounted(() => {
   listsStore.getLists() // TODO get on server (useFetch)

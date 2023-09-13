@@ -1,8 +1,9 @@
 <script setup>
 import { useListsStore } from '~/stores/lists'
-const props = defineProps({
-  drawer: Boolean
-})
+// const props = defineProps({
+//   drawer: Boolean
+// })
+const open = useNav()
 
 const listName = ref('')
 const listsStore = useListsStore()
@@ -18,7 +19,7 @@ function newList () {
 </script>
 <template>
   <v-navigation-drawer
-    :model-value="props.drawer"
+    v-model="open"
 
     class="pa-2 fill-height"
   >
