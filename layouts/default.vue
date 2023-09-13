@@ -1,16 +1,13 @@
 <script setup>
 const theme = ref('myCustomLightTheme')
-const drawer = ref(false)
+// const drawer = ref(false)
 </script>
 <template>
   <main>
     <v-theme-provider :theme="theme" with-background>
       <v-app>
         <v-layout>
-          <v-app-bar elevation="0">
-            <v-app-bar-nav-icon variant="text" @click.stop="drawer = !drawer" />
-          </v-app-bar>
-          <app-nav :drawer="drawer" />
+          <app-nav />
           <v-main>
             <v-container>
               <NuxtPage />
