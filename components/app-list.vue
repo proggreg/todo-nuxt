@@ -24,7 +24,7 @@ const open = useNav()
 </script>
 <template>
   <v-row v-if="list" no-gutters class="py-4">
-    <v-col cols="1">
+    <v-col cols="1" class="d-lg-none">
       <v-icon @touchstart="open = true" @mouseover="open = true">
         mdi-format-list-bulleted
       </v-icon>
