@@ -6,7 +6,6 @@ const dialog = ref(false)
 <template>
   <v-navigation-drawer
     v-model="open"
-
     class="pa-2 fill-height"
   >
     <v-list>
