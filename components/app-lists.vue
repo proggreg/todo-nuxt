@@ -2,10 +2,13 @@
 import { useListsStore } from '~/stores/lists'
 const listsStore = useListsStore()
 const navOpen = useNav()
+const { width } = useWindowSize() // TODO would like to use useDisplay from vuetify but getting undefined
 function selectList (list) {
   listsStore.setCurrentList(list)
   listsStore.getTodos(list._id)
-  navOpen.value = false
+  if (width.value < 1280) {
+    navOpen.value = false
+  }
 }
 onMounted(() => {
   listsStore.getLists() // TODO get on server (useFetch)
