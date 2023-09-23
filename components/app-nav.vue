@@ -1,8 +1,4 @@
 <script setup>
-import { useListsStore } from '~/stores/lists'
-// const props = defineProps({
-//   drawer: Boolean
-// })
 const open = useNav()
 const dialog = ref(false)
 
