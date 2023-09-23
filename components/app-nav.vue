@@ -4,17 +4,7 @@ import { useListsStore } from '~/stores/lists'
 //   drawer: Boolean
 // })
 const open = useNav()
-
-const listName = ref('')
-const listsStore = useListsStore()
-
 const dialog = ref(false)
-function newList () {
-  listsStore.addList(listName.value)
-
-  listName.value = ''
-  dialog.value = false
-}
 
 </script>
 <template>
@@ -25,24 +15,13 @@ function newList () {
   >
     <v-list>
       <v-list-item>
+        <template #append>
+          <v-icon @click="dialog = true">
+            mdi-plus
+          </v-icon>
+        </template>
         <template #prepend>
-          <app-dialog :open="dialog" @close="dialog = false">
-            <template #open>
-              <v-btn
-                color="green"
-                @click="dialog = true"
-              >
-                New List
-              </v-btn>
-            </template>
-            <dialog-list-new />
-
-            <template #buttons>
-              <v-btn color="primary" @click="newList">
-                Save
-              </v-btn>
-            </template>
-          </app-dialog>
+          <dialog-list-new :open="dialog" @close="dialog = false" />
         </template>
       </v-list-item>
     </v-list>
