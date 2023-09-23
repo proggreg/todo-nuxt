@@ -26,14 +26,17 @@ export const useListsStore = defineStore('lists', {
   actions: {
     async addList (listName: string) {
       if (listName) {
-        const newListData = { name: listName, tasks: [] }
+        console.log('add list')
+        const newListData = { name: listName, todos: [] }
 
+        this.lists.push(newListData)
+        this.currentList = newListData
         const newList = await $fetch<list>('/api/list/create', {
           method: 'POST',
           body: newListData
         })
-        this.lists.push(newList)
-        this.currentList = newList
+
+        this.lists[this.lists.length - 1]._id = newList._id
       }
     },
     setLists (lists: Array<list>) {
