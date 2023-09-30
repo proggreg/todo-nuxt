@@ -1,13 +1,8 @@
 <script setup lang="ts">
 import { useListsStore } from '~/stores/lists'
+import { Todo } from '~/types/globals'
 const todoName = ref('')
 const listsStore = useListsStore()
-
-interface Todo {
-  name: string;
-  done: boolean;
-  _id?: string;
-}
 
 onMounted(() => {
   if (listsStore.currentList && listsStore.currentList._id) {

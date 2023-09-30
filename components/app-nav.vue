@@ -10,6 +10,11 @@ const dialog = ref(false)
   >
     <v-list>
       <v-list-item>
+        <v-btn elevation="0" rounded="lg" append-icon="mdi-home" width="100%">
+          Today
+        </v-btn>
+      </v-list-item>
+      <v-list-item>
         <template #append>
           <v-btn elevation="0" rounded="lg" icon="mdi-plus" @click="dialog = true" />
         </template>
