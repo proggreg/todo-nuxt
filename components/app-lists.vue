@@ -31,10 +31,19 @@ onMounted(() => {
       placeholder="My List"
       @click="selectList(list)"
     >
-      <v-list-item-title>{{ list.name }}</v-list-item-title>
+      <nuxt-link class="nuxt-link" to="/lists">
+        <v-list-item-title>{{ list.name }}</v-list-item-title>
+      </nuxt-link>
       <template #append>
         <options-menu :list-id="list._id" />
       </template>
     </v-list-item>
   </v-list>
 </template>
+<style scoped>
+.nuxt-link {
+  text-decoration: none;
+  color: inherit;
+  cursor: pointer;
+}
+</style>
