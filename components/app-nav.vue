@@ -11,9 +11,7 @@ const dialog = ref(false)
     <v-list>
       <v-list-item>
         <template #append>
-          <v-icon @click="dialog = true">
-            mdi-plus
-          </v-icon>
+          <v-btn elevation="0" rounded="lg" icon="mdi-plus" @click="dialog = true" />
         </template>
         <template #prepend>
           <dialog-list-new :open="dialog" @close="dialog = false" />
