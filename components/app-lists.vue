@@ -25,7 +25,7 @@ onMounted(() => {
       v-else
       :key="i"
       color="accent"
-      rounded="xl"
+      rounded="lg"
       fluid
       :value="i"
       placeholder="My List"
