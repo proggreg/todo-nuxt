@@ -1,28 +1,25 @@
 <script setup lang="ts">
+import { ref } from 'vue'
+import VueDatePicker from '@vuepic/vue-datepicker'
+import '@vuepic/vue-datepicker/dist/main.css'
 const store = useListsStore()
-const dueDate = ref([new Date()])
+const date = ref(new Date())
+
+const format = (date: Date) => {
+  const day = date.getDate()
+  const month = date.getMonth() + 1
+  const year = date.getFullYear()
+
+  return `${day}/${month}/${year}`
+}
+
 function setDueDate () {
-  console.log('set due date', dueDate.value)
-  if (dueDate.value) {
-    store.setDueDate(dueDate.value)
+  if (date.value) {
+    store.setDueDate(date.value)
   }
 }
+
 </script>
 <template>
-  <v-menu :close-on-content-click="false">
-    <template #activator="{props}">
-      <v-btn variant="text" elevation="0" v-bind="props" icon="mdi-calendar" />
-    </template>
-
-    <v-card>
-      <v-date-picker
-        v-model="dueDate"
-        input-mode="keyboard"
-        format="dd/mm/yyyy"
-        locale="en-GB"
-        :hide-actions="true"
-        @input="setDueDate"
-      />
-    </v-card>
-  </v-menu>
+  <VueDatePicker v-model="date" :format="format" @closed="setDueDate" />
 </template>

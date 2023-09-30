@@ -51,10 +51,14 @@ export default defineNuxtConfig({
           myCustomLightTheme
         }
       }
+
     },
     moduleOptions: {
       useVuetifyLabs: true
     }
+  },
+  build: {
+    transpile: ['@vuepic/vue-datepicker']
   },
   typescript: {
     strict: true

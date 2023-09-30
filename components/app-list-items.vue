@@ -44,9 +44,9 @@ function selectTodo (todo: Todo) {
     v-if="listsStore.currentList"
     v-model="todoName"
     variant="solo-filled"
-    rounded
+    rounded="lg"
     :placeholder="'Add todo to ' + listsStore.currentList.name"
-
+    class="add-todo-field"
     @keyup.enter="addTodo()"
   >
     <template #append-inner>
@@ -87,3 +87,9 @@ function selectTodo (todo: Todo) {
     </v-list-item>
   </v-list>
 </template>
+<style scoped>
+.add-todo-field {
+  position: relative;
+  z-index: 1;
+}
+</style>
