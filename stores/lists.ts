@@ -16,7 +16,6 @@ export const useListsStore = defineStore('lists', {
   actions: {
     async addList (listName: string) {
       if (listName) {
-        console.log('add list')
         const newListData = { name: listName, todos: [] }
 
         this.lists.push(newListData)
