@@ -29,7 +29,7 @@ const open = useNav()
         mdi-format-list-bulleted
       </v-icon>
     </v-col>
-    <v-col cols="11">
+    <v-col cols="12">
       <h1 class="text-h4">
         {{ list.name }}
       </h1>

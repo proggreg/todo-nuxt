@@ -9,7 +9,7 @@ const theme = ref('myCustomLightTheme')
         <v-layout>
           <app-nav />
           <v-main>
-            <v-container>
+            <v-container fluid>
               <NuxtPage />
             </v-container>
           </v-main>

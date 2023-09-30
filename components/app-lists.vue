@@ -16,7 +16,7 @@ onMounted(() => {
 </script>
 
 <template>
-  <v-list nav>
+  <v-list>
     <v-list-item v-if="!listsStore.lists || !listsStore.lists.length">
       <v-list-item-title>No lists yet</v-list-item-title>
     </v-list-item>
