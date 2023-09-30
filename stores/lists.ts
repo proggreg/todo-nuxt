@@ -75,6 +75,11 @@ export const useListsStore = defineStore('lists', {
     setCurrentTask (currentTask: Todo) {
       this.currentTask = currentTask
     },
+    setDueDate (date: Date) {
+      if (this.currentTask) {
+        this.currentTask.dueDate = date
+      }
+    },
     setTaskName (name :string, index: number) {
       if (!this.currentTask || !this.currentList) { return }
       this.currentList.todos[index].name = name

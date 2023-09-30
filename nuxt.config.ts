@@ -51,6 +51,9 @@ export default defineNuxtConfig({
           myCustomLightTheme
         }
       }
+    },
+    moduleOptions: {
+      useVuetifyLabs: true
     }
   },
   typescript: {

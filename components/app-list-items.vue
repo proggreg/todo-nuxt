@@ -46,8 +46,13 @@ function selectTodo (todo: Todo) {
     variant="solo-filled"
     rounded
     :placeholder="'Add todo to ' + listsStore.currentList.name"
+
     @keyup.enter="addTodo()"
-  />
+  >
+    <template #append-inner>
+      <app-duedate />
+    </template>
+  </v-text-field>
   <v-list v-if="listsStore.currentList" elevation="0" rounded>
     <v-list-subheader>Todo</v-list-subheader>
     <v-list-item
