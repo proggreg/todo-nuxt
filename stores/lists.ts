@@ -11,7 +11,7 @@ export const useListsStore = defineStore('lists', {
   state: () : listsState => ({
     lists: [],
     currentList: undefined,
-    currentTask: undefinedx§
+    currentTask: undefined
   }),
   actions: {
     async addList (listName: string) {
