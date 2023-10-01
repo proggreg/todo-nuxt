@@ -1,22 +1,8 @@
 <script setup lang="ts">
 import { useListsStore } from '~/stores/lists'
 import { Todo } from '~/types/globals'
-const todoName = ref('')
+
 const listsStore = useListsStore()
-
-onMounted(() => {
-  if (listsStore.currentList && listsStore.currentList._id) {
-    listsStore.getTodos(listsStore.currentList._id)
-  }
-})
-
-function addTodo () {
-  if (todoName.value && listsStore.currentList) {
-    listsStore.addTodo(todoName.value)
-  }
-
-  todoName.value = ''
-}
 
 function deleteTodo (todo: Todo) {
   if (!todo._id) {
@@ -37,22 +23,15 @@ function selectTodo (todo: Todo) {
   listsStore.setCurrentTask(todo)
 }
 
+onMounted(() => {
+  if (listsStore.currentList && listsStore.currentList._id) {
+    listsStore.getTodos(listsStore.currentList._id)
+  }
+})
+
 </script>
 
 <template>
-  <v-text-field
-    v-if="listsStore.currentList"
-    v-model="todoName"
-    variant="solo-filled"
-    rounded="lg"
-    :placeholder="'Add todo to ' + listsStore.currentList.name"
-    class="add-todo-field"
-    @keyup.enter="addTodo()"
-  >
-    <template #append-inner>
-      <app-duedate />
-    </template>
-  </v-text-field>
   <v-list v-if="listsStore.currentList" elevation="0" rounded>
     <v-list-subheader>Todo</v-list-subheader>
     <v-list-item
@@ -73,6 +52,7 @@ function selectTodo (todo: Todo) {
         </v-list-item-action>
       </template>
       <template #append="{}">
+        <NuxtTime v-if="todo.dueDate" :datetime="todo.dueDate" month="long" day="numeric" />
         <v-list-item-action end>
           <v-btn
             variant="tonal"
