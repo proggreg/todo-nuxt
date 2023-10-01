@@ -4,14 +4,16 @@ import { Todo, List } from '~/types/globals'
 interface listsState {
   lists: List[],
   currentList?: List,
-  currentTask?: Todo
+  currentTask?: Todo,
+  todaysTodos?: Todo[]
 }
 
 export const useListsStore = defineStore('lists', {
   state: () : listsState => ({
     lists: [],
     currentList: undefined,
-    currentTask: undefined
+    currentTask: undefined,
+    todaysTodos: undefined
   }),
   actions: {
     async addList (listName: string) {
@@ -56,14 +58,11 @@ export const useListsStore = defineStore('lists', {
         this.currentList.todos = todos
       }
     },
-    async addTodo (name: string) {
+    async addTodo (newTodo: Todo) {
       if (!this.currentList) { return }
       const todo = await $fetch<Todo>(`/api/list/todo/${this.currentList._id}`, {
         method: 'POST',
-        body: {
-          name,
-          done: false
-        }
+        body: newTodo
       })
       this.currentList.todos.push(todo)
     },
@@ -87,6 +86,18 @@ export const useListsStore = defineStore('lists', {
     async getLists () {
       const data = await $fetch<List[]>('/api/lists')
       this.setLists(data)
+      this.getTodaysTodos()
+    },
+    async getTodaysTodos () {
+      this.todaysTodos = await $fetch<Todo[]>('/api/today')
+    },
+    async updateTodo (todo: Todo) {
+      const data = await $fetch(`/api/list/todo/${todo._id}`, {
+        method: 'PUT',
+        body: todo
+      })
+
+      console.log(data)
     }
   }
 })
