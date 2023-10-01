@@ -1,6 +1,16 @@
 <script setup lang="ts">
 const open = useNav()
 const dialog = ref(false)
+const listsStore = useListsStore()
+
+function refreshToday () {
+  listsStore.getTodaysTodos()
+  if (!listsStore.todaysTodos) { return }
+  listsStore.setCurrentList({
+    name: 'today',
+    todos: listsStore.todaysTodos
+  })
+}
 
 </script>
 <template>
@@ -9,7 +19,14 @@ const dialog = ref(false)
     class="pa-2 fill-height"
   >
     <v-list>
-      <v-btn elevation="0" rounded="lg" append-icon="mdi-home" width="100%" to="/">
+      <v-btn
+        elevation="0"
+        rounded="lg"
+        append-icon="mdi-home"
+        width="100%"
+        to="/"
+        @click="refreshToday"
+      >
         Today
       </v-btn>
 
