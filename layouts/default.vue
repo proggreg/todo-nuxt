@@ -1,6 +1,5 @@
-<script setup>
+<script setup lang="ts">
 const theme = ref('myCustomLightTheme')
-// const drawer = ref(false)
 </script>
 <template>
   <main>
