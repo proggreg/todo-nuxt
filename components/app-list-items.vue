@@ -37,31 +37,31 @@ onMounted(() => {
     <v-list-item
       v-for="(todo, index) in listsStore.currentList.todos"
       :key="index"
-      density="compact"
       variant="text"
+      rounded="lg"
     >
+      <template #prepend>
+        <v-list-item-action start>
+          <v-checkbox-btn v-model="todo.done" @click="editTodo(todo)" />
+        </v-list-item-action>
+      </template>
       <v-list-item-title
         :class="todo.done ? 'text-decoration-line-through' : ''"
         @click="selectTodo(todo)"
       >
         {{ todo.name }}
       </v-list-item-title>
-      <template #prepend="{}">
-        <v-list-item-action start>
-          <v-checkbox-btn v-model="todo.done" @click="editTodo(todo)" />
-        </v-list-item-action>
-      </template>
-      <template #append="{}">
+
+      <template #append>
         <NuxtTime v-if="todo.dueDate" :datetime="todo.dueDate" month="long" day="numeric" />
         <v-list-item-action end>
           <v-btn
-            variant="tonal"
+            variant="text"
             size="x-small"
-            rounded
+            rounded="lg"
+            icon="mdi-delete"
             @click="deleteTodo(todo)"
-          >
-            Delete
-          </v-btn>
+          />
         </v-list-item-action>
       </template>
     </v-list-item>
@@ -71,5 +71,8 @@ onMounted(() => {
 .add-todo-field {
   position: relative;
   z-index: 1;
+}
+.mouseOver {
+  cursor: pointer;
 }
 </style>
