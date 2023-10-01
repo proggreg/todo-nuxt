@@ -19,13 +19,8 @@ function todoSelected () {
         <app-list @todoSelected="todoSelected" />
       </v-col>
       <v-col class="fill-height d-none d-sm-block " cols="12" sm="5">
-        <v-dialog>
-          <v-sheet class="fill-height rounded-lg">
-            <app-list-item />
-          </v-sheet>
-        </v-dialog>
         <v-sheet class="fill-height  rounded-lg">
-          <app-list-item />
+          <app-item-detail />
         </v-sheet>
       </v-col>
     </v-row>
