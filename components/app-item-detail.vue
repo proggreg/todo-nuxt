@@ -1,11 +1,25 @@
 <script setup>
+// import VueDatePicker from '@vuepic/vue-datepicker'
 import { useListsStore } from '~/stores/lists'
+import '@vuepic/vue-datepicker/dist/main.css'
 const listsStore = useListsStore()
+
+function updateDueDate () {
+  console.log('update due date')
+  listsStore.updateTodo({
+    _id: listsStore.currentTask._id,
+    dueDate: listsStore.currentTask.dueDate,
+    name: listsStore.currentTask.name
+  })
+}
 
 </script>
 
 <template>
-  <v-card v-if="listsStore.currentTask">
+  <v-card v-if="listsStore.currentTask" style="position: relative;">
+    <template #append>
+      <app-duedate v-model="listsStore.currentTask.dueDate" @set-date="updateDueDate" />
+    </template>
     <v-card-title>
       <v-text-field
         v-model="listsStore.currentTask.name"
@@ -23,6 +37,7 @@ const listsStore = useListsStore()
         :disabled="listsStore.currentTask.done"
       />
     </v-card-item>
+
     <v-card-actions>
       <v-spacer />
       <v-file-input
