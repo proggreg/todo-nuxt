@@ -30,6 +30,7 @@
     "@vuepic/vue-datepicker": "^7.0.0",
     "mongoose": "^7.5.0",
     "nuxt-mongoose": "^0.0.9",
+    "nuxt-time": "^0.1.1",
     "pinia": "^2.1.4"
   }
 }
