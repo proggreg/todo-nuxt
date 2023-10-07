@@ -40,7 +40,7 @@ function addTodo () {
         {{ list.name }}
       </h1>
     </v-col>
-    <v-col>
+    <v-col cols="12">
       <v-text-field
         v-if="listsStore.currentList"
         v-model="newTodo.name"
