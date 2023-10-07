@@ -19,8 +19,17 @@ function editTodo (todo: Todo) {
     body: todo
   })
 }
+
 function selectTodo (todo: Todo) {
   listsStore.setCurrentTask(todo)
+}
+
+function updateDueDate (newDate: Date, todo: Todo) {
+  todo.dueDate = newDate
+  $fetch(`/api/list/todo/${todo._id}`, {
+    method: 'PUT',
+    body: todo
+  })
 }
 
 const todos = computed(() => {
@@ -75,7 +84,7 @@ onMounted(() => {
           </v-list-item-title>
 
           <template #append>
-            <NuxtTime v-if="todo.dueDate" :datetime="todo.dueDate" month="long" day="numeric" />
+            <AppDuedate :date="todo.dueDate" :todo="todo" @set-date="updateDueDate" />
             <v-list-item-action end>
               <v-btn
                 variant="text"
@@ -90,7 +99,7 @@ onMounted(() => {
       </template>
     </v-hover>
 
-    <v-list-group v-if="complete.length" fluid>
+    <v-list-group v-if="complete.length" fluid :disabled="true">
       <template #activator="{ props }">
         <v-list-item
           v-bind="props"
@@ -107,6 +116,7 @@ onMounted(() => {
             rounded="lg"
             :variant="isHovering ? 'tonal' : 'text'"
             :class="isHovering ? 'mouseOver': ''"
+            style="opacity: 0.5;"
           >
             <template #prepend>
               <v-list-item-action start>
@@ -122,7 +132,8 @@ onMounted(() => {
             </v-list-item-title>
 
             <template #append>
-              <NuxtTime v-if="todo.dueDate" :datetime="todo.dueDate" month="long" day="numeric" />
+              <AppDuedate :date="todo.dueDate" />
+
               <v-list-item-action end>
                 <v-btn
                   variant="text"
