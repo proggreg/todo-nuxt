@@ -23,6 +23,13 @@ function selectTodo (todo: Todo) {
   listsStore.setCurrentTask(todo)
 }
 
+const todos = computed(() => {
+  return listsStore.currentList.todos.filter(todo => !todo.done)
+})
+const complete = computed(() => {
+  return listsStore.currentList.todos.filter(todo => todo.done)
+})
+
 onBeforeMount(() => {
   listsStore.getTodaysTodos()
 })
@@ -45,9 +52,10 @@ onMounted(() => {
 
 <template>
   <v-list v-if="listsStore.currentList" elevation="0" rounded>
-    <v-list-subheader>Todo</v-list-subheader>
+    <v-list-item :title="`Todo (${todos.length})`" />
+
     <v-list-item
-      v-for="(todo, index) in listsStore.currentList.todos"
+      v-for="(todo, index) in todos"
       :key="index"
       variant="text"
       rounded="lg"
@@ -78,6 +86,46 @@ onMounted(() => {
         </v-list-item-action>
       </template>
     </v-list-item>
+
+    <v-list-group fluid>
+      <template #activator="{ props }">
+        <v-list-item
+          v-bind="props"
+          :title="`Complete (${complete.length})`"
+        />
+      </template>
+      <v-list-item
+        v-for="(todo, index) in complete"
+        :key="index"
+        variant="text"
+      >
+        <template #prepend>
+          <v-list-item-action start>
+            <v-checkbox-btn v-model="todo.done" @click="editTodo(todo)" />
+          </v-list-item-action>
+        </template>
+
+        <v-list-item-title
+          :class="todo.done ? 'text-decoration-line-through' : ''"
+          @click="selectTodo(todo)"
+        >
+          {{ todo.name }}
+        </v-list-item-title>
+
+        <template #append>
+          <NuxtTime v-if="todo.dueDate" :datetime="todo.dueDate" month="long" day="numeric" />
+          <v-list-item-action end>
+            <v-btn
+              variant="text"
+              size="x-small"
+              rounded="lg"
+              icon="mdi-delete"
+              @click="deleteTodo(todo)"
+            />
+          </v-list-item-action>
+        </template>
+      </v-list-item>
+    </v-list-group>
   </v-list>
 </template>
 <style scoped>
