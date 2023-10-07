@@ -12,6 +12,8 @@ function refreshToday () {
   })
 }
 
+// refreshToday()
+
 </script>
 <template>
   <v-navigation-drawer

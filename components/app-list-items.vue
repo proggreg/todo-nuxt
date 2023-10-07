@@ -23,9 +23,25 @@ function selectTodo (todo: Todo) {
   listsStore.setCurrentTask(todo)
 }
 
+onBeforeMount(() => {
+  listsStore.getTodaysTodos()
+  if (!listsStore.todaysTodos) { return }
+  listsStore.setCurrentList({
+    name: 'today',
+    todos: listsStore.todaysTodos
+  })
+})
 onMounted(() => {
   if (listsStore.currentList && listsStore.currentList._id) {
     listsStore.getTodos(listsStore.currentList._id)
+  } else {
+    console.log('get today')
+    listsStore.getTodaysTodos()
+    if (!listsStore.todaysTodos) { return }
+    listsStore.setCurrentList({
+      name: 'today',
+      todos: listsStore.todaysTodos
+    })
   }
 })
 
