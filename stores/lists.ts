@@ -67,7 +67,7 @@ export const useListsStore = defineStore('lists', {
       this.currentList.todos.push(todo)
     },
     async getTodos (listId: string) {
-      const todos = await useFetch<Todo[]>(`/api/list/todo/${listId}`)
+      const { data: todos } = await useFetch<Todo[]>(`/api/list/todo/${listId}`)
       if (!this.currentList || !todos) { return }
       this.setCurrentListTasks(todos)
     },
@@ -84,13 +84,19 @@ export const useListsStore = defineStore('lists', {
       this.currentList.todos[index].name = name
     },
     async getLists () {
-      const data = await useFetch<List[]>('/api/lists')
-      this.setLists(data)
-      this.getTodaysTodos()
+      const { data } = await useFetch<List[]>('/api/lists')
+      console.log('get lists', data)
+      this.setLists(data.value)
+      // this.getTodaysTodos()
     },
     async getTodaysTodos () {
-      // @ts-expect-error
-      this.todaysTodos = await useFetch<Todo[]>('/api/today')
+      const { data } = await useFetch<Todo[]>('/api/today')
+      console.log('get todays todos ', data)
+      this.todaysTodos = data
+      this.setCurrentList({
+        name: 'Today',
+        todos: this.todaysTodos
+      })
     },
     async updateTodo (todo: Todo) {
       return await $fetch(`/api/list/todo/${todo._id}`, {

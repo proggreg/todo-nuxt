@@ -25,11 +25,6 @@ function selectTodo (todo: Todo) {
 
 onBeforeMount(() => {
   listsStore.getTodaysTodos()
-  if (!listsStore.todaysTodos) { return }
-  listsStore.setCurrentList({
-    name: 'today',
-    todos: listsStore.todaysTodos
-  })
 })
 onMounted(() => {
   if (listsStore.currentList && listsStore.currentList._id) {
@@ -43,6 +38,7 @@ onMounted(() => {
       todos: listsStore.todaysTodos
     })
   }
+  console.log(listsStore.currentList)
 })
 
 </script>
@@ -61,6 +57,7 @@ onMounted(() => {
           <v-checkbox-btn v-model="todo.done" @click="editTodo(todo)" />
         </v-list-item-action>
       </template>
+
       <v-list-item-title
         :class="todo.done ? 'text-decoration-line-through' : ''"
         @click="selectTodo(todo)"

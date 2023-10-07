@@ -11,8 +11,7 @@ function refreshToday () {
     todos: listsStore.todaysTodos
   })
 }
-
-// refreshToday()
+listsStore.getLists()
 
 </script>
 <template>
