@@ -18,7 +18,6 @@ export default defineNuxtConfig({
     '@nuxt/devtools',
     '@vueuse/nuxt',
     'nuxt-mongoose',
-    'nuxt-time',
     'nuxt-vitest'
   ],
 

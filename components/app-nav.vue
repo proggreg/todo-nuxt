@@ -2,6 +2,7 @@
 const open = useNav()
 const dialog = ref(false)
 const listsStore = useListsStore()
+const { width } = useWindowSize()
 
 function refreshToday () {
   listsStore.getTodaysTodos()
@@ -15,6 +16,13 @@ listsStore.getLists()
 
 </script>
 <template>
+  <v-app-bar v-if="width < 1280" :flat="true">
+    <v-col cols="1" class="d-lg-none">
+      <v-icon @touchstart="open = true" @mouseover="open = true">
+        mdi-format-list-bulleted
+      </v-icon>
+    </v-col>
+  </v-app-bar>
   <v-navigation-drawer
     v-model="open"
     class="pa-2 fill-height"
