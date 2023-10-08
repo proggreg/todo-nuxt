@@ -29,8 +29,8 @@ function addTodo () {
 
 </script>
 <template>
-  <v-row v-if="list" no-gutters class="py-4">
-    <v-col cols="12" class="py-4">
+  <v-row v-if="list" no-gutters>
+    <v-col cols="12" class="pb-4">
       <h1 class="text-h4">
         {{ list.name }}
       </h1>
