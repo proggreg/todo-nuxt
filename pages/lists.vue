@@ -1,8 +1,5 @@
 <script setup>
-import { ref } from 'vue'
-
 const { width } = useWindowSize()
-
 const dialog = ref(false)
 
 function todoSelected () {

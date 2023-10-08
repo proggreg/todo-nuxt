@@ -1,5 +1,6 @@
 <script setup lang="ts">
-const open = useNav()
+// const open = useNav()
+const open = ref(false)
 const dialog = ref(false)
 const listsStore = useListsStore()
 const { width } = useWindowSize()
@@ -16,25 +17,24 @@ listsStore.getLists()
 
 </script>
 <template>
-  <v-app-bar v-if="width < 1280" :flat="true">
-    <v-col cols="1" class="d-lg-none">
-      <v-icon @touchstart="open = true" @mouseover="open = true">
-        mdi-format-list-bulleted
-      </v-icon>
-    </v-col>
-  </v-app-bar>
+  <v-col cols="1" class="d-lg-none">
+    <v-icon @touchstart="open = !open; console.log('touch start', open)" @mouseover="open = true">
+      mdi-format-list-bulleted
+    </v-icon>
+  </v-col>
+
   <v-navigation-drawer
     v-model="open"
     class="pa-2 fill-height"
   >
     <v-list>
+      <v-spacer />
       <v-btn
         elevation="0"
         rounded="lg"
         append-icon="mdi-home"
         width="100%"
         to="/"
-        @click="refreshToday"
       >
         Today
       </v-btn>

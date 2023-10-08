@@ -41,22 +41,19 @@ const complete = computed(() => {
   return listsStore.currentList.todos.filter(todo => todo.done)
 })
 
-onBeforeMount(() => {
-  listsStore.getTodaysTodos()
-})
 onMounted(() => {
+  console.log('mounted', listsStore.currentList)
   if (listsStore.currentList && listsStore.currentList._id) {
     listsStore.getTodos(listsStore.currentList._id)
   } else {
     console.log('get today')
-    listsStore.getTodaysTodos()
+    // listsStore.getTodaysTodos()
     if (!listsStore.todaysTodos) { return }
     listsStore.setCurrentList({
       name: 'today',
       todos: listsStore.todaysTodos
     })
   }
-  console.log(listsStore.currentList)
 })
 
 </script>
@@ -84,7 +81,7 @@ onMounted(() => {
           </v-list-item-title>
 
           <template #append>
-            <AppDuedate :date="todo.dueDate" :todo="todo" @set-date="updateDueDate" />
+            <!-- <AppDuedate :date="todo.dueDate" :todo="todo" @set-date="updateDueDate" /> -->
             <v-list-item-action end>
               <v-btn
                 variant="text"
@@ -132,7 +129,7 @@ onMounted(() => {
             </v-list-item-title>
 
             <template #append>
-              <AppDuedate :date="todo.dueDate" />
+              <!-- <AppDuedate :date="todo.dueDate" /> -->
 
               <v-list-item-action end>
                 <v-btn

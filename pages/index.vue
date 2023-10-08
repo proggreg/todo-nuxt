@@ -1,5 +1,6 @@
 <script setup lang="ts">
-
+const listsStore = useListsStore()
+listsStore.getTodaysTodos()
 </script>
 
 <template>
