@@ -79,7 +79,7 @@ onMounted(() => {
           </v-list-item-title>
 
           <template #append>
-            <!-- <AppDuedate :date="todo.dueDate" :todo="todo" @set-date="updateDueDate" /> -->
+            <AppDuedate :date="todo.dueDate" :todo="todo" @set-date="updateDueDate" />
             <v-list-item-action end>
               <v-btn
                 variant="text"

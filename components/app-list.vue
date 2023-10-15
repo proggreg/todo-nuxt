@@ -45,7 +45,7 @@ function addTodo () {
         @keyup.enter="addTodo()"
       >
         <template #append-inner>
-          <!-- <app-duedate @set-date="(newDate: Date) => newTodo.dueDate = newDate" /> -->
+          <app-duedate @set-date="(newDate: Date) => newTodo.dueDate = newDate" />
 
           <v-btn :disabled="!newTodo.name" rounded="lg" variant="text" icon="mdi-plus" @click="addTodo" />
         </template>
