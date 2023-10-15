@@ -17,7 +17,8 @@ export default defineNuxtConfig({
     '@pinia/nuxt',
     '@nuxt/devtools',
     '@vueuse/nuxt',
-    'nuxt-mongoose'
+    'nuxt-mongoose',
+    '@nuxtjs/pwa'
   ],
 
   experimental: {
