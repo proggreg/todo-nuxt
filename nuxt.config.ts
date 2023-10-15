@@ -17,7 +17,8 @@ export default defineNuxtConfig({
     '@pinia/nuxt',
     '@nuxt/devtools',
     '@vueuse/nuxt',
-    'nuxt-mongoose'
+    'nuxt-mongoose',
+    '@vite-pwa/nuxt'
   ],
 
   experimental: {
@@ -51,6 +52,13 @@ export default defineNuxtConfig({
           myCustomLightTheme
         }
       }
+    }
+  },
+
+  pwa: {
+    registerType: 'autoUpdate',
+    devOptions: {
+      enabled: true
     }
   },
 

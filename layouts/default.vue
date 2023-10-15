@@ -3,6 +3,7 @@ const theme = ref('myCustomLightTheme')
 // const drawer = ref(false)
 </script>
 <template>
+  <VitePwaManifest />
   <main>
     <v-theme-provider :theme="theme" with-background>
       <v-app>
