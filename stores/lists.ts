@@ -85,12 +85,12 @@ export const useListsStore = defineStore('lists', {
     },
     async getLists () {
       const { data } = await useFetch<List[]>('/api/lists')
-      console.log('get lists', data)
+
       this.setLists(data.value)
     },
     async getTodaysTodos () {
       const { data } = await useFetch<Todo[]>('/api/today')
-      console.log('get todays todos ', data)
+
       this.todaysTodos = data
       this.setCurrentList({
         name: 'Today',

@@ -42,11 +42,9 @@ const complete = computed(() => {
 })
 
 onMounted(() => {
-  console.log('mounted', listsStore.currentList)
   if (listsStore.currentList && listsStore.currentList._id) {
     listsStore.getTodos(listsStore.currentList._id)
   } else {
-    console.log('get today')
     // listsStore.getTodaysTodos()
     if (!listsStore.todaysTodos) { return }
     listsStore.setCurrentList({

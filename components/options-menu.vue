@@ -2,7 +2,6 @@
 const store = useListsStore()
 const props = defineProps<{ listId: string}>()
 function deleteList () {
-  console.log('delete list', props.listId)
   store.deleteList(props.listId)
 }
 const options = reactive([{
