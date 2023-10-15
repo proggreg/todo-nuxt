@@ -9,10 +9,13 @@ export const TodoSchema = defineMongooseModel({
     },
     done: {
       type: 'boolean',
-      required: true
+      default: false
     },
     list_id: {
       type: 'string'
+    },
+    dueDate: {
+      type: 'date'
     }
   }
 })

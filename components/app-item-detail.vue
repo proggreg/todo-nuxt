@@ -1,11 +1,38 @@
 <script setup>
+// import VueDatePicker from '@vuepic/vue-datepicker'
 import { useListsStore } from '~/stores/lists'
+import '@vuepic/vue-datepicker/dist/main.css'
 const listsStore = useListsStore()
+
+function updateDueDate () {
+  listsStore.updateTodo({
+    _id: listsStore.currentTask._id,
+    dueDate: listsStore.currentTask.dueDate
+  })
+}
+function updateName () {
+  listsStore.updateTodo({
+    _id: listsStore.currentTask._id,
+    name: listsStore.currentTask.name
+  })
+}
+function editDone () {
+  listsStore.updateTodo({
+    _id: listsStore.currentTask._id,
+    done: listsStore.currentTask.done
+  })
+}
 
 </script>
 
 <template>
-  <v-card v-if="listsStore.currentTask">
+  <v-card v-if="listsStore.currentTask" style="position: relative;">
+    <template #prepend>
+      <v-checkbox-btn v-model="listsStore.currentTask.done" @click="editDone(todo)" />
+    </template>
+    <template #append>
+      <app-duedate v-model="listsStore.currentTask.dueDate" @set-date="updateDueDate" />
+    </template>
     <v-card-title>
       <v-text-field
         v-model="listsStore.currentTask.name"
@@ -13,6 +40,7 @@ const listsStore = useListsStore()
           listsStore.currentTask.done ? 'text-decoration-line-through' : ''
         "
         :disabled="listsStore.currentTask.done"
+        @input="updateName"
       />
     </v-card-title>
     <v-card-item>
@@ -23,6 +51,7 @@ const listsStore = useListsStore()
         :disabled="listsStore.currentTask.done"
       />
     </v-card-item>
+
     <v-card-actions>
       <v-spacer />
       <v-file-input

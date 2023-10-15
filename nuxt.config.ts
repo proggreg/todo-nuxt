@@ -18,7 +18,8 @@ export default defineNuxtConfig({
     '@nuxt/devtools',
     '@vueuse/nuxt',
     'nuxt-mongoose',
-    '@vite-pwa/nuxt'
+    '@vite-pwa/nuxt',
+    'nuxt-vitest'
   ],
 
   experimental: {
@@ -52,6 +53,10 @@ export default defineNuxtConfig({
           myCustomLightTheme
         }
       }
+
+    },
+    moduleOptions: {
+      useVuetifyLabs: true
     }
   },
 
@@ -80,7 +85,12 @@ export default defineNuxtConfig({
       enabled: true
     }
   },
-
+  build: {
+    transpile: ['@vuepic/vue-datepicker']
+  },
+  typescript: {
+    strict: true
+  },
   devtools: {
     enabled: true
   }

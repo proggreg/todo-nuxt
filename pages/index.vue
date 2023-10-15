@@ -1,33 +1,9 @@
-<script setup>
-import { ref } from 'vue'
-
-const { width } = useWindowSize()
-
-const dialog = ref(false)
-
-function todoSelected () {
-  if (width.value < 600) {
-    dialog.value = true
-  }
-}
-
+<script setup lang="ts">
+const listsStore = useListsStore()
+listsStore.getTodaysTodos()
 </script>
+
 <template>
-  <client-only>
-    <v-row>
-      <v-col cols="12" sm="6">
-        <app-list @todoSelected="todoSelected" />
-      </v-col>
-      <v-col class="fill-height d-none d-sm-block " cols="12" sm="5">
-        <v-dialog>
-          <v-sheet class="fill-height rounded-lg">
-            <app-list-item />
-          </v-sheet>
-        </v-dialog>
-        <v-sheet class="fill-height  rounded-lg">
-          <app-list-item />
-        </v-sheet>
-      </v-col>
-    </v-row>
-  </client-only>
+  <h1>Today</h1>
+  <app-list-items />
 </template>

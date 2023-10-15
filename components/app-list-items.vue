@@ -1,27 +1,8 @@
 <script setup lang="ts">
 import { useListsStore } from '~/stores/lists'
-const todoName = ref('')
+import { Todo } from '~/types/globals'
+
 const listsStore = useListsStore()
-
-interface Todo {
-  name: string;
-  done: boolean;
-  _id?: string;
-}
-
-onMounted(() => {
-  if (listsStore.currentList && listsStore.currentList._id) {
-    listsStore.getTodos(listsStore.currentList._id)
-  }
-})
-
-function addTodo () {
-  if (todoName.value && listsStore.currentList) {
-    listsStore.addTodo(todoName.value)
-  }
-
-  todoName.value = ''
-}
 
 function deleteTodo (todo: Todo) {
   if (!todo._id) {
@@ -38,52 +19,140 @@ function editTodo (todo: Todo) {
     body: todo
   })
 }
+
 function selectTodo (todo: Todo) {
   listsStore.setCurrentTask(todo)
 }
 
+function updateDueDate (newDate: Date, todo: Todo) {
+  todo.dueDate = newDate
+  $fetch(`/api/list/todo/${todo._id}`, {
+    method: 'PUT',
+    body: todo
+  })
+}
+
+const todos = computed(() => {
+  if (!listsStore.currentList || !listsStore.currentList.todos) { return [] }
+  return listsStore.currentList.todos.filter(todo => !todo.done)
+})
+const complete = computed(() => {
+  if (!listsStore.currentList || !listsStore.currentList.todos) { return [] }
+  return listsStore.currentList.todos.filter(todo => todo.done)
+})
+
+onMounted(() => {
+  console.log('mounted', listsStore.currentList)
+  if (listsStore.currentList && listsStore.currentList._id) {
+    listsStore.getTodos(listsStore.currentList._id)
+  } else {
+    console.log('get today')
+    // listsStore.getTodaysTodos()
+    if (!listsStore.todaysTodos) { return }
+    listsStore.setCurrentList({
+      name: 'today',
+      todos: listsStore.todaysTodos
+    })
+  }
+})
+
 </script>
 
 <template>
-  <v-text-field
-    v-if="listsStore.currentList"
-    v-model="todoName"
-    variant="solo-filled"
-    rounded
-    :placeholder="'Add todo to ' + listsStore.currentList.name"
-    @keyup.enter="addTodo()"
-  />
-  <v-list v-if="listsStore.currentList" elevation="0" rounded>
-    <v-list-subheader>Todo</v-list-subheader>
-    <v-list-item
-      v-for="(todo, index) in listsStore.currentList.todos"
+  <v-list>
+    <v-list-item v-if="todos.length" :title="`Todo (${todos.length})`" />
+    <v-hover
+      v-for="(todo, index) in todos"
       :key="index"
-      density="compact"
-      variant="text"
     >
-      <v-list-item-title
-        :class="todo.done ? 'text-decoration-line-through' : ''"
-        @click="selectTodo(todo)"
-      >
-        {{ todo.name }}
-      </v-list-item-title>
-      <template #prepend="{}">
-        <v-list-item-action start>
-          <v-checkbox-btn v-model="todo.done" @click="editTodo(todo)" />
-        </v-list-item-action>
-      </template>
-      <template #append="{}">
-        <v-list-item-action end>
-          <v-btn
-            variant="tonal"
-            size="x-small"
-            rounded
-            @click="deleteTodo(todo)"
+      <template #default="{ isHovering, props }">
+        <v-list-item v-bind="props" rounded="lg" :variant="isHovering ? 'tonal' : 'text'" :class="isHovering ? 'mouseOver': ''">
+          <template #prepend>
+            <v-list-item-action start>
+              <v-checkbox-btn v-model="todo.done" @click="editTodo(todo)" />
+            </v-list-item-action>
+          </template>
+
+          <v-list-item-title
+            :class="todo.done ? 'text-decoration-line-through' : ''"
+            @click="selectTodo(todo)"
           >
-            Delete
-          </v-btn>
-        </v-list-item-action>
+            {{ todo.name }}
+          </v-list-item-title>
+
+          <template #append>
+            <!-- <AppDuedate :date="todo.dueDate" :todo="todo" @set-date="updateDueDate" /> -->
+            <v-list-item-action end>
+              <v-btn
+                variant="text"
+                size="x-small"
+                rounded="lg"
+                icon="mdi-delete"
+                @click="deleteTodo(todo)"
+              />
+            </v-list-item-action>
+          </template>
+        </v-list-item>
       </template>
-    </v-list-item>
+    </v-hover>
+
+    <v-list-group v-if="complete.length" fluid :disabled="true">
+      <template #activator="{ props }">
+        <v-list-item
+          v-bind="props"
+          :title="`Complete (${complete.length})`"
+        />
+      </template>
+      <v-hover
+        v-for="(todo, index) in complete"
+        :key="index"
+      >
+        <template #default="{ isHovering, props }">
+          <v-list-item
+            v-bind="props"
+            rounded="lg"
+            :variant="isHovering ? 'tonal' : 'text'"
+            :class="isHovering ? 'mouseOver': ''"
+            style="opacity: 0.5;"
+          >
+            <template #prepend>
+              <v-list-item-action start>
+                <v-checkbox-btn v-model="todo.done" @click="editTodo(todo)" />
+              </v-list-item-action>
+            </template>
+
+            <v-list-item-title
+              :class="todo.done ? 'text-decoration-line-through' : ''"
+              @click="selectTodo(todo)"
+            >
+              {{ todo.name }}
+            </v-list-item-title>
+
+            <template #append>
+              <!-- <AppDuedate :date="todo.dueDate" /> -->
+
+              <v-list-item-action end>
+                <v-btn
+                  variant="text"
+                  size="x-small"
+                  rounded="lg"
+                  icon="mdi-delete"
+                  @click="deleteTodo(todo)"
+                />
+              </v-list-item-action>
+            </template>
+          </v-list-item>
+        </template>
+      </v-hover>
+    </v-list-group>
   </v-list>
 </template>
+<style scoped>
+.add-todo-field {
+  position: relative;
+  z-index: 1;
+}
+.mouseOver {
+  cursor: pointer;
+}
+</style>
