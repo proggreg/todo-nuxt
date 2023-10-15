@@ -16,7 +16,7 @@ onMounted(() => {
 </script>
 
 <template>
-  <v-list nav>
+  <v-list>
     <v-list-item v-if="!listsStore.lists || !listsStore.lists.length">
       <v-list-item-title>No lists yet</v-list-item-title>
     </v-list-item>
@@ -25,16 +25,25 @@ onMounted(() => {
       v-else
       :key="i"
       color="accent"
-      rounded="xl"
+      rounded="lg"
       fluid
       :value="i"
       placeholder="My List"
       @click="selectList(list)"
     >
-      <v-list-item-title>{{ list.name }}</v-list-item-title>
+      <nuxt-link class="nuxt-link" to="/lists">
+        <v-list-item-title>{{ list.name }}</v-list-item-title>
+      </nuxt-link>
       <template #append>
         <options-menu :list-id="list._id" />
       </template>
     </v-list-item>
   </v-list>
 </template>
+<style scoped>
+.nuxt-link {
+  text-decoration: none;
+  color: inherit;
+  cursor: pointer;
+}
+</style>

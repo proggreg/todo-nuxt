@@ -1,19 +1,18 @@
-<script setup>
+<script setup lang="ts">
 const theme = ref('myCustomLightTheme')
-// const drawer = ref(false)
 </script>
 <template>
+  <VitePwaManifest />
   <main>
     <v-theme-provider :theme="theme" with-background>
       <v-app>
-        <v-layout>
-          <app-nav />
-          <v-main>
-            <v-container>
-              <NuxtPage />
-            </v-container>
-          </v-main>
-        </v-layout>
+        <app-nav />
+
+        <v-main>
+          <v-container fluid>
+            <NuxtPage />
+          </v-container>
+        </v-main>
       </v-app>
     </v-theme-provider>
   </main>
