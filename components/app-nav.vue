@@ -1,24 +1,26 @@
 <script setup lang="ts">
-// const open = useNav()
-const open = ref(false)
+const open = useNav()
 const dialog = ref(false)
 const listsStore = useListsStore()
-const { width } = useWindowSize()
 
-function refreshToday () {
-  listsStore.getTodaysTodos()
-  if (!listsStore.todaysTodos) { return }
-  listsStore.setCurrentList({
-    name: 'today',
-    todos: listsStore.todaysTodos
-  })
-}
+// function refreshToday () {
+//   listsStore.getTodaysTodos()
+//   if (!listsStore.todaysTodos) { return }
+//   listsStore.setCurrentList({
+//     name: 'today',
+//     todos: listsStore.todaysTodos
+//   })
+// }
 listsStore.getLists()
 
 </script>
 <template>
-  <v-col cols="1" class="d-lg-none">
-    <v-btn icon="mdi-format-list-bulleted" @click="open = !open" />
+  <v-col cols="auto" class="d-lg-none">
+    <v-btn size="small" style="padding: 0;" elevation="0" @click="open = !open">
+      <v-icon class="text-h4" size="x-large">
+        mdi-format-list-bulleted
+      </v-icon>
+    </v-btn>
   </v-col>
 
   <v-navigation-drawer
