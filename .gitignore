@@ -98,8 +98,7 @@ sw.*
 .yarn
 .yarnrc.yml
 yarn.lock
-playwright-report/index.html
-test-results/example-has-title-chromium/trace.zip
+playwright-report
 test-results
 
 sw.*
