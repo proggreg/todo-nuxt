@@ -18,9 +18,7 @@ listsStore.getLists()
 </script>
 <template>
   <v-col cols="1" class="d-lg-none">
-    <v-icon @touchstart="open = !open; console.log('touch start', open)" @mouseover="open = true">
-      mdi-format-list-bulleted
-    </v-icon>
+    <v-btn icon="mdi-format-list-bulleted" @click="open = !open" />
   </v-col>
 
   <v-navigation-drawer
