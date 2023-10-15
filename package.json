@@ -34,6 +34,7 @@
   "dependencies": {
     "@invictus.codes/nuxt-vuetify": "^0.2.20",
     "@pinia/nuxt": "^0.4.11",
+    "@vite-pwa/nuxt": "^0.1.1",
     "@vuepic/vue-datepicker": "^7.0.0",
     "mongoose": "^7.5.0",
     "nuxt-mongoose": "^0.0.9",

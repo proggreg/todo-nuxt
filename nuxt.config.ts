@@ -18,6 +18,7 @@ export default defineNuxtConfig({
     '@nuxt/devtools',
     '@vueuse/nuxt',
     'nuxt-mongoose',
+    '@vite-pwa/nuxt',
     'nuxt-vitest'
   ],
 
@@ -56,6 +57,32 @@ export default defineNuxtConfig({
     },
     moduleOptions: {
       useVuetifyLabs: true
+    }
+  },
+
+  pwa: {
+    registerType: 'autoUpdate',
+    manifest: {
+      name: 'Tickup',
+      short_name: 'Tickup',
+      description: 'Tick Tick / Clickup type app',
+      theme_color: '#ffffff',
+      icons: [
+        {
+          src: 'check-256x-256y.png',
+          sizes: '256x256',
+          type: 'image/png'
+        },
+        {
+          src: 'check-512x-512y.png',
+          sizes: '512x512',
+          type: 'image/png'
+        }
+      ]
+    },
+
+    devOptions: {
+      enabled: true
     }
   },
   build: {

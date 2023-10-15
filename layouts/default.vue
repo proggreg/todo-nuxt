@@ -2,6 +2,7 @@
 const theme = ref('myCustomLightTheme')
 </script>
 <template>
+  <VitePwaManifest />
   <main>
     <v-theme-provider :theme="theme" with-background>
       <v-app>
