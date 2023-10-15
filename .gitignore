@@ -101,3 +101,5 @@ yarn.lock
 playwright-report/index.html
 test-results/example-has-title-chromium/trace.zip
 test-results/example-localhost-chromium/trace.zip
+
+sw.*
