@@ -3,25 +3,27 @@ const open = useNav()
 const dialog = ref(false)
 const listsStore = useListsStore()
 
-// function refreshToday () {
-//   listsStore.getTodaysTodos()
-//   if (!listsStore.todaysTodos) { return }
-//   listsStore.setCurrentList({
-//     name: 'today',
-//     todos: listsStore.todaysTodos
-//   })
-// }
 listsStore.getLists()
 
 </script>
+
 <template>
-  <v-col cols="auto" class="d-lg-none">
-    <v-btn size="small" style="padding: 0;" elevation="0" @click="open = !open">
-      <v-icon class="text-h4" size="x-large">
-        mdi-format-list-bulleted
-      </v-icon>
-    </v-btn>
-  </v-col>
+  <v-container>
+    <v-row>
+      <v-col cols="1" class="d-flex d-lg-none align-center">
+        <v-btn size="small" style="padding: 0;" elevation="0" @click="open = !open">
+          <v-icon class="text-h4" size="x-large">
+            mdi-format-list-bulleted
+          </v-icon>
+        </v-btn>
+      </v-col>
+      <v-spacer />
+
+      <v-col cols="1">
+        <darkmode-switch />
+      </v-col>
+    </v-row>
+  </v-container>
 
   <v-navigation-drawer
     v-model="open"
