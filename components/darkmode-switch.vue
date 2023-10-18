@@ -7,14 +7,5 @@ function toggleDarkMode () {
 }
 </script>
 <template>
-  <v-switch inset :hide-details="true" @click="toggleDarkMode">
-    <template #prepend>
-      <v-icon v-if="theme.global.name.value === 'light'">
-        mdi-weather-night
-      </v-icon>
-      <v-icon v-else>
-        mdi-weather-sunny
-      </v-icon>
-    </template>
-  </v-switch>
+  <v-btn variant="text" :icon="theme.global.current.value.dark ? 'mdi-weather-night' : 'mdi-weather-sunny'" @click="toggleDarkMode" />
 </template>
