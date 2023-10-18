@@ -52,6 +52,9 @@ export default defineNuxtConfig({
           myCustomDarkTheme,
           myCustomLightTheme
         }
+      },
+      locale: {
+        locale: 'gb'
       }
 
     },
