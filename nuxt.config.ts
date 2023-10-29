@@ -52,11 +52,7 @@ export default defineNuxtConfig({
           myCustomDarkTheme,
           myCustomLightTheme
         }
-      },
-      locale: {
-        locale: 'gb'
       }
-
     },
     moduleOptions: {
       useVuetifyLabs: true
@@ -83,13 +79,22 @@ export default defineNuxtConfig({
         }
       ]
     },
-
+    client: {
+      installPrompt: true,
+      // you don't need to include this: only for testing purposes
+      // if enabling periodic sync for update use 1 hour or so (periodicSyncForUpdates: 3600)
+      periodicSyncForUpdates: 20
+    },
+    workbox: {
+      navigateFallback: '/',
+      globPatterns: ['**/*.{js,css,html,png,svg,ico}']
+    },
     devOptions: {
-      enabled: true
+      enabled: true,
+      suppressWarnings: true,
+      navigateFallbackAllowlist: [/^\/$/],
+      type: 'module'
     }
-  },
-  build: {
-    transpile: ['@vuepic/vue-datepicker']
   },
   typescript: {
     strict: true
