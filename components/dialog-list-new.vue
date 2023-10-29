@@ -1,6 +1,7 @@
 <script setup lang="ts">
 const listName = ref('')
 const listsStore = useListsStore()
+const navOpen = useNav()
 
 const props = defineProps<{open: boolean}>()
 const emit = defineEmits(['close'])
@@ -10,6 +11,7 @@ function newList () {
 
   listName.value = ''
   emit('close')
+  navOpen.value = false
 }
 </script>
 

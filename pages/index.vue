@@ -1,14 +1,13 @@
 <script setup lang="ts">
-import { Todo } from '@/types/globals'
 const listsStore = useListsStore()
 listsStore.getTodaysTodos()
 
-function todoSelected () {
-  console.log('selected')
-}
+watch(listsStore.todaysTodos, (todos) => {
+  console.log('todaysTodos', todos)
+})
 
 </script>
 
 <template>
-  <app-list @todo-Selected="todoSelected" />
+  <app-list v-if="listsStore.currentList" :list="listsStore.currentList" />
 </template>

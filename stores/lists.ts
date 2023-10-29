@@ -13,7 +13,7 @@ export const useListsStore = defineStore('lists', {
     lists: [],
     currentList: undefined,
     currentTask: undefined,
-    todaysTodos: undefined
+    todaysTodos: []
   }),
   actions: {
     async addList (listName: string) {
@@ -91,17 +91,19 @@ export const useListsStore = defineStore('lists', {
     async getTodaysTodos () {
       const { data } = await useFetch<Todo[]>('/api/today')
 
-      this.todaysTodos = data
       this.setCurrentList({
         name: 'Today',
-        todos: this.todaysTodos
+        todos: data
       })
+
+      this.todaysTodos = data
     },
     async updateTodo (todo: Todo) {
-      return await $fetch(`/api/list/todo/${todo._id}`, {
+      const updatedTodo = await $fetch<Todo>(`/api/list/todo/${todo._id}`, {
         method: 'PUT',
         body: todo
       })
+      this.setCurrentTask(updatedTodo)
     }
   }
 })

@@ -1,13 +1,11 @@
 <script setup>
-// import VueDatePicker from '@vuepic/vue-datepicker'
 import { useListsStore } from '~/stores/lists'
-import '@vuepic/vue-datepicker/dist/main.css'
 const listsStore = useListsStore()
 
-function updateDueDate () {
+function updateDueDate (newDate) {
   listsStore.updateTodo({
     _id: listsStore.currentTask._id,
-    dueDate: listsStore.currentTask.dueDate
+    dueDate: newDate
   })
 }
 function updateName () {
@@ -31,7 +29,7 @@ function editDone () {
       <v-checkbox-btn v-model="listsStore.currentTask.done" @click="editDone(todo)" />
     </template>
     <template #append>
-      <app-duedate v-model="listsStore.currentTask.dueDate" @set-date="updateDueDate" />
+      <app-duedate :date="listsStore.currentTask.dueDate" :todo="listsStore.currentTask" :show-detail="true" @set-date="updateDueDate" />
     </template>
     <v-card-title>
       <v-text-field

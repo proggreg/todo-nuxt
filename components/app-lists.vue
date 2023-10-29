@@ -6,13 +6,12 @@ const { width } = useWindowSize() // TODO would like to use useDisplay from vuet
 function selectList (list) {
   listsStore.setCurrentList(list)
   listsStore.getTodos(list._id)
-  if (width.value < 1280) {
+  if (width.value < 800) {
+    console.log('close navigation')
     navOpen.value = false
   }
 }
-onMounted(() => {
-  listsStore.getLists() // TODO get on server (useFetch)
-})
+
 </script>
 
 <template>

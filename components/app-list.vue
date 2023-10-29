@@ -1,19 +1,12 @@
 <script setup lang="ts">
 import { Todo } from '~/types/globals'
 import { useListsStore } from '~/stores/lists'
+
 const listsStore = useListsStore()
 const newTodo = ref<Todo>({
   name: '',
   done: false,
   dueDate: undefined
-})
-
-const list = computed(() => { // TODO if there is no current list go to today?
-  if (!listsStore.currentList) {
-    listsStore.setCurrentList(listsStore.lists[0])
-    return listsStore.lists[0]
-  }
-  return listsStore.currentList
 })
 
 function addTodo () {
@@ -28,10 +21,10 @@ function addTodo () {
 
 </script>
 <template>
-  <v-row v-if="list" no-gutters>
+  <v-row v-if="listsStore.currentList" no-gutters>
     <v-col cols="12" class="pb-4">
       <h1 class="text-h4">
-        {{ list.name }}
+        {{ listsStore.currentList.name }}
       </h1>
     </v-col>
     <v-col cols="12">
@@ -42,17 +35,14 @@ function addTodo () {
         rounded="lg"
         :placeholder="'Add todo to ' + listsStore.currentList.name"
         class="add-todo-field"
-        @keyup.enter="addTodo()"
       >
         <template #append-inner>
-          <app-duedate @set-date="(newDate: Date) => newTodo.dueDate = newDate" />
+          <app-duedate v-if="listsStore.currentList.name !== 'Today'" :date="newTodo.dueDate" @set-date="(newDate: Date) => newTodo.dueDate = newDate" />
 
           <v-btn :disabled="!newTodo.name" rounded="lg" variant="text" icon="mdi-plus" @click="addTodo" />
         </template>
       </v-text-field>
-      <app-list-items
-        v-if="list"
-      />
+      <app-list-items />
     </v-col>
   </v-row>
 </template>
