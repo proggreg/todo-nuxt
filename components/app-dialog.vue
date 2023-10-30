@@ -1,5 +1,6 @@
 <script setup lang="ts">
-const size = useWindowSize()
+import { useDisplay } from 'vuetify'
+const { smAndDown } = useDisplay()
 const dialogProps = defineProps<{
   title?: string,
   open: boolean
@@ -9,7 +10,7 @@ const emit = defineEmits(['close'])
 </script>
 
 <template>
-  <v-dialog :model-value="dialogProps.open" :fullscreen="size.width.value <= 800" transition="dialog-bottom-transition" @update:model-value="emit('close')">
+  <v-dialog max-width="500" :model-value="dialogProps.open" :fullscreen="smAndDown" transition="dialog-bottom-transition" @update:model-value="emit('close')">
     <template #activator>
       <slot name="open" />
     </template>
