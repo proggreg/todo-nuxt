@@ -11,6 +11,11 @@ const newTodo = ref<Todo>({
 
 function addTodo () {
   if (newTodo && listsStore.currentList) {
+    if (listsStore.currentList.name === 'Today') {
+      const today = new Date()
+      newTodo.value.dueDate = today
+    }
+
     listsStore.addTodo(newTodo.value)
   }
 
@@ -35,6 +40,7 @@ function addTodo () {
         rounded="lg"
         :placeholder="'Add todo to ' + listsStore.currentList.name"
         class="add-todo-field"
+        @keyup.enter="addTodo"
       >
         <template #append-inner>
           <app-duedate v-if="listsStore.currentList.name !== 'Today'" :date="newTodo.dueDate" @set-date="(newDate: Date) => newTodo.dueDate = newDate" />
@@ -42,7 +48,6 @@ function addTodo () {
           <v-btn :disabled="!newTodo.name" rounded="lg" variant="text" icon="mdi-plus" @click="addTodo" />
         </template>
       </v-text-field>
-      <app-list-items />
     </v-col>
   </v-row>
 </template>

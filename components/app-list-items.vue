@@ -1,6 +1,7 @@
 <script setup lang="ts">
 import { useListsStore } from '~/stores/lists'
 import { Todo } from '~/types/globals'
+const itemProps = defineProps<{items: Todo[]}>()
 
 const listsStore = useListsStore()
 
@@ -33,17 +34,18 @@ function updateDueDate (newDate: Date, todo: Todo) {
 }
 
 const todos = computed(() => {
-  if (!listsStore.currentList || !listsStore.currentList.todos) { return [] }
-  return listsStore.currentList.todos.filter(todo => !todo.done)
+  return itemProps.items.filter(todo => !todo.done)
 })
 const complete = computed(() => {
-  if (!listsStore.currentList || !listsStore.currentList.todos) { return [] }
-  return listsStore.currentList.todos.filter(todo => todo.done)
+  return itemProps.items.filter(todo => todo.done)
 })
 
 </script>
 
 <template>
+  <v-row>
+    <v-col><app-filter-select /></v-col>
+  </v-row>
   <v-list>
     <v-list-item v-if="todos.length" :title="`Todo (${todos.length})`" />
     <v-hover

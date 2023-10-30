@@ -1,13 +1,10 @@
 <script setup lang="ts">
 import { useDate } from 'vuetify/labs/date'
 import { Todo } from '@/types/globals'
-
-// eslint-disable-next-line vue/no-dupe-keys
 const date = useDate()
-const { width } = useWindowSize()
 const emit = defineEmits(['setDate'])
 const open = ref(false)
-const dueDateProps = defineProps<{date?: Date | string, todo?: Todo, showDetail?: boolean}>()
+const dueDateProps = defineProps<{todoDueDate?: Date | string, todo?: Todo, showDetail?: boolean}>()
 const dueDate = ref('')
 
 watch(dueDate, (dueDate) => {
@@ -15,11 +12,11 @@ watch(dueDate, (dueDate) => {
 })
 
 const formattedDate = computed(() => {
-  if (!dueDateProps.date) { return '' }
+  if (!dueDateProps.todoDueDate) { return '' }
 
-  console.log('date prop', dueDateProps.date)
+  // console.log('date prop', dueDateProps.todoDueDate)
 
-  return date.format(new Date(dueDateProps.date), 'keyboardDate')
+  return date.format(new Date(dueDateProps.todoDueDate), 'keyboardDate')
 })
 
 </script>
@@ -31,7 +28,6 @@ const formattedDate = computed(() => {
         v-bind="props"
         style="min-width: 160px"
         placeholder="date"
-        size="small"
         class="text-h6"
         :value="formattedDate"
         append-icon="mdi-calendar"
@@ -41,9 +37,7 @@ const formattedDate = computed(() => {
       <v-btn v-else v-bind="props" icon="mdi-calendar" variant="text" @click="open = !open" />
     </template>
     <v-list>
-      {{ dueDate }}
       <v-date-picker v-model="dueDate" rounded="lg" @click:save="open = !open" @click:cancel="open = !open" />
     </v-list>
   </v-menu>
 </template>
-<!-- TODO use container query to show/hide text field -->

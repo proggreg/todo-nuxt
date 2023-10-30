@@ -1,13 +1,12 @@
 <script setup lang="ts">
-const listsStore = useListsStore()
-listsStore.getTodaysTodos()
 
-watch(listsStore.todaysTodos, (todos) => {
-  console.log('todaysTodos', todos)
-})
+const listsStore = useListsStore()
+
+listsStore.currentList.name = 'Today'
 
 </script>
 
 <template>
-  <app-list v-if="listsStore.currentList" :list="listsStore.currentList" />
+  <app-list />
+  <app-list-items :items="listsStore.todaysTodos" />
 </template>

@@ -1,12 +1,15 @@
 <script setup>
+import { useDisplay } from 'vuetify'
 import { useListsStore } from '~/stores/lists'
+
+const { smAndDown } = useDisplay()
 const listsStore = useListsStore()
 const navOpen = useNav()
-const { width } = useWindowSize() // TODO would like to use useDisplay from vuetify but getting undefined
+
 function selectList (list) {
   listsStore.setCurrentList(list)
-  listsStore.getTodos(list._id)
-  if (width.value < 800) {
+  console.log(smAndDown.value)
+  if (smAndDown.value) {
     console.log('close navigation')
     navOpen.value = false
   }
@@ -30,7 +33,7 @@ function selectList (list) {
       placeholder="My List"
       @click="selectList(list)"
     >
-      <nuxt-link class="nuxt-link" to="/lists">
+      <nuxt-link class="nuxt-link" :to="`/list/${list._id}`">
         <v-list-item-title>{{ list.name }}</v-list-item-title>
       </nuxt-link>
       <template #append>

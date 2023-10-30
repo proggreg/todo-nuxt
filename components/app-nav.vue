@@ -1,14 +1,14 @@
 <script setup lang="ts">
+import { useDisplay } from 'vuetify'
 const open = useNav()
 const dialog = ref(false)
 const listsStore = useListsStore()
-const { width } = useWindowSize()
-const desktop = computed(() => width.value > 800)
+const { smAndDown } = useDisplay()
 
 listsStore.getLists()
 
 function closeDrawer () {
-  if (width < 800) {
+  if (smAndDown.value) {
     open.value = false
   }
 }
@@ -18,14 +18,14 @@ function closeDrawer () {
 <template>
   <v-app-bar
     density="comfortable"
-    height="100"
+    height="70"
     elevation="0"
     align-center
     class="d-flex justify-space-between"
     style="justify-content: space-between;"
   >
     <template #prepend>
-      <v-btn v-if="width < 800" size="small" style="padding: 0;" elevation="0" @click="open = !open">
+      <v-btn v-if="smAndDown" size="small" style="padding: 0;" elevation="0" @click="open = !open">
         <v-icon class="text-h4" size="x-large">
           mdi-format-list-bulleted
         </v-icon>
@@ -44,7 +44,7 @@ function closeDrawer () {
   <v-navigation-drawer
     v-model="open"
     class="pa-2 fill-height"
-    :permanent="desktop"
+    :permanent="!smAndDown"
   >
     <v-list>
       <v-spacer />

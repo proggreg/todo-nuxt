@@ -3,16 +3,21 @@ import { Todo, List } from '~/types/globals'
 
 interface listsState {
   lists: List[],
-  currentList?: List,
-  currentTask?: Todo,
-  todaysTodos?: Todo[]
+  currentList: List,
+  currentTask: Todo,
+  todaysTodos: Todo[]
 }
 
 export const useListsStore = defineStore('lists', {
   state: () : listsState => ({
     lists: [],
-    currentList: undefined,
-    currentTask: undefined,
+    currentList: {
+      name: '',
+      todos: []
+    },
+    currentTask: {
+      name: '', done: false
+    },
     todaysTodos: []
   }),
   actions: {
@@ -52,8 +57,7 @@ export const useListsStore = defineStore('lists', {
     setCurrentList (currentList: List) {
       this.currentList = currentList
     },
-    setCurrentListTasks (todos: List['todos']) {
-      if (!this.currentList) { return }
+    setCurrentListTasks (todos: Todo[]) {
       if (todos) {
         this.currentList.todos = todos
       }
@@ -68,8 +72,10 @@ export const useListsStore = defineStore('lists', {
     },
     async getTodos (listId: string) {
       const { data: todos } = await useFetch<Todo[]>(`/api/list/todo/${listId}`)
-      if (!this.currentList || !todos) { return }
-      this.setCurrentListTasks(todos)
+      if (todos) {
+        console.log('get todo\'s', todos)
+        this.setCurrentListTasks(todos)
+      }
     },
     setCurrentTask (currentTask: Todo) {
       this.currentTask = currentTask
@@ -88,15 +94,17 @@ export const useListsStore = defineStore('lists', {
 
       this.setLists(data.value)
     },
+    async getList (id: string) {
+      const { data } = await useFetch<List>(`/api/list/${id}`)
+      console.log('get list', data.value)
+      // debugger
+      this.currentList = data.value
+    },
     async getTodaysTodos () {
       const { data } = await useFetch<Todo[]>('/api/today')
-
-      this.setCurrentList({
-        name: 'Today',
-        todos: data
-      })
-
-      this.todaysTodos = data
+      if (data) {
+        this.todaysTodos = data
+      }
     },
     async updateTodo (todo: Todo) {
       const updatedTodo = await $fetch<Todo>(`/api/list/todo/${todo._id}`, {
@@ -104,6 +112,17 @@ export const useListsStore = defineStore('lists', {
         body: todo
       })
       this.setCurrentTask(updatedTodo)
+      this.getTodaysTodos()
+    },
+    filterTodos (filterName) {
+      if (!this.currentList) { return }
+      this.currentList.todos = this.currentList.todos.filter((todo) => {
+        console.log('filter todos', new Date(todo.dueDate), new Date())
+        const today = new Date()
+        const todoDate = new Date(todo.dueDate)
+        console.log(today.getDate(), todoDate.getDate())
+        return todo.dueDate && today.getDate() === todoDate.getDate()
+      })
     }
   }
 })
