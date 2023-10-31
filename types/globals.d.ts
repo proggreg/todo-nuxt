@@ -2,7 +2,8 @@ export interface Todo {
     name: string;
     done: boolean;
     _id?: string;
-    dueDate?: Date
+    dueDate?: Date,
+    list_id?: string;
   }
 
   export interface List {

@@ -6,9 +6,9 @@ const { smAndDown } = useDisplay()
 const listsStore = useListsStore()
 const navOpen = useNav()
 
-function selectList (list) {
-  listsStore.setCurrentList(list)
-  console.log(smAndDown.value)
+async function selectList (list) {
+  await navigateTo(`/list/${list._id}`)
+  console.log('select list')
   if (smAndDown.value) {
     console.log('close navigation')
     navOpen.value = false
@@ -33,9 +33,8 @@ function selectList (list) {
       placeholder="My List"
       @click="selectList(list)"
     >
-      <nuxt-link class="nuxt-link" :to="`/list/${list._id}`">
-        <v-list-item-title>{{ list.name }}</v-list-item-title>
-      </nuxt-link>
+      <v-list-item-title>{{ list.name }}</v-list-item-title>
+
       <template #append>
         <options-menu :list-id="list._id" />
       </template>

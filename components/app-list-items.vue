@@ -34,7 +34,10 @@ function updateDueDate (newDate: Date, todo: Todo) {
 }
 
 const todos = computed(() => {
-  return itemProps.items.filter(todo => !todo.done)
+  const todos = itemProps.items.filter(todo => !todo.done)
+  console.log('computed', itemProps.items.length, todos.length)
+
+  return todos
 })
 const complete = computed(() => {
   return itemProps.items.filter(todo => todo.done)
@@ -43,13 +46,13 @@ const complete = computed(() => {
 </script>
 
 <template>
-  <v-row>
+  <!-- <v-row>
     <v-col><app-filter-select /></v-col>
-  </v-row>
+  </v-row> -->
   <v-list>
     <v-list-item v-if="todos.length" :title="`Todo (${todos.length})`" />
     <v-hover
-      v-for="(todo, index) in todos"
+      v-for="(todo, index) in itemProps.items"
       :key="index"
     >
       <template #default="{ isHovering, props }">

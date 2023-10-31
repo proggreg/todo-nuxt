@@ -22,6 +22,7 @@ export const useListsStore = defineStore('lists', {
   }),
   actions: {
     async addList (listName: string) {
+      console.log('addList', listName)
       if (listName) {
         const newListData = { name: listName, todos: [] }
 
@@ -33,6 +34,9 @@ export const useListsStore = defineStore('lists', {
         })
 
         this.lists[this.lists.length - 1]._id = newList._id
+        console.log('newList', newList)
+
+        return newList
       }
     },
     setLists (lists: Array<List>) {
@@ -48,9 +52,13 @@ export const useListsStore = defineStore('lists', {
       }
     },
     async deleteTodo (todoId : string) {
-      await $fetch(`/api/list/todo/${todoId}`, {
+      const todo = await $fetch(`/api/list/todo/${todoId}`, {
         method: 'DELETE'
       })
+      console.log(todo)
+
+      this.getTodaysTodos()
+
       if (!this.currentList) { return }
       this.currentList.todos = this.currentList.todos.filter(todo => todo._id !== todoId)
     },
@@ -58,13 +66,11 @@ export const useListsStore = defineStore('lists', {
       this.currentList = currentList
     },
     setCurrentListTasks (todos: Todo[]) {
-      if (todos) {
-        this.currentList.todos = todos
-      }
+      this.currentList.todos = todos
     },
     async addTodo (newTodo: Todo) {
       if (!this.currentList) { return }
-      const todo = await $fetch<Todo>(`/api/list/todo/${this.currentList._id}`, {
+      const todo = await $fetch<Todo>('/api/list/todo', {
         method: 'POST',
         body: newTodo
       })
@@ -97,13 +103,15 @@ export const useListsStore = defineStore('lists', {
     async getList (id: string) {
       const { data } = await useFetch<List>(`/api/list/${id}`)
       console.log('get list', data.value)
-      // debugger
+
       this.currentList = data.value
     },
     async getTodaysTodos () {
       const { data } = await useFetch<Todo[]>('/api/today')
+      console.log('get todays todos here', data.value)
+
       if (data) {
-        this.todaysTodos = data
+        this.todaysTodos = data.value
       }
     },
     async updateTodo (todo: Todo) {

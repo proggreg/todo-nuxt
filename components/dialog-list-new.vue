@@ -6,12 +6,15 @@ const navOpen = useNav()
 const props = defineProps<{open: boolean}>()
 const emit = defineEmits(['close'])
 
-function newList () {
-  listsStore.addList(listName.value)
+async function newList () {
+  const list = await listsStore.addList(listName.value)
 
-  listName.value = ''
-  emit('close')
-  navOpen.value = false
+  if (list) {
+    listName.value = ''
+    emit('close')
+    navOpen.value = false
+    await navigateTo(`/list/${list._id}`)
+  }
 }
 </script>
 
