@@ -2,10 +2,8 @@
 import { useDisplay } from 'vuetify'
 const open = useNav()
 const dialog = ref(false)
-const listsStore = useListsStore()
-const { smAndDown } = useDisplay()
 
-listsStore.getLists()
+const { smAndDown } = useDisplay()
 
 function closeDrawer () {
   if (smAndDown.value) {
