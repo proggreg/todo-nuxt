@@ -17,7 +17,7 @@ function updateName () {
 function editDone () {
   listsStore.updateTodo({
     _id: listsStore.currentTask._id,
-    done: listsStore.currentTask.done
+    status: 'Done'
   })
 }
 

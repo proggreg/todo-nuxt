@@ -6,7 +6,8 @@ const listsStore = useListsStore()
 const newTodo = ref<Todo>({
   name: '',
   done: false,
-  dueDate: undefined
+  dueDate: undefined,
+  status: 'Open'
 })
 
 async function addTodo () {
@@ -29,11 +30,6 @@ async function addTodo () {
 </script>
 <template>
   <v-row v-if="listsStore.currentList" no-gutters>
-    <v-col cols="12" class="pb-4">
-      <h1 class="text-h4">
-        {{ listsStore.currentList.name }}
-      </h1>
-    </v-col>
     <v-col cols="12">
       <v-text-field
         v-if="listsStore.currentList"
@@ -50,6 +46,7 @@ async function addTodo () {
           <v-btn :disabled="!newTodo.name" rounded="lg" variant="text" icon="mdi-plus" @click="addTodo" />
         </template>
       </v-text-field>
+      <slot />
     </v-col>
   </v-row>
 </template>
