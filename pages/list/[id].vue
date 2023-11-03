@@ -24,7 +24,7 @@ function todoSelected () {
     <v-row>
       <v-col v-if="listsStore.currentList" cols="12" sm="6">
         <app-list @todoSelected="todoSelected" />
-        <app-list-items v-if="listsStore.currentList.todos" :items="listsStore.currentList.todos" />
+        <app-list-items v-if="listsStore.currentList.todos" :list-name="listsStore.currentList.name" :todos="listsStore.currentList.todos" />
       </v-col>
       <v-col class="fill-height d-none d-sm-block " cols="12" sm="5">
         <v-sheet class="fill-height  rounded-lg">
