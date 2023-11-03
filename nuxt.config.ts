@@ -23,7 +23,8 @@ export default defineNuxtConfig({
   ],
 
   experimental: {
-    payloadExtraction: false
+    payloadExtraction: false,
+    typedPages: true
   },
 
   nitro: {
@@ -41,6 +42,7 @@ export default defineNuxtConfig({
     autoImport: true,
     dirs: ['./stores']
   },
+
 
   pinia: {
     autoImports: ['defineStore', 'acceptHMRUpdate']
