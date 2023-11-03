@@ -8,6 +8,7 @@ const statusColorMapping = {
   Open: '#87909e',
   Done: '#008844'
 }
+const todos = reactive(listProps.todos)
 
 const listsStore = useListsStore()
 
@@ -39,24 +40,34 @@ function updateDueDate (newDate: Date, todo: Todo) {
   })
 }
 
+const groupedTodos = computed(() => {
+  return statuses.map((status) => {
+    return {
+      status,
+      todos: todos ? todos.filter(todo => todo.status === status) : []
+    }
+  })
+})
+
 </script>
 
 <template>
   <v-list :opened="open">
-    <v-list-group v-for="status in statuses" :key="status" :value="status" fluid>
+    <v-list-subtitle>{{ listProps.listName }}</v-list-subtitle>
+    <v-list-group v-for="groupedTodo in groupedTodos" :key="groupedTodo.status" :value="groupedTodo.status" fluid>
       <template #activator="{ props }">
         <v-list-item
           v-bind="props"
-          :title="status"
+          :title="groupedTodo.status"
         />
       </template>
       <v-hover
-        v-for="(todo, index) in listProps.todos"
+        v-for="(todo, index) in groupedTodo.todos"
         :key="index"
       >
         <template #default="{ isHovering, props }">
           <v-list-item
-            v-if="todo.status === status"
+
             v-bind="props"
             rounded="lg"
             :variant="isHovering ? 'tonal' : 'text'"
@@ -69,7 +80,7 @@ function updateDueDate (newDate: Date, todo: Todo) {
                     <div
                       class="status-icon"
                       :style="{
-                        backgroundColor: statusColorMapping[status]
+                        backgroundColor: statusColorMapping[todo.status]
                       }"
                       v-bind="props"
                     />
