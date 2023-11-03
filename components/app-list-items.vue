@@ -1,8 +1,9 @@
 <script setup lang="ts">
 import { useListsStore } from '~/stores/lists'
-import { Todo, Status } from '~/types/globals'
-const listProps = defineProps<{todos: Todo[], listName: string, statuses: Status[]}>()
-
+import { Todo } from '~/types/globals'
+const listProps = defineProps<{todos: Todo[], listName: string}>()
+const statuses = reactive(['Open', 'Done'])
+const open = reactive(['Open'])
 const statusColorMapping = {
   Open: '#87909e',
   Done: '#008844'
@@ -41,8 +42,8 @@ function updateDueDate (newDate: Date, todo: Todo) {
 </script>
 
 <template>
-  <v-list>
-    <v-list-group v-for="status in listProps.statuses" :key="status" fluid>
+  <v-list :opened="open">
+    <v-list-group v-for="status in statuses" :key="status" :value="status" fluid>
       <template #activator="{ props }">
         <v-list-item
           v-bind="props"
@@ -74,7 +75,7 @@ function updateDueDate (newDate: Date, todo: Todo) {
                     />
                   </template>
                   <v-list>
-                    <v-list-item v-for="status in listProps.statuses" :key="status" @click="editTodo(todo,status)">
+                    <v-list-item v-for="status in statuses" :key="status" @click="editTodo(todo,status)">
                       {{ status }}
                     </v-list-item>
                   </v-list>
