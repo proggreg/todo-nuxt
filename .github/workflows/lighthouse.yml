@@ -4,6 +4,7 @@ on:
   push:
     branches:
       - develop
+      - feature/Lighthouse-CI-CU-86bwbd2tu
 
 jobs:
   lighthouse:
