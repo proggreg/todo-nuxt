@@ -8,31 +8,17 @@ on:
 jobs:
   lighthouse:
     runs-on: ubuntu-latest
-
     steps:
       - uses: actions/checkout@v3
-
+      - name: Use Node.js 16.x
+        uses: actions/setup-node@v3
+        with:
+          node-version: 16.x
       - name: Install dependencies
         run: yarn install
 
       - name: Build Nuxt website
         run: yarn build
 
-      - name: Run Lighthouse audit
-        uses: actions/lighthouse-ci-action@v1
-        with:
-          url: http://localhost:3000
-          staticDistDir: ./dist
-          numberOfRuns: 3
-
-      - name: Upload Lighthouse report
-        uses: actions/upload-artifact@v3
-        with:
-          name: lighthouse-report
-          path: lighthouse/report.html
-
-      - name: Fail if Lighthouse score is below 90
-        if: steps.run-lighthouse.outputs.lighthouse.score < 90
-        run: |
-          echo "Lighthouse score is below 90. Failing workflow."
-          exit 1
+      - name: Run Lighthouse audit (mobile)
+        run: yarn lhci:mobile
