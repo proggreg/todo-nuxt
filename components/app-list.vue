@@ -1,31 +1,47 @@
 <script setup lang="ts">
-import { useListsStore } from '~/stores/lists'
-const store = useListsStore()
-const list = computed(() => store.currentList)
+const listsStore = useListsStore()
+const newTodo = ref<Todo>({
+  name: '',
+  dueDate: undefined,
+  status: 'Open'
+})
 
-// function updateListName () { // TODO use edit button to edit title
-//   if (store.currentList.name) {
-//     $fetch('/api/list/update', {
-//       method: 'PUT',
-//       body: {
-//         name: store.currentList.name,
-//         _id: store.listId
-//       }
-//     })
-//   }
-// }
+async function addTodo () {
+  if (newTodo && listsStore.currentList) {
+    if (listsStore.currentList.name === 'Today') {
+      const today = new Date()
+      newTodo.value.dueDate = today
+    }
+    newTodo.value.list_id = listsStore.currentList._id
+
+    listsStore.addTodo(newTodo.value || '')
+    await listsStore.getTodos()
+  }
+
+  newTodo.value.name = ''
+  newTodo.value.dueDate = undefined
+}
+
 </script>
 <template>
-  <v-row v-if="list" no-gutters>
-    <v-col class="py-4" cols="12">
-      <h1>
-        {{ list.name }}
-      </h1>
-    </v-col>
-    <v-col>
-      <app-list-items
-        v-if="list"
-      />
+  <v-row v-if="listsStore.currentList" no-gutters>
+    <v-col cols="12">
+      <v-text-field
+        v-if="listsStore.currentList"
+        v-model="newTodo.name"
+        variant="solo-filled"
+        rounded="lg"
+        :placeholder="'Add todo to ' + listsStore.currentList.name"
+        class="add-todo-field"
+        @keyup.enter="addTodo"
+      >
+        <template #append-inner>
+          <app-duedate v-if="listsStore.currentList.name !== 'Today'" :date="newTodo.dueDate" @set-date="(newDate: Date) => newTodo.dueDate = newDate" />
+
+          <v-btn :disabled="!newTodo.name" rounded="lg" variant="text" icon="mdi-plus" @click="addTodo" />
+        </template>
+      </v-text-field>
+      <slot />
     </v-col>
   </v-row>
 </template>

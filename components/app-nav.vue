@@ -1,50 +1,75 @@
-<script setup>
-import { useWindowSize } from '@vueuse/core'
-import { useListsStore } from '~/stores/lists'
-const drawer = ref(true)
-const listName = ref('')
-const listsStore = useListsStore()
-const { width } = useWindowSize()
+<script setup lang="ts">
+const open = useNav()
 const dialog = ref(false)
-function newList () {
-  listsStore.addList(listName.value)
+const listsStore = useListsStore()
+const { smAndDown } = useDisplay()
 
-  listName.value = ''
-  dialog.value = false
+function closeDrawer () {
+  listsStore.getTodos()
+  if (smAndDown.value) {
+    open.value = false
+  }
 }
 
-onMounted(() => {
-  if (width.value >= 1280) {
-    drawer.value = true
-  }
-})
 </script>
+
 <template>
+  <v-app-bar
+    density="comfortable"
+    height="70"
+    elevation="0"
+    align-center
+    class="d-flex justify-space-between"
+    style="justify-content: space-between;"
+  >
+    <template #prepend>
+      <v-btn v-if="smAndDown" size="small" style="padding: 0;" elevation="0" @click="open = !open">
+        <v-icon class="text-h4" size="x-large">
+          mdi-format-list-bulleted
+        </v-icon>
+      </v-btn>
+
+      <app-profile />
+    </template>
+
+    <app-search />
+    <!-- <v-spacer /> -->
+    <template #append>
+      <darkmode-switch />
+    </template>
+  </v-app-bar>
+
   <v-navigation-drawer
-    v-model="drawer"
-    app
+    v-model="open"
     class="pa-2 fill-height"
+    :permanent="!smAndDown"
   >
     <v-list>
-      <v-list-item>
-        <template #prepend>
-          <app-dialog :open="dialog" @close="dialog = false">
-            <template #open>
-              <v-btn
-                color="green"
-                @click="dialog = true"
-              >
-                New List
-              </v-btn>
-            </template>
+      <v-spacer />
+      <v-btn
+        elevation="0"
+        rounded="lg"
+        append-icon="mdi-home"
+        width="100%"
+        to="/"
+        @click="closeDrawer"
+      >
+        Home
+      </v-btn>
 
-            <v-text-field v-model="listName" placeholder="New List" @keyup.enter="newList" />
-            <template #buttons>
-              <v-btn color="primary" @click="newList">
-                Save
-              </v-btn>
-            </template>
-          </app-dialog>
+      <v-list-item>
+        <template #append>
+          <v-btn elevation="0" rounded="lg" icon="mdi-plus" @click="dialog = true" />
+        </template>
+        <template #prepend>
+          <dialog-list-new
+            :open="dialog"
+            @close="(val) => {
+
+              dialog = false;
+
+            }"
+          />
         </template>
       </v-list-item>
     </v-list>

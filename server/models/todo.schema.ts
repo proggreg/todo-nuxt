@@ -7,11 +7,13 @@ export const TodoSchema = defineMongooseModel({
       type: 'string',
       required: true
     },
-    done: {
-      type: 'boolean',
-      required: true
-    },
     list_id: {
+      type: 'string'
+    },
+    dueDate: {
+      type: 'date'
+    },
+    status: {
       type: 'string'
     }
   }

@@ -1,15 +1,15 @@
 <script setup lang="ts">
-const size = useWindowSize()
+const { smAndDown } = useDisplay()
 const dialogProps = defineProps<{
   title?: string,
-  open?: boolean
+  open: boolean
 }>()
 const emit = defineEmits(['close'])
 
 </script>
 
 <template>
-  <v-dialog max-width="50vw" :model-value="dialogProps.open" :fullscreen="size.width.value <= 400" transition="dialog-bottom-transition">
+  <v-dialog max-width="500" :model-value="dialogProps.open" :fullscreen="smAndDown" transition="dialog-bottom-transition" @update:model-value="emit('close')">
     <template #activator>
       <slot name="open" />
     </template>

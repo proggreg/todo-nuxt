@@ -7,7 +7,7 @@ export default defineEventHandler(async (event) => {
     }
     return await TodoSchema.findOneAndUpdate({
       _id: event.context.params._id
-    }, body)
+    }, body, { new: true })
   } catch (e) {
     console.error(e)
     return e

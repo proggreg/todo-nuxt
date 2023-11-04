@@ -9,9 +9,6 @@ export const ListSchema = defineMongooseModel({
     },
     descriptions: {
       type: 'string'
-    },
-    todos: {
-      type: 'array'
     }
   }
 })

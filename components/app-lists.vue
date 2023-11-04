@@ -1,18 +1,20 @@
-<script setup>
-import { useListsStore } from '~/stores/lists'
+<script setup lang="ts">
+const { smAndDown } = useDisplay()
 const listsStore = useListsStore()
+const navOpen = useNav()
 
-function selectList (list) {
-  listsStore.setCurrentList(list)
-  listsStore.getTodos(list._id)
+async function selectList (list: List) {
+  await navigateTo(`/list/${list._id}`)
+
+  if (smAndDown.value) {
+    navOpen.value = false
+  }
 }
-onMounted(() => {
-  listsStore.getLists() // TODO get on server (useFetch)
-})
+
 </script>
 
 <template>
-  <v-list nav>
+  <v-list>
     <v-list-item v-if="!listsStore.lists || !listsStore.lists.length">
       <v-list-item-title>No lists yet</v-list-item-title>
     </v-list-item>
@@ -21,16 +23,24 @@ onMounted(() => {
       v-else
       :key="i"
       color="accent"
-      rounded="xl"
+      rounded="lg"
       fluid
       :value="i"
       placeholder="My List"
       @click="selectList(list)"
     >
       <v-list-item-title>{{ list.name }}</v-list-item-title>
+
       <template #append>
         <options-menu :list-id="list._id" />
       </template>
     </v-list-item>
   </v-list>
 </template>
+<style scoped>
+.nuxt-link {
+  text-decoration: none;
+  color: inherit;
+  cursor: pointer;
+}
+</style>
