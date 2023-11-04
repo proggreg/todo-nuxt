@@ -22,3 +22,5 @@ jobs:
 
       - name: Run Lighthouse audit (mobile)
         run: yarn lhci:mobile
+        env:
+          LHCI_GITHUB_APP_TOKEN: ${{ secrets.LHCI_GITHUB_APP_TOKEN }}
