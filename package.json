@@ -3,12 +3,16 @@
   "scripts": {
     "build": "nuxt build",
     "dev": "nuxt dev",
+    "start": "node .output/server/index.mjs",
     "test": "vitest",
     "generate": "nuxt generate",
     "preview": "nuxt preview",
-    "postinstall": "nuxt prepare"
+    "postinstall": "nuxt prepare",
+    "lhci:mobile": "lhci autorun",
+    "lhci:desktop": "lhci autorun --collect.settings.preset=desktop"
   },
   "devDependencies": {
+    "@lhci/cli": "^0.12.0",
     "@nuxt/devtools": "^1.0.0-beta.2",
     "@nuxt/eslint-config": "^0.2.0",
     "@nuxt/test-utils": "^3.7.3",
