@@ -1,10 +1,10 @@
 export interface Todo {
     name: string;
-    done: boolean;
     _id?: string;
     dueDate?: Date,
     list_id?: string;
     status: Status;
+    desc?: string;
   }
 
   export type Status = 'Open' | 'Done';
