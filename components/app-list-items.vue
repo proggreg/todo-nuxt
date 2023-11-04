@@ -1,6 +1,4 @@
 <script setup lang="ts">
-import { useListsStore } from '~/stores/lists'
-import { Todo, Status } from '~/types/globals'
 const listProps = defineProps<{todos: Todo[], listName: string}>()
 const statuses = reactive<Status[]>(['Open', 'Done'])
 const open = reactive(['Open'])
@@ -52,7 +50,7 @@ const groupedTodos = computed(() => {
 
 <template>
   <v-list :opened="open">
-    <v-list-subtitle>{{ listProps.listName }}</v-list-subtitle>
+    <v-list-subheader>{{ listProps.listName }}</v-list-subheader>
     <v-list-group v-for="groupedTodo in groupedTodos" :key="groupedTodo.status" :value="groupedTodo.status" fluid>
       <template #activator="{ props }">
         <v-list-item

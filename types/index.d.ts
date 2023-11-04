@@ -1,4 +1,6 @@
-export interface Todo {
+export {Todo, Status, List}
+declare global {
+  interface Todo {
     name: string;
     _id?: string;
     dueDate?: Date,
@@ -7,10 +9,11 @@ export interface Todo {
     desc?: string;
   }
 
-  export type Status = 'Open' | 'Done';
+  type Status = 'Open' | 'Done';
 
-  export interface List {
+  interface List {
     name: string;
     todos: Todo[];
     _id?: string;
   }
+}

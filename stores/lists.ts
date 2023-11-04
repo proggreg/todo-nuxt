@@ -1,5 +1,5 @@
 import { defineStore } from 'pinia'
-import { Todo, List } from '~/types/globals'
+import { Todo, List } from '~/types'
 
 interface listsState {
   lists: List[],

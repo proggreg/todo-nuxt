@@ -1,5 +1,4 @@
 <script setup lang="ts">
-import { useDisplay } from 'vuetify'
 const { smAndDown } = useDisplay()
 const dialogProps = defineProps<{
   title?: string,

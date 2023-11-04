@@ -1,5 +1,4 @@
 <script setup lang="ts">
-import { useDisplay } from 'vuetify'
 const open = useNav()
 const dialog = ref(false)
 const listsStore = useListsStore()
@@ -55,7 +54,7 @@ function closeDrawer () {
         to="/"
         @click="closeDrawer"
       >
-        Today
+        Home
       </v-btn>
 
       <v-list-item>

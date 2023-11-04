@@ -1,12 +1,9 @@
-<script setup>
-import { useDisplay } from 'vuetify'
-import { useListsStore } from '~/stores/lists'
-
+<script setup lang="ts">
 const { smAndDown } = useDisplay()
 const listsStore = useListsStore()
 const navOpen = useNav()
 
-async function selectList (list) {
+async function selectList (list: List) {
   await navigateTo(`/list/${list._id}`)
 
   if (smAndDown.value) {

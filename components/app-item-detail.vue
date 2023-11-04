@@ -1,5 +1,4 @@
 <script setup lang="ts">
-import { useListsStore } from '~/stores/lists'
 const listsStore = useListsStore()
 
 function updateDueDate (newDate: Date) {

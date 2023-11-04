@@ -40,11 +40,18 @@ export default defineNuxtConfig({
 
   imports: {
     autoImport: true,
-    dirs: ['./stores']
+    dirs: ['./stores'],
+    presets: [{
+      from: 'vuetify',
+      imports: ['useDisplay']
+    }, {
+      from: 'vuetify/labs/date',
+      imports: ['useDate']
+    }]
   },
 
   pinia: {
-
+    storesDirs: ['./stores/**']
   },
   vuetify: {
     vuetifyOptions: {
