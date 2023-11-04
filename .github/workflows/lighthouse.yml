@@ -5,7 +5,6 @@ on:
     branches:
       - develop
       - feature/Lighthouse-CI-CU-86bwbd2tu
-
 jobs:
   lighthouse:
     runs-on: ubuntu-latest
@@ -20,9 +19,10 @@ jobs:
         run: yarn build
 
       - name: Run Lighthouse audit
-        uses: actions/lhci@v1
+        uses: actions/lighthouse-ci-action@v1
         with:
           url: http://localhost:3000
+          staticDistDir: ./dist
           numberOfRuns: 3
 
       - name: Upload Lighthouse report
