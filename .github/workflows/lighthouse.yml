@@ -1,0 +1,37 @@
+name: Test Nuxt website using Google Lighthouse
+
+on:
+  push:
+    branches:
+      - develop
+
+jobs:
+  lighthouse:
+    runs-on: ubuntu-latest
+
+    steps:
+      - uses: actions/checkout@v3
+
+      - name: Install dependencies
+        run: yarn install
+
+      - name: Build Nuxt website
+        run: yarn build
+
+      - name: Run Lighthouse audit
+        uses: actions/lhci@v1
+        with:
+          url: http://localhost:3000
+          numberOfRuns: 3
+
+      - name: Upload Lighthouse report
+        uses: actions/upload-artifact@v3
+        with:
+          name: lighthouse-report
+          path: lighthouse/report.html
+
+      - name: Fail if Lighthouse score is below 90
+        if: steps.run-lighthouse.outputs.lighthouse.score < 90
+        run: |
+          echo "Lighthouse score is below 90. Failing workflow."
+          exit 1
