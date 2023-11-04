@@ -24,7 +24,7 @@ export default defineNuxtConfig({
 
   experimental: {
     payloadExtraction: false,
-    typedPages: true
+    typedPages: false
   },
 
   nitro: {
@@ -44,7 +44,7 @@ export default defineNuxtConfig({
   },
 
   pinia: {
-    autoImports: ['defineStore', 'acceptHMRUpdate']
+
   },
   vuetify: {
     vuetifyOptions: {
