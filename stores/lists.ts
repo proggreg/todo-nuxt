@@ -4,8 +4,8 @@ import { Todo, List } from '~/types/globals'
 interface listsState {
   lists: List[],
   currentList: List,
-  currentTask: Todo,
-  todaysTodos: Todo[]
+  currentTodo: Todo,
+  todos?: Todo[]
 }
 
 export const useListsStore = defineStore('lists', {
@@ -15,14 +15,14 @@ export const useListsStore = defineStore('lists', {
       name: '',
       todos: []
     },
-    currentTask: {
-      name: '', done: false
+    currentTodo: {
+      name: '',
+      status: 'Done'
     },
-    todaysTodos: []
+    todos: []
   }),
   actions: {
     async addList (listName: string) {
-      console.log('addList', listName)
       if (listName) {
         const newListData = { name: listName, todos: [] }
 
@@ -34,7 +34,6 @@ export const useListsStore = defineStore('lists', {
         })
 
         this.lists[this.lists.length - 1]._id = newList._id
-        console.log('newList', newList)
 
         return newList
       }
@@ -52,12 +51,13 @@ export const useListsStore = defineStore('lists', {
       }
     },
     async deleteTodo (todoId : string) {
+      // eslint-disable-next-line @typescript-eslint/no-unused-vars
       const todo = await $fetch(`/api/list/todo/${todoId}`, {
         method: 'DELETE'
       })
-      console.log(todo)
+      // TODO do i need todo?
 
-      this.getTodaysTodos()
+      this.getTodos()
 
       if (!this.currentList) { return }
       this.currentList.todos = this.currentList.todos.filter(todo => todo._id !== todoId)
@@ -65,7 +65,7 @@ export const useListsStore = defineStore('lists', {
     setCurrentList (currentList: List) {
       this.currentList = currentList
     },
-    setCurrentListTasks (todos: Todo[]) {
+    setListTodos (todos: Todo[]) {
       this.currentList.todos = todos
     },
     async addTodo (newTodo: Todo) {
@@ -76,42 +76,44 @@ export const useListsStore = defineStore('lists', {
       })
       this.currentList.todos.push(todo)
     },
-    async getTodos (listId: string) {
-      const { data: todos } = await useFetch<Todo[]>(`/api/list/todo/${listId}`)
-      if (todos) {
-        console.log('get todo\'s', todos)
-        this.setCurrentListTasks(todos)
+    async getListTodos (listId: string) {
+      const { data } = await useFetch<Todo[]>(`/api/list/todo/${listId}`)
+
+      if (data.value) {
+        this.setListTodos(data.value)
       }
     },
-    setCurrentTask (currentTask: Todo) {
-      this.currentTask = currentTask
+    setCurrentTodo (currentTodo: Todo) {
+      this.currentTodo = currentTodo
     },
     setDueDate (date: Date) {
-      if (this.currentTask) {
-        this.currentTask.dueDate = date
+      if (this.currentTodo) {
+        this.currentTodo.dueDate = date
       }
     },
     setTaskName (name :string, index: number) {
-      if (!this.currentTask || !this.currentList) { return }
+      if (!this.currentTodo || !this.currentList) { return }
       this.currentList.todos[index].name = name
     },
     async getLists () {
       const { data } = await useFetch<List[]>('/api/lists')
 
-      this.setLists(data.value)
+      if (data.value) {
+        this.setLists(data.value)
+      }
     },
     async getList (id: string) {
       const { data } = await useFetch<List>(`/api/list/${id}`)
-      console.log('get list', data.value)
 
-      this.currentList = data.value
+      if (data.value) {
+        this.currentList = data.value
+      }
     },
-    async getTodaysTodos () {
+    async getTodos () {
       const { data } = await useFetch<Todo[]>('/api/today')
-      console.log('get todays todos here', data.value)
 
-      if (data) {
-        this.todaysTodos = data.value
+      if (data.value) {
+        this.todos = data.value
       }
     },
     async updateTodo (todo: Todo) {
@@ -119,18 +121,8 @@ export const useListsStore = defineStore('lists', {
         method: 'PUT',
         body: todo
       })
-      this.setCurrentTask(updatedTodo)
-      this.getTodaysTodos()
-    },
-    filterTodos (filterName) {
-      if (!this.currentList) { return }
-      this.currentList.todos = this.currentList.todos.filter((todo) => {
-        console.log('filter todos', new Date(todo.dueDate), new Date())
-        const today = new Date()
-        const todoDate = new Date(todo.dueDate)
-        console.log(today.getDate(), todoDate.getDate())
-        return todo.dueDate && today.getDate() === todoDate.getDate()
-      })
+      this.setCurrentTodo(updatedTodo)
+      this.getTodos()
     }
   }
 })
