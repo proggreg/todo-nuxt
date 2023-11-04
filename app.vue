@@ -2,10 +2,10 @@
 import { Todo } from '@/types/globals'
 import { useListsStore } from '@/stores/lists'
 const listsStore = useListsStore()
-const { data: todayTodos } = useFetch<Todo[]>('/api/today')
+const { data } = useFetch<Todo[]>('/api/today')
 listsStore.getLists()
-if (todayTodos) {
-  listsStore.todaysTodos = todayTodos
+if (data.value) {
+  listsStore.todos = data.value
 }
 
 </script>

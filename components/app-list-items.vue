@@ -1,8 +1,8 @@
 <script setup lang="ts">
 import { useListsStore } from '~/stores/lists'
-import { Todo } from '~/types/globals'
+import { Todo, Status } from '~/types/globals'
 const listProps = defineProps<{todos: Todo[], listName: string}>()
-const statuses = reactive(['Open', 'Done'])
+const statuses = reactive<Status[]>(['Open', 'Done'])
 const open = reactive(['Open'])
 const statusColorMapping = {
   Open: '#87909e',
@@ -13,14 +13,12 @@ const todos = reactive(listProps.todos)
 const listsStore = useListsStore()
 
 function deleteTodo (todo: Todo) {
-  if (!todo._id) {
-    console.warn('no id to delete')
-    return
+  if (todo._id) {
+    listsStore.deleteTodo(todo._id)
   }
-  listsStore.deleteTodo(todo._id)
 }
 
-function editTodo (todo: Todo, status: string) {
+function editTodo (todo: Todo, status: Status) {
   todo.status = status
   $fetch(`/api/list/todo/${todo._id}`, {
     method: 'PUT',
@@ -29,9 +27,10 @@ function editTodo (todo: Todo, status: string) {
 }
 
 function selectTodo (todo: Todo) {
-  listsStore.setCurrentTask(todo)
+  listsStore.setCurrentTodo(todo)
 }
-
+// TODO updateDueDate
+// eslint-disable-next-line @typescript-eslint/no-unused-vars
 function updateDueDate (newDate: Date, todo: Todo) {
   todo.dueDate = newDate
   $fetch(`/api/list/todo/${todo._id}`, {
@@ -86,7 +85,7 @@ const groupedTodos = computed(() => {
                     />
                   </template>
                   <v-list>
-                    <v-list-item v-for="status in statuses" :key="status" @click="editTodo(todo,status)">
+                    <v-list-item v-for="status in statuses" :key="status" @click="editTodo(todo, status)">
                       {{ status }}
                     </v-list-item>
                   </v-list>

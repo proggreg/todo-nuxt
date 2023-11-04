@@ -1,13 +1,13 @@
 <script setup lang="ts">
 import { useDisplay } from 'vuetify'
 import { useListsStore } from '@/stores/lists'
-const route = useRoute()
+const { params } = useRoute()
 const dialog = ref(false)
 const { smAndDown } = useDisplay()
 const listsStore = useListsStore()
 try {
-  listsStore.getList(route.params.id)
-  listsStore.getTodos(route.params.id)
+  listsStore.getList(params.id[0])
+  listsStore.getTodos()
 } catch (error) {
   await navigateTo('/')
 }
@@ -23,7 +23,7 @@ function todoSelected () {
   <client-only>
     <v-row>
       <v-col v-if="listsStore.currentList" cols="12" sm="6">
-        <app-list @todoSelected="todoSelected" />
+        <app-list @todo-selected="todoSelected" />
         <app-list-items v-if="listsStore.currentList.todos" :list-name="listsStore.currentList.name" :todos="listsStore.currentList.todos" />
       </v-col>
       <v-col class="fill-height d-none d-sm-block " cols="12" sm="5">

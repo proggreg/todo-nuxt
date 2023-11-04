@@ -1,52 +1,43 @@
-<script setup>
+<script setup lang="ts">
 import { useListsStore } from '~/stores/lists'
 const listsStore = useListsStore()
 
-function updateDueDate (newDate) {
-  listsStore.updateTodo({
-    _id: listsStore.currentTask._id,
-    dueDate: newDate
-  })
+function updateDueDate (newDate: Date) {
+  listsStore.currentTodo.dueDate = newDate
+  listsStore.updateTodo(listsStore.currentTodo)
 }
 function updateName () {
-  listsStore.updateTodo({
-    _id: listsStore.currentTask._id,
-    name: listsStore.currentTask.name
-  })
+  listsStore.updateTodo(listsStore.currentTodo)
 }
+
+// TODO editDone
+// eslint-disable-next-line @typescript-eslint/no-unused-vars
 function editDone () {
-  listsStore.updateTodo({
-    _id: listsStore.currentTask._id,
-    status: 'Done'
-  })
+  listsStore.currentTodo.status = 'Done'
+  listsStore.updateTodo(listsStore.currentTodo)
 }
 
 </script>
 
 <template>
-  <v-card v-if="listsStore.currentTask" style="position: relative;">
+  <v-card v-if="listsStore.currentTodo" style="position: relative;">
     <template #prepend>
-      <v-checkbox-btn v-model="listsStore.currentTask.done" @click="editDone(todo)" />
+      <!-- TODO change to update status <v-checkbox-btn v-model="listsStore.currentTodo.done" @click="editDone(todo)" /> -->
     </template>
     <template #append>
-      <app-duedate :date="listsStore.currentTask.dueDate" :todo="listsStore.currentTask" :show-detail="true" @set-date="updateDueDate" />
+      <app-duedate :date="listsStore.currentTodo.dueDate" :todo="listsStore.currentTodo" :show-detail="true" @set-date="updateDueDate" />
     </template>
     <v-card-title>
       <v-text-field
-        v-model="listsStore.currentTask.name"
-        :class="
-          listsStore.currentTask.done ? 'text-decoration-line-through' : ''
-        "
-        :disabled="listsStore.currentTask.done"
+        v-model="listsStore.currentTodo.name"
         @input="updateName"
       />
     </v-card-title>
     <v-card-item>
       <v-textarea
-        v-model="listsStore.currentTask.desc"
+        v-model="listsStore.currentTodo.desc"
         label="description"
         variant="solo-inverted"
-        :disabled="listsStore.currentTask.done"
       />
     </v-card-item>
 
@@ -57,7 +48,6 @@ function editDone () {
         variant="solo-inverted"
         density="compact"
         hide-details
-        :disabled="listsStore.currentTask.done"
       />
     </v-card-actions>
   </v-card>

@@ -5,7 +5,6 @@ import { useListsStore } from '~/stores/lists'
 const listsStore = useListsStore()
 const newTodo = ref<Todo>({
   name: '',
-  done: false,
   dueDate: undefined,
   status: 'Open'
 })
@@ -19,11 +18,10 @@ async function addTodo () {
     newTodo.value.list_id = listsStore.currentList._id
 
     listsStore.addTodo(newTodo.value || '')
-    await listsStore.getTodaysTodos()
+    await listsStore.getTodos()
   }
 
   newTodo.value.name = ''
-  newTodo.value.done = false
   newTodo.value.dueDate = undefined
 }
 

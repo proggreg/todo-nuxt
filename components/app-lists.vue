@@ -8,9 +8,8 @@ const navOpen = useNav()
 
 async function selectList (list) {
   await navigateTo(`/list/${list._id}`)
-  console.log('select list')
+
   if (smAndDown.value) {
-    console.log('close navigation')
     navOpen.value = false
   }
 }

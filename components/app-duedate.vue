@@ -5,18 +5,16 @@ const date = useDate()
 const emit = defineEmits(['setDate'])
 const open = ref(false)
 const dueDateProps = defineProps<{todoDueDate?: Date | string, todo?: Todo, showDetail?: boolean}>()
-const dueDate = ref('')
+const dueDate = ref([''])
 
 watch(dueDate, (dueDate) => {
   emit('setDate', dueDate, dueDateProps.todo)
 })
 
 const formattedDate = computed(() => {
-  if (!dueDateProps.todoDueDate) { return '' }
-
-  // console.log('date prop', dueDateProps.todoDueDate)
-
-  return date.format(new Date(dueDateProps.todoDueDate), 'keyboardDate')
+  if (dueDateProps.todoDueDate) {
+    return date.format(new Date(dueDateProps.todoDueDate), 'keyboardDate')
+  }
 })
 
 </script>
