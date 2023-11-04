@@ -1,9 +1,9 @@
 <script setup lang="ts">
 const store = useListsStore()
 
-const props = defineProps<{ listId: string}>()
+const optionProps = defineProps<{ listId: string}>()
 async function deleteList () {
-  store.deleteList(props.listId)
+  store.deleteList(optionProps.listId)
   await navigateTo('/')
 }
 const options = reactive([{
