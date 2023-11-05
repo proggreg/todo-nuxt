@@ -78,7 +78,7 @@ function deleteTodo (todo: Todo) {
         </v-list-item-title>
 
         <template #append>
-          <AppDuedate :date="todo.dueDate" />
+          <AppDueDate :date="todo.dueDate" />
 
           <v-list-item-action end>
             <v-btn

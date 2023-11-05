@@ -19,7 +19,7 @@ async function newList () {
 </script>
 
 <template>
-  <app-dialog :open="props.open" @close="emit('close')">
+  <AppDialog :open="props.open" @close="emit('close')">
     <template #open>
       <div class="d-flex justify-space-between">
         Lists
@@ -33,5 +33,5 @@ async function newList () {
         Save
       </v-btn>
     </template>
-  </app-dialog>
+  </AppDialog>
 </template>

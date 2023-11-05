@@ -6,6 +6,8 @@ useHead({ title: 'TickUp:Home' })
 </script>
 
 <template>
-  <TodoNew />
-  <ListView v-if="listsStore.todos" :todos="listsStore.todos" list-name="Today" />
+  <div>
+    <TodoNew />
+    <ListView v-if="listsStore.todos" :todos="listsStore.todos" list-name="Today" />
+  </div>
 </template>

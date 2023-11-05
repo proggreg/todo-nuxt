@@ -3,7 +3,7 @@
 <template>
   <main>
     <v-app>
-      <app-nav />
+      <AppNav />
 
       <v-main>
         <v-container fluid>

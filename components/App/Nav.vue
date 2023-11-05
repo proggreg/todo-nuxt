@@ -35,7 +35,7 @@ function closeDrawer () {
     <app-search />
     <!-- <v-spacer /> -->
     <template #append>
-      <darkmode-switch />
+      <AppDarkMode />
     </template>
   </v-app-bar>
 
@@ -62,18 +62,14 @@ function closeDrawer () {
           <v-btn elevation="0" rounded="lg" icon="mdi-plus" @click="dialog = true" />
         </template>
         <template #prepend>
-          <dialog-list-new
+          <ListNew
             :open="dialog"
-            @close="(val) => {
-
-              dialog = false;
-
-            }"
+            @close="dialog = false"
           />
         </template>
       </v-list-item>
     </v-list>
     <v-divider />
-    <app-lists />
+    <AppNavItems />
   </v-navigation-drawer>
 </template>
