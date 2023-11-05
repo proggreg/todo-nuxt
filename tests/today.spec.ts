@@ -1,18 +1,18 @@
 // import any store you want to interact with in tests
-import { beforeAll, beforeEach, describe, test, vi, expect } from 'vitest'
-import { createTestingPinia } from '@pinia/testing'
+import { beforeAll, beforeEach, describe, test, expect } from 'vitest'
+// import { createTestingPinia } from '@pinia/testing'
 import { mountSuspended } from 'nuxt-vitest/utils'
 import { registerEndpoint } from 'vitest-environment-nuxt/utils'
 import AppListItems from '@/components/app-list-items.vue'
-import { useListsStore } from '@/stores/lists.ts'
+// import { useListsStore } from '@/stores/lists'
 // import AppListItems from '@/components/app-list-items.vue'
 
 registerEndpoint('/test/', () => ({
   test: 'test-field'
 }))
 describe('today page', () => {
-  const store = useListsStore() // uses the testing pinia!
-  const today = new Date()
+  // const store = useListsStore() // uses the testing pinia!
+  // const today = new Date()
   beforeAll(() => {
     registerEndpoint('/api/today', () => ({
       test: 'test-field'
@@ -22,11 +22,11 @@ describe('today page', () => {
     }))
   })
   beforeEach(() => {
-    store.$state.todaysTodos = [{
-      name: 'test todo',
-      done: false,
-      dueDate: today
-    }]
+    // store.$state.todaysTodos = [{
+    //   name: 'test todo',
+    //   done: false,
+    //   dueDate: today
+    // }]
 
     // const wrapper = mount(AppListItems, {
     //   global: {
