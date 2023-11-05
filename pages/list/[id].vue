@@ -26,8 +26,8 @@ if (currentList.value) {
   <client-only>
     <v-row>
       <v-col cols="12" sm="6">
-        <app-list @todo-selected="todoSelected" />
-        <app-list-items v-if="todos && currentList" :list-name="currentList.name" :todos="todos" />
+        <TodoNew />
+        <ListView v-if="todos && currentList" :list-name="currentList.name" :todos="todos" />
       </v-col>
       <v-col class="fill-height d-none d-sm-block " cols="12" sm="5">
         <v-sheet class="fill-height  rounded-lg">

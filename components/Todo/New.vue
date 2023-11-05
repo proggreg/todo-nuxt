@@ -8,13 +8,9 @@ const newTodo = ref<Todo>({
 
 async function addTodo () {
   if (newTodo && listsStore.currentList) {
-    if (listsStore.currentList.name === 'Today') {
-      const today = new Date()
-      newTodo.value.dueDate = today
-    }
     newTodo.value.list_id = listsStore.currentList._id
 
-    listsStore.addTodo(newTodo.value || '')
+    listsStore.addTodo(newTodo.value)
     await listsStore.getTodos()
   }
 
