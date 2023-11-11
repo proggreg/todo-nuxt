@@ -19,7 +19,6 @@ export default defineNuxtConfig({
     '@vueuse/nuxt',
     'nuxt-mongoose',
     // '@vite-pwa/nuxt',
-    'nuxt-vitest',
     '@nuxtjs/eslint-module'
   ],
 
