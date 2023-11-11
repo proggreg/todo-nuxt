@@ -8,10 +8,6 @@ const todos = reactive(itemProps.todos)
 
 const emit = defineEmits(['TodoClicked'])
 
-function getStatusColor (todoStatus: string) {
-  return statuses.filter(status => status.name === todoStatus)[0].color
-}
-
 function selectTodo (todo: Todo) {
   listsStore.setCurrentTodo(todo)
 }
@@ -58,13 +54,7 @@ function deleteTodo (todo: Todo) {
           <v-list-item-action start>
             <v-menu>
               <template #activator="{props}">
-                <div
-                  class="status-icon"
-                  :style="{
-                    backgroundColor: getStatusColor(todo.status)
-                  }"
-                  v-bind="props"
-                />
+                <ListStatus v-bind="props" :todo="todo" />
               </template>
               <v-list>
                 <v-list-item v-for="status in statuses" :key="status.name" @click="editTodo(todo, status)">
@@ -97,11 +87,7 @@ function deleteTodo (todo: Todo) {
   </v-hover>
 </template>
 <style scoped>
-.status-icon {
-  width: 10px;
-  height: 10px;
-  border-radius: 50%;
-}
+
 .add-todo-field {
   position: relative;
   z-index: 1;
