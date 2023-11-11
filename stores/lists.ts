@@ -1,6 +1,3 @@
-import { defineStore } from 'pinia'
-import { Todo, List } from '~/types'
-
 interface listsState {
   lists: List[],
   currentList: List,
@@ -17,7 +14,8 @@ export const useListsStore = defineStore('lists', {
     },
     currentTodo: {
       name: '',
-      status: 'Done'
+      status: 'Done',
+      desc: ''
     },
     todos: []
   }),
@@ -121,8 +119,9 @@ export const useListsStore = defineStore('lists', {
         method: 'PUT',
         body: todo
       })
+      console.log(updatedTodo)
       this.setCurrentTodo(updatedTodo)
-      this.getTodos()
+      // this.getTodos()
     }
   }
 })

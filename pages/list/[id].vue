@@ -25,14 +25,9 @@ if (currentList.value) {
 <template>
   <client-only>
     <v-row>
-      <v-col cols="12" sm="6">
+      <v-col>
         <TodoNew />
         <ListView v-if="todos && currentList" :list-name="currentList.name" :todos="todos" />
-      </v-col>
-      <v-col class="fill-height d-none d-sm-block " cols="12" sm="5">
-        <v-sheet class="fill-height  rounded-lg">
-          <app-item-detail />
-        </v-sheet>
       </v-col>
     </v-row>
   </client-only>

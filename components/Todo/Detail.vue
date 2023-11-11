@@ -9,51 +9,47 @@ function updateName () {
   listsStore.updateTodo(listsStore.currentTodo)
 }
 
-// TODO editDone
-// eslint-disable-next-line @typescript-eslint/no-unused-vars
-function editDone () {
-  listsStore.currentTodo.status = 'Done'
+function updateDesc () {
+  listsStore.currentTodo.desc = desc.value
   listsStore.updateTodo(listsStore.currentTodo)
 }
+const desc = ref(listsStore.currentTodo.desc)
 
 </script>
 
 <template>
-  <v-card v-if="listsStore.currentTodo" style="position: relative;">
+  <v-card>
     <template #prepend>
-      <!-- TODO change to update status <v-checkbox-btn v-model="listsStore.currentTodo.done" @click="editDone(todo)" /> -->
+      <TodoStatus />
     </template>
     <template #append>
-      <app-duedate :date="listsStore.currentTodo.dueDate" :todo="listsStore.currentTodo" :show-detail="true" @set-date="updateDueDate" />
+      <AppDueDate :date="listsStore.currentTodo.dueDate" :todo="listsStore.currentTodo" :show-detail="true" @set-date="updateDueDate" />
     </template>
     <v-card-title>
       <v-text-field
         v-model="listsStore.currentTodo.name"
-        @input="updateName"
+        @blur="updateName"
       />
     </v-card-title>
     <v-card-item>
       <v-textarea
-        v-model="listsStore.currentTodo.desc"
+        v-model="desc"
         label="description"
         variant="solo-inverted"
+        @blur="updateDesc"
       />
     </v-card-item>
 
     <v-card-actions>
       <v-spacer />
-      <v-file-input
+      <!-- <v-file-input
         label="File input"
         variant="solo-inverted"
         density="compact"
         hide-details
-      />
+        TODO File Attachments
+      /> -->
     </v-card-actions>
-  </v-card>
-  <v-card v-else>
-    <v-card-title>
-      Select a task to view details
-    </v-card-title>
   </v-card>
 </template>
 
