@@ -2,11 +2,12 @@
 const listsStore = useListsStore()
 const { statuses } = useSettingsStore()
 const itemProps = defineProps<{
-  todos: Todo[]
+  todos: Todo[],
+  status: string
 }>()
 const todos = reactive(itemProps.todos)
 
-const emit = defineEmits(['TodoClicked'])
+const emit = defineEmits(['TodoClicked', 'updateTodos'])
 
 function selectTodo (todo: Todo) {
   listsStore.setCurrentTodo(todo)
@@ -14,15 +15,6 @@ function selectTodo (todo: Todo) {
 
 function editTodo (todo: Todo, status: Status) {
   todo.status = status.name
-  $fetch(`/api/list/todo/${todo._id}`, {
-    method: 'PUT',
-    body: todo
-  })
-}
-// TODO updateDueDate
-// eslint-disable-next-line @typescript-eslint/no-unused-vars
-function updateDueDate (newDate: Date, todo: Todo) {
-  todo.dueDate = newDate
   $fetch(`/api/list/todo/${todo._id}`, {
     method: 'PUT',
     body: todo
@@ -39,11 +31,12 @@ function deleteTodo (todo: Todo) {
 
 <template>
   <v-hover
-    v-for="(todo, index) in todos"
+    v-for="(todo, index) in itemProps.todos"
     :key="index"
   >
     <template #default="{ isHovering, props }">
       <v-list-item
+        v-if="todo.status == itemProps.status"
         v-bind="props"
         rounded="lg"
         :variant="isHovering ? 'tonal' : 'text'"

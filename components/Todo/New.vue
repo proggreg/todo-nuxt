@@ -1,18 +1,19 @@
 <script setup lang="ts">
 const listsStore = useListsStore()
+const props = defineProps<{listId: string}>()
 const newTodo = ref<Todo>({
   name: '',
   dueDate: undefined,
-  status: 'Open'
+  status: 'Open',
+  desc: ''
 })
+const emit = defineEmits(['newTodo'])
 
 async function addTodo () {
-  if (newTodo && listsStore.currentList) {
-    newTodo.value.list_id = listsStore.currentList._id
+  newTodo.value.list_id = props.listId
 
-    listsStore.addTodo(newTodo.value)
-    await listsStore.getTodos()
-  }
+  await listsStore.addTodo(newTodo)
+  emit('newTodo', newTodo)
 
   newTodo.value.name = ''
   newTodo.value.dueDate = undefined

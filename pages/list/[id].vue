@@ -21,12 +21,10 @@ if (currentList.value) {
 
 </script>
 <template>
-  <client-only>
-    <v-row>
-      <v-col>
-        <TodoNew />
-        <ListView v-if="todos && currentList" :list-name="currentList.name" :todos="todos" @refresh="refresh()" />
-      </v-col>
-    </v-row>
-  </client-only>
+  <v-row>
+    <v-col>
+      <TodoNew :list-id="params.id" @new-todo="refresh()" />
+      <ListView v-if="todos && currentList" :list-name="currentList.name" :todos="todos" />
+    </v-col>
+  </v-row>
 </template>
