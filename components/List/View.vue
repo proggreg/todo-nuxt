@@ -4,7 +4,7 @@ const { statuses } = useSettingsStore()
 const open = reactive(['Open'])
 const dialog = ref(false)
 const emit = defineEmits(['refresh'])
-
+// TODO list count
 function updateTodos () {
   emit('refresh')
 }
