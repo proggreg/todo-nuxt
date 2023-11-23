@@ -1,10 +1,8 @@
 <script setup lang="ts">
 const { currentTodo, updateTodo } = useListsStore()
 const { statuses } = useSettingsStore()
-const emit = defineEmits(['update'])
 const index = ref(0)
-const initStatus = statuses.filter(status => status.name === currentTodo.status)
-const currentStatus = reactive({ name: initStatus[0].name, color: initStatus[0].color })
+const currentStatus = reactive({ name: 'Open', color: 'grey' })
 function selectStatus (status: Status, newIndex: number) {
   index.value = newIndex
   currentStatus.name = status.name
@@ -17,12 +15,6 @@ function nextStatus () {
     currentStatus.name = statuses[index.value].name
     currentStatus.color = statuses[index.value].color
   }
-}
-
-function lookUpStatus () {
-  console.log(currentTodo.status)
-  console.log()
-  currentStatus.value = statuses.filter(status => status.name === currentTodo.status)
 }
 
 watch(currentStatus, () => {

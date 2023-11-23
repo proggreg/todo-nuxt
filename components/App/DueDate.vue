@@ -15,6 +15,16 @@ const formattedDate = computed(() => {
   }
 })
 
+// TODO updateDueDate
+// eslint-disable-next-line @typescript-eslint/no-unused-vars
+function updateDueDate (newDate: Date, todo: Todo) {
+  todo.dueDate = newDate
+  $fetch(`/api/list/todo/${todo._id}`, {
+    method: 'PUT',
+    body: todo
+  })
+}
+
 </script>
 <template>
   <v-menu :close-on-content-click="false" :model-value="open">

@@ -2,11 +2,11 @@
 const listsStore = useListsStore()
 const { statuses } = useSettingsStore()
 const itemProps = defineProps<{
-  todos: Todo[]
+  todos: Todo[],
+  status: string
 }>()
-const todos = reactive(itemProps.todos)
 
-const emit = defineEmits(['TodoClicked'])
+const emit = defineEmits(['TodoClicked', 'updateTodos'])
 
 function selectTodo (todo: Todo) {
   listsStore.setCurrentTodo(todo)
@@ -19,19 +19,11 @@ function editTodo (todo: Todo, status: Status) {
     body: todo
   })
 }
-// TODO updateDueDate
-// eslint-disable-next-line @typescript-eslint/no-unused-vars
-function updateDueDate (newDate: Date, todo: Todo) {
-  todo.dueDate = newDate
-  $fetch(`/api/list/todo/${todo._id}`, {
-    method: 'PUT',
-    body: todo
-  })
-}
 
 function deleteTodo (todo: Todo) {
   if (todo._id) {
     listsStore.deleteTodo(todo._id)
+    emit('updateTodos')
   }
 }
 
@@ -39,11 +31,12 @@ function deleteTodo (todo: Todo) {
 
 <template>
   <v-hover
-    v-for="(todo, index) in todos"
+    v-for="(todo, index) in listsStore.currentList.todos"
     :key="index"
   >
     <template #default="{ isHovering, props }">
       <v-list-item
+        v-if="todo.status == itemProps.status"
         v-bind="props"
         rounded="lg"
         :variant="isHovering ? 'tonal' : 'text'"
@@ -78,7 +71,7 @@ function deleteTodo (todo: Todo) {
               size="x-small"
               rounded="lg"
               icon="mdi-delete"
-              @click="deleteTodo(todo)"
+              @click.stop="deleteTodo(todo)"
             />
           </v-list-item-action>
         </template>

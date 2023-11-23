@@ -1,18 +1,20 @@
 <script setup lang="ts">
 const listsStore = useListsStore()
+const props = defineProps<{listId: string}>()
 const newTodo = ref<Todo>({
   name: '',
   dueDate: undefined,
-  status: 'Open'
+  status: 'Open',
+  desc: ''
 })
+const emit = defineEmits(['newTodo'])
 
 async function addTodo () {
-  if (newTodo && listsStore.currentList) {
-    newTodo.value.list_id = listsStore.currentList._id
+  newTodo.value.list_id = props.listId
 
-    listsStore.addTodo(newTodo.value)
-    await listsStore.getTodos()
-  }
+  await listsStore.addTodo(newTodo)
+  console.log('add to do')
+  emit('newTodo', newTodo)
 
   newTodo.value.name = ''
   newTodo.value.dueDate = undefined
@@ -32,7 +34,7 @@ async function addTodo () {
         @keyup.enter="addTodo"
       >
         <template #append-inner>
-          <app-duedate v-if="listsStore.currentList.name !== 'Today'" :date="newTodo.dueDate" @set-date="(newDate: Date) => newTodo.dueDate = newDate" />
+          <AppDueDate v-if="listsStore.currentList.name !== 'Today'" :date="newTodo.dueDate" @set-date="(newDate: Date) => newTodo.dueDate = newDate" />
 
           <v-btn :disabled="!newTodo.name" rounded="lg" variant="text" icon="mdi-plus" @click="addTodo" />
         </template>

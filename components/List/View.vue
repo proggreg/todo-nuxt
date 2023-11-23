@@ -3,31 +3,34 @@ const listProps = defineProps<{todos: Todo[], listName: string}>()
 const { statuses } = useSettingsStore()
 const open = reactive(['Open'])
 const dialog = ref(false)
-
-const todos = reactive(listProps.todos)
-
-const groupedTodos = computed(() => {
-  return statuses.map((status) => {
-    return {
-      status,
-      todos: todos ? todos.filter(todo => todo.status === status.name) : []
-    }
-  })
-})
-
+const emit = defineEmits(['refresh'])
+// TODO list count
+function updateTodos () {
+  emit('refresh')
+}
 </script>
 
 <template>
   <v-list :opened="open">
     <v-list-subheader>{{ listProps.listName }}</v-list-subheader>
-    <v-list-group v-for="groupedTodo in groupedTodos" :key="groupedTodo.status.name" :value="groupedTodo.status.name" fluid>
+    <v-list-group
+      v-for="status in statuses"
+      :key="status.name"
+      :value="status.name"
+      fluid
+    >
       <template #activator="{ props }">
         <v-list-item
           v-bind="props"
-          :title="`${groupedTodo.status.name} (${groupedTodo.todos.length})`"
+          :title="`${status.name}`"
         />
       </template>
-      <ListItem :statuses="statuses" :todos="groupedTodo.todos" @todo-clicked="dialog = true" />
+      <ListItem
+        :todos="listProps.todos"
+        :status="status.name"
+        @todo-clicked="dialog = true"
+        @update-todos="updateTodos"
+      />
       <AppDialog :open="dialog" @close="dialog = false">
         <TodoDetail />
       </AppDialog>

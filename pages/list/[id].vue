@@ -1,18 +1,15 @@
 <script setup lang="ts">
 const { params } = useRoute()
-const dialog = ref(false)
-const { smAndDown } = useDisplay()
 const { data: currentList } = await useFetch<List>(`/api/list/${params.id}`)
 const { data: todos } = await useFetch<Todo[]>(`/api/list/todo/${params.id}`)
+const store = useListsStore()
+
+if (todos) {
+  store.setListTodos(todos)
+}
 
 if (!currentList) {
   navigateTo('/')
-}
-
-function todoSelected () {
-  if (smAndDown.value) {
-    dialog.value = true
-  }
 }
 
 if (currentList.value) {
@@ -23,12 +20,10 @@ if (currentList.value) {
 
 </script>
 <template>
-  <client-only>
-    <v-row>
-      <v-col>
-        <TodoNew />
-        <ListView v-if="todos && currentList" :list-name="currentList.name" :todos="todos" />
-      </v-col>
-    </v-row>
-  </client-only>
+  <v-row>
+    <v-col>
+      <TodoNew :list-id="params.id" />
+      <ListView v-if="todos && currentList" :list-name="currentList.name" :todos="todos" />
+    </v-col>
+  </v-row>
 </template>

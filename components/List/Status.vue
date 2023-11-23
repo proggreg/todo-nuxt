@@ -2,12 +2,17 @@
 const { statuses } = useSettingsStore()
 const statusProps = defineProps<{todo: Todo}>()
 function getStatusColor (todoStatus: string) {
-  return statuses.filter(status => status.name === todoStatus)[0].color
+  const status = statuses.filter(status => status.name === todoStatus)
+  if (status.length > 0) {
+    return status[0].color
+  }
 }
 </script>
 <template>
-  <div
-    class="status-icon"
+  <v-btn
+    class=""
+    size="x-small"
+    rounded="xl"
     :style="{
       backgroundColor: getStatusColor(statusProps.todo.status)
     }"
@@ -15,8 +20,8 @@ function getStatusColor (todoStatus: string) {
 </template>
 <style scoped>
 .status-icon {
-  width: 10px;
-  height: 10px;
+  width: 1.5em;
+  height: 1.5em;
   border-radius: 50%;
 }
 
