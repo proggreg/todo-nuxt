@@ -15,7 +15,8 @@ export const useListsStore = defineStore('lists', {
     currentTodo: {
       name: '',
       status: 'Done',
-      desc: ''
+      desc: '',
+      value: ''
     },
     todos: []
   }),
@@ -64,13 +65,14 @@ export const useListsStore = defineStore('lists', {
       this.currentList = currentList
     },
     setListTodos (todos: Todo[]) {
-      this.currentList.todos = todos
+      this.currentList.todos = todos || []
     },
     async addTodo (newTodo: Todo) {
       const todo = await $fetch<Todo>('/api/list/todo', {
         method: 'POST',
         body: newTodo.value
       })
+      this.currentList.todos.push(todo)
       return todo
     },
     async getListTodos (listId: string) {

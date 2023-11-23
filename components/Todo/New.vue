@@ -13,6 +13,7 @@ async function addTodo () {
   newTodo.value.list_id = props.listId
 
   await listsStore.addTodo(newTodo)
+  console.log('add to do')
   emit('newTodo', newTodo)
 
   newTodo.value.name = ''
