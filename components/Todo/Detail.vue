@@ -23,7 +23,7 @@ const desc = ref(listsStore.currentTodo.desc)
       <TodoStatus />
     </template>
     <template #append>
-      <AppDueDate :date="listsStore.currentTodo.dueDate" :todo="listsStore.currentTodo" :show-detail="true" @set-date="updateDueDate" />
+      <AppDueDate :todo-due-date="listsStore.currentTodo.dueDate" :todo="listsStore.currentTodo" :show-detail="true" @set-date="updateDueDate" />
     </template>
     <v-card-title>
       <v-text-field
