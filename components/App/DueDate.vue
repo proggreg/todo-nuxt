@@ -2,7 +2,7 @@
 const date = useDate()
 const emit = defineEmits(['setDate'])
 const open = ref(false)
-const dueDateProps = defineProps<{todoDueDate?: Date | string, todo?: Todo, showDetail?: boolean}>()
+const dueDateProps = defineProps<{todoDueDate?: Date | string, todo: Todo, showDetail?: boolean}>()
 const dueDate = ref([''])
 
 watch(dueDate, (dueDate) => {
