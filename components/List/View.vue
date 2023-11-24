@@ -1,7 +1,7 @@
 <script setup lang="ts">
 const listProps = defineProps<{todos: Todo[], listName: string}>()
 const { statuses } = useSettingsStore()
-const open = reactive(['Open'])
+const open = reactive(['Open', 'In Progress', 'Closed'])
 const dialog = ref(false)
 const emit = defineEmits(['refresh'])
 // TODO list count
