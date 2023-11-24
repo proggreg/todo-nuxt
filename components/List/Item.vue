@@ -1,6 +1,7 @@
 <script lang="ts" setup>
 const listsStore = useListsStore()
 const { statuses } = useSettingsStore()
+const { smAndDown } = useDisplay()
 const itemProps = defineProps<{
   todos: Todo[],
   status: string
@@ -63,7 +64,7 @@ function deleteTodo (todo: Todo) {
         </v-list-item-title>
 
         <template #append>
-          <AppDueDate :date="todo.dueDate" />
+          <AppDueDate :todo="todo" :todo-due-date="todo.dueDate" :show-detail="!smAndDown" />
 
           <v-list-item-action end>
             <v-btn
