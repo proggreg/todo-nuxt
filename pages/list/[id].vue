@@ -4,6 +4,10 @@ const { data: currentList } = await useFetch<List>(`/api/list/${params.id}`)
 const { data: todos } = await useFetch<Todo[]>(`/api/list/todo/${params.id}`)
 const store = useListsStore()
 
+if (currentList.value.name) {
+  store.setListName(currentList.value.name)
+}
+
 if (todos) {
   store.setListTodos(todos)
 }
@@ -22,8 +26,9 @@ if (currentList.value) {
 <template>
   <v-row>
     <v-col>
-      <TodoNew :list-id="params.id" />
-      <ListView v-if="todos && currentList" :list-name="currentList.name" :todos="todos" />
+      <!-- <TodoNew :list-id="params.id" /> -->
+      <!-- <ListView v-if="todos && currentList" :list-name="currentList.name" :todos="todos" /> -->
+      <ListTable />
     </v-col>
   </v-row>
 </template>
