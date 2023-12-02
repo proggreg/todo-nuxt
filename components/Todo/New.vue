@@ -1,6 +1,6 @@
 <script setup lang="ts">
 const listsStore = useListsStore()
-const props = defineProps<{listId: string}>()
+const props = defineProps<{listId?: string}>()
 const newTodo = ref<Todo>({
   name: '',
   dueDate: undefined,
@@ -34,7 +34,7 @@ async function addTodo () {
         @keyup.enter="addTodo"
       >
         <template #append-inner>
-          <AppDueDate v-if="listsStore.currentList.name !== 'Today'" :date="newTodo.dueDate" @set-date="(newDate: Date) => newTodo.dueDate = newDate" />
+          <!-- <AppDueDate v-if="listsStore.currentList.name !== 'Today'" :date="newTodo.dueDate" @set-date="(newDate: Date) => newTodo.dueDate = newDate" /> -->
 
           <v-btn :disabled="!newTodo.name" rounded="lg" variant="text" icon="mdi-plus" @click="addTodo" />
         </template>
