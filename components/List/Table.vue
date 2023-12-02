@@ -1,41 +1,100 @@
+<!-- eslint-disable vue/max-attributes-per-line -->
 <script setup lang="ts">
-const store = useListsStore()
-const { statuses } = useSettingsStore()
+const store = useListsStore();
+const { statuses } = useSettingsStore();
+const props = defineProps<{ list_id: string }>();
+const newTodo = ref(null)
 
 const headers = [
-  { title: 'Title', key: 'name', maxWidth: '10px' },
-  { title: 'Description', key: 'desc' },
-  { title: 'Date', key: 'dueDate', sortable: true },
-  { title: 'Actions', key: 'actions', sortable: false }
-]
+  { title: "Title", key: "name", sortable: true },
+  { title: "Description", key: "desc" },
+  { title: "Date", key: "dueDate", sortable: true },
+  { title: "Actions", key: "actions", sortable: false },
+];
 
-const group = ref([{
-  key: 'status',
-  order: true,
-  title: 'Status'
-}])
+const group = ref([
+  {
+    key: "status",
+    order: true,
+    title: "Status",
+  },
+]);
 
-function formatDate (date:Date) {
-  if (!date) { return '' }
-  return new Date(date).toLocaleDateString('en-GB')
+const dialog = ref(false);
+
+function showModal(todo: any) {
+  store.setCurrentTodo(todo);
+  dialog.value = true;
 }
 
-function editItem (item) {
-  // TODO: Implement edit functionality
+function formatDate(date: Date) {
+  if (!date) {
+    return "";
+  }
+  return new Date(date).toLocaleDateString("en-GB");
 }
 
-function deleteItem (item) {
-  // TODO: Implement delete functionality
-}
-
-function getStatusColor (todoStatus: string) {
-  const status = statuses.filter(status => status.name === todoStatus)
-  if (status.length > 0) {
-    return status[0].color
+function deleteItem(todo: Todo) {
+  if (todo._id) {
+    store.deleteTodo(todo._id);
   }
 }
 
-const expanded = ref(['root_status_Open'])
+function getStatusColor(todoStatus: string) {
+  const status = statuses.filter((status) => status.name === todoStatus);
+  if (status.length > 0) {
+    return status[0].color;
+  }
+}
+
+const expanded = computed(() => {
+  // Get the grouped todos by status
+  const groupedTodos = store.currentList.todos.reduce((result, todo) => {
+    const status = todo.status;
+    if (!result[status]) {
+      result[status] = [];
+    }
+    result[status].push(todo);
+    return result;
+  }, {});
+
+  // Get the name of the last todos in each group
+  const lastTodoNames = Object.values(groupedTodos).map((todos: Todo[]) => {
+    const lastTodo = todos[todos.length - 1];
+
+    return lastTodo ? lastTodo._id : "";
+  });
+
+  return lastTodoNames;
+});
+
+const newTodoVariant = ref("text");
+const openNewTodo = ref('');
+const newTodoTitle = ref("");
+
+async function createTodo(status: string) {
+  if (newTodoTitle.value) {
+    const newTodo: Todo = {
+      name: newTodoTitle.value,
+      status,
+      desc: "",
+      list_id: props.list_id,
+    };
+    await store.addTodo(newTodo);
+    newTodoTitle.value = ''
+    
+  } else {
+    openNewTodo.value = ''
+  }
+}
+
+onUpdated(() => {
+  console.log('update', newTodo.value, openNewTodo.value)
+  if (openNewTodo.value) {
+    newTodo.value.focus()
+  }
+    
+})
 </script>
 
 <template>
@@ -44,28 +103,21 @@ const expanded = ref(['root_status_Open'])
     :headers="headers"
     :items="store.currentList.todos"
     :group-by="group"
-    :sort-by="[{ key: 'status'}]"
-    must-sort
+    multi-sort
     hover
+    :sort-by="[{key: 'title', order: 'asc'}]"
+    show-expand
+    item-value="_id"
+    items-per-page="-1"
   >
-    <template #headers="{columns}">
-      <!-- <tr>
-        <template v-for="column in columns" :key="column.title">
-          <th v-if="column.title === 'Group'" width="180px">
-            Status
-          </th>
-          <th v-else>
-            {{ column.title }}
-          </th>
-        </template>
-      </tr> -->
-    </template>
     <template #top>
       <v-toolbar flat>
         <v-toolbar-title :text="store.currentList.name" />
         <v-spacer />
       </v-toolbar>
     </template>
+
+    
     <template #item.dueDate="{ item }">
       <td>
         {{ formatDate(item.dueDate) }}
@@ -73,7 +125,10 @@ const expanded = ref(['root_status_Open'])
     </template>
     <template #group-header="{ item, columns, toggleGroup, isGroupOpen }">
       <tr>
-        <td :colspan="columns.length">
+        <td
+          :colspan="columns.length"
+          style="width: 0;"
+        >
           <VBtn
             size="small"
             variant="text"
@@ -89,9 +144,16 @@ const expanded = ref(['root_status_Open'])
           />
         </td>
       </tr>
-      <tr>
-        <template v-for="column in columns" :key="column.title">
-          <th v-if="column.title === 'Group'" width="180px">
+      <tr v-if="isGroupOpen(item)">
+        <template
+          v-for="column in columns"
+          :key="column.title"
+        >
+          <th
+            v-if="column.title === 'Group'"
+            width="0px"
+            style="display: none;"
+          >
             Status
           </th>
           <th v-else>
@@ -101,15 +163,66 @@ const expanded = ref(['root_status_Open'])
       </tr>
     </template>
 
-    <template #item.actions="{ item }">
-      <v-icon small class="mr-2" @click="editItem(item)">
-        mdi-pencil
-      </v-icon>
-      <v-icon small @click="deleteItem(item)">
-        mdi-delete
-      </v-icon>
-    </template>
+    <template #item="{ item, columns }">
+      <tr @click="showModal(item)">
+        <template
+          v-for="col in columns"
+          :key="col.key"
+        >
+          <td v-if="col.key === 'dueDate'">
+            {{ formatDate(item[col.key]) }}
+          </td>
+          <td v-else-if="col.key === 'actions'">
+            <v-btn
+              icon="mdi-delete"
+              variat="text"
+              rounded="lg"
+              elevation="0"
+              small
+              @click.stop="deleteItem(item)"
+            />
+          </td>
+          <td v-else-if="col.key !== 'data-table-group'">
+            {{ item[col.key] }}
+          </td>
+        </template>
+      </tr>
 
+      <AppDialog
+        :open="dialog"
+        @close="dialog = false"
+      >
+        <TodoDetail />
+      </AppDialog>
+    </template>
+    <template #expanded-row="{ item }">
+      <tr v-if="openNewTodo === '' || openNewTodo !== item.status">
+        <td colspan="5">
+          <v-btn
+            :variant="newTodoVariant"
+            size="x-small"
+            elevation="0"
+            @click="openNewTodo = item.status; console.log(item)"
+            @mouseover="newTodoVariant = 'outlined'"
+            @mouseleave="newTodoVariant = 'text'"
+          >
+            Add Todo
+          </v-btn>
+        </td>
+      </tr>
+      <tr v-else-if="openNewTodo === item.status">
+        <td>
+          <v-text-field
+            ref="newTodo"  
+            v-model="newTodoTitle"
+            variant="plain"
+            placeholder="new todo"
+            @blur="createTodo(item['status'])"
+            @keyup.enter="$event.target.blur()"
+          />
+        </td>
+      </tr>
+    </template>
     <template #bottom />
   </v-data-table>
 </template>
