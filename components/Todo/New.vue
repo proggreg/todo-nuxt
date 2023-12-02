@@ -1,6 +1,6 @@
 <script setup lang="ts">
 const listsStore = useListsStore()
-const props = defineProps<{listId: string}>()
+const props = defineProps<{listId?: string}>()
 const newTodo = ref<Todo>({
   name: '',
   dueDate: undefined,
