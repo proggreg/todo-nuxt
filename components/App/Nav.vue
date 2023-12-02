@@ -32,7 +32,7 @@ function closeDrawer () {
       <app-profile />
     </template>
 
-    <app-search />
+    <!-- <AppSearch /> -->
     <!-- <v-spacer /> -->
     <template #append>
       <AppDarkMode />
