@@ -72,6 +72,20 @@ const newTodoVariant = ref("text");
 const openNewTodo = ref('');
 const newTodoTitle = ref("");
 
+const customSortBy = ref([])
+
+
+function addSort (key: string) {
+    const index = customSortBy.value.findIndex(item => item.key === key);
+    if (index === -1) {
+      customSortBy.value.push({ key, order: 'asc' });
+    } else {
+      const order = customSortBy.value[index].order;
+      customSortBy.value[index].order = order === 'asc' ? 'desc' : 'asc';
+    }
+    
+}
+
 async function createTodo(status: string) {
   if (newTodoTitle.value) {
     const newTodo: Todo = {
@@ -105,7 +119,7 @@ onUpdated(() => {
     :group-by="group"
     multi-sort
     hover
-    :sort-by="[{key: 'title', order: 'asc'}]"
+    :sort-by="customSortBy"
     show-expand
     item-value="_id"
     items-per-page="-1"
@@ -117,7 +131,13 @@ onUpdated(() => {
       </v-toolbar>
     </template>
 
-    
+    <template #headers="{sortBy, columns}" >
+      {{ columns }}
+      {{ sortBy }}
+
+      {{ customSortBy }}
+      
+      </template>
     <template #item.dueDate="{ item }">
       <td>
         {{ formatDate(item.dueDate) }}
@@ -156,7 +176,7 @@ onUpdated(() => {
           >
             Status
           </th>
-          <th v-else>
+          <th v-else @click="addSort(column.key)">
             {{ column.title }}
           </th>
         </template>
@@ -175,7 +195,7 @@ onUpdated(() => {
           <td v-else-if="col.key === 'actions'">
             <v-btn
               icon="mdi-delete"
-              variat="text"
+              variant="text"
               rounded="lg"
               elevation="0"
               small
@@ -222,6 +242,18 @@ onUpdated(() => {
           />
         </td>
       </tr>
+    </template>
+
+    <!-- <template #data-table-group="{props, count, item}">
+      {{props, count, item}}
+    </template> -->
+
+    <template #colgroup="{}">
+      col group
+    </template>
+
+    <template #body.append>
+      here
     </template>
     <template #bottom />
   </v-data-table>

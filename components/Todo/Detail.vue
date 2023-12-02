@@ -6,7 +6,9 @@ function updateDueDate (newDate: Date) {
   listsStore.updateTodo(listsStore.currentTodo)
 }
 function updateName () {
-  listsStore.updateTodo(listsStore.currentTodo)
+  if (listsStore.currentTodo.name) {
+    listsStore.updateTodo(listsStore.currentTodo)  
+  }
 }
 
 function updateDesc () {
