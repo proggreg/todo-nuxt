@@ -13,11 +13,12 @@ const myCustomDarkTheme = {
 
 export default defineNuxtConfig({
   modules: [
-    '@invictus.codes/nuxt-vuetify',
     '@pinia/nuxt',
     '@nuxt/devtools',
     '@vueuse/nuxt',
-    'nuxt-mongoose'
+    'nuxt-mongoose',
+    'nuxt-vitest',
+    'vuetify-nuxt-module'
   ],
 
   experimental: {
