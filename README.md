@@ -1,4 +1,4 @@
-# Nuxt Example
+# Tickup
 
 A simple Todo app that has been inspired by Clickup and Ticktick.
 
