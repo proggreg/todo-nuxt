@@ -20,7 +20,8 @@ function closeDrawer () {
     elevation="0"
     align-center
     class="d-flex justify-space-between"
-    style="justify-content: space-between;"
+    style="justify-content: space-between; border-top: none; border-left: none; border-right: none;"
+    border
   >
     <template #prepend>
       <v-btn v-if="smAndDown" size="small" style="padding: 0;" elevation="0" @click="open = !open">
@@ -32,8 +33,9 @@ function closeDrawer () {
       <app-profile />
     </template>
 
-    <app-search />
+    <!-- <AppSearch /> -->
     <!-- <v-spacer /> -->
+
     <template #append>
       <AppDarkMode />
     </template>

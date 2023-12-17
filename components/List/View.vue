@@ -19,7 +19,10 @@ function updateTodos() {
 
     
       <template #activator="{ props }">
-        <v-list-item v-bind="props" :title="`${status.name}`" />
+        <v-list-item
+          v-bind="props"
+          :title="`${status.name} (${listProps.todos ? listProps.todos.filter((todo) => todo.status === status.name).length : 0})`"
+        />
       </template>
       <ListItem :todos="listProps.todos" :status="status.name" @todo-clicked="dialog = true"
         @update-todos="updateTodos" />
