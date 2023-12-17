@@ -13,6 +13,7 @@ function updateTodos () {
 <template>
   <v-list :opened="open">
     <v-list-subheader>{{ listProps.listName }}</v-list-subheader>
+ 
     <v-list-group
       v-for="status in statuses"
       :key="status.name"

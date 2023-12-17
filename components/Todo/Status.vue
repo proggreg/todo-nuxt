@@ -3,8 +3,11 @@ const { currentTodo, updateTodo } = useListsStore()
 const { statuses } = useSettingsStore()
 const index = ref(0)
 const initStatus = statuses.find(status => status.name === currentTodo.status)
+let currentStatus: Status = { name: 'Open', color: 'grey' }
+if (initStatus) {
+  currentStatus = reactive({ name: initStatus.name, color: initStatus.color })
+}
 
-const currentStatus = reactive({ name: initStatus.name, color: initStatus.color })
 function selectStatus (status: Status, newIndex: number) {
   index.value = newIndex
   currentStatus.name = status.name

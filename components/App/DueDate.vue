@@ -11,7 +11,7 @@ watch(dueDate, (dueDate) => {
 
 const formattedDate = computed(() => {
   if (dueDateProps.todoDueDate) {
-    return date.format(new Date(dueDateProps.todoDueDate), 'keyboardDate')
+    return new Date(dueDateProps.todoDueDate).toLocaleDateString('en-GB')
   }
 })
 
