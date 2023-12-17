@@ -22,7 +22,7 @@ function updateTodos () {
       <template #activator="{ props }">
         <v-list-item
           v-bind="props"
-          :title="`${status.name}`"
+          :title="`${status.name} (${listProps.todos.filter((todo) => todo.status === status.name).length || 0})`"
         />
       </template>
       <ListItem
