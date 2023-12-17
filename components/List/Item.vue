@@ -32,7 +32,7 @@ function deleteTodo (todo: Todo) {
 
 <template>
   <v-hover
-    v-for="(todo, index) in listsStore.currentList.todos"
+    v-for="(todo, index) in itemProps.todos"
     :key="index"
   >
     <template #default="{ isHovering, props }">
