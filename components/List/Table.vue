@@ -3,10 +3,14 @@ const store = useListsStore();
 const { statuses } = useSettingsStore();
 const props = defineProps<{ list_id: string }>();
 const newTodo = ref(null)
+const dialog = ref(false);
+const newTodoVariant = ref("text");
+const openNewTodo = ref('');
+const newTodoTitle = ref("");
 
 const headers = [
   { title: "Title", key: "name", sortable: true },
-  { title: "Description", key: "desc" },
+  { title: "Description", key: "desc", sortable: true },
   { title: "Date", key: "dueDate", sortable: true },
   { title: "Actions", key: "actions", sortable: false },
 ];
@@ -19,11 +23,24 @@ const group = ref([
   },
 ]);
 
-const dialog = ref(false);
+
 
 function showModal(todo: any) {
   store.setCurrentTodo(todo.raw);
   dialog.value = true;
+}
+
+function isSorted(sortBy, column) {
+  return sortBy.some(item => item.key === column.key);
+}
+
+function isSortedIndex(sortBy, column) {
+  let index = sortBy.findIndex(item => item.key === column.key);
+  index++
+  if (index > 0) {
+    return index
+  }
+  return false
 }
 
 function formatDate(date: Date) {
@@ -46,27 +63,7 @@ function getStatusColor(todoStatus: string) {
   }
 }
 
-
-const newTodoVariant = ref("text");
-const openNewTodo = ref('');
-const newTodoTitle = ref("");
-
-const customSortBy = ref([])
-
-
-// function addSort(key: string) {
-//   const index = customSortBy.value.findIndex(item => item.key === key);
-//   if (index === -1) {
-//     customSortBy.value.push({ key, order: 'asc' });
-//   } else {
-//     const order = customSortBy.value[index].order;
-//     customSortBy.value[index].order = order === 'asc' ? 'desc' : 'asc';
-//   }
-
-// }
-
 async function createTodo(status: string) {
-
   if (newTodoTitle.value) {
     const newTodo: Todo = {
       name: newTodoTitle.value,
@@ -88,8 +85,8 @@ async function createTodo(status: string) {
 </script>
 
 <template>
-  <v-data-table :headers="headers" :items="store.currentList.todos" :group-by="group" multi-sort hover
-    :sort-by="customSortBy" show-expand item-value="_id" items-per-page="-1">
+  <v-data-table :headers="headers" :items="store.currentList.todos" :group-by="group" multi-sort hover show-expand
+    item-value="_id" items-per-page="-1">
     <template #top>
       <v-toolbar flat>
         <v-toolbar-title :text="store.currentList.name" />
@@ -99,7 +96,8 @@ async function createTodo(status: string) {
 
     <template #headers="{ sortBy, columns }" />
 
-    <template #body="{ headers, columns, groupedItems, toggleGroup, isGroupOpen }">
+    <template #body="{ headers, columns, groupedItems, toggleGroup, isGroupOpen, sortBy, toggleSort }">
+
       <template v-for="groupItem in groupedItems" :key="groupItem.key">
         <tr v-if="groupItem.key === 'status'">
           <th :colspan="columns.length">
@@ -108,11 +106,27 @@ async function createTodo(status: string) {
           </th>
         </tr>
         <template v-if="isGroupOpen(groupItem)">
+
           <tr>
+
+
             <template v-for="column in columns" :key="column.key">
-              <th v-if="column.key !== 'data-table-group'" colspan="1">
-                {{ column.title }}
-              </th>
+              <v-hover v-if="column.key !== 'data-table-group' && column.key !== 'data-table-expand'">
+                <template v-slot:default="{ isHovering, props }">
+                  <th @click="toggleSort(column)" :style="isHovering ? 'cursor: pointer' : ''" v-bind="props" colspan="1">
+                    {{ column.title }}
+
+                    <v-icon v-if="isHovering && !isSorted(sortBy, column)">mdi-arrow-up-down</v-icon>
+
+                    <template v-for="sort in sortBy" :key="sort.key">
+                      <v-icon v-if="sort.key === column.key && sort.order === 'asc'">mdi-arrow-up</v-icon>
+                      <v-icon v-if="sort.key === column.key && sort.order === 'desc'">mdi-arrow-down</v-icon>
+                    </template>
+                    <div v-if="isSortedIndex(sortBy, column)" class="v-data-table-header__sort-badge">{{
+                      isSortedIndex(sortBy, column) }}</div>
+                  </th>
+                </template>
+              </v-hover>
             </template>
           </tr>
           <tr v-for="item in groupItem.items" :key="item.key" @click="showModal(item)">
