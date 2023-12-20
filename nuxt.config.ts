@@ -60,7 +60,7 @@ export default defineNuxtConfig({
       }
     },
     moduleOptions: {
-      useVuetifyLabs: false
+      useVuetifyLabs: true
     }
   },
   typescript: {
