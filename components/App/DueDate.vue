@@ -10,11 +10,7 @@ const formattedDate = computed(() => {
 })
 
 function updateDueDate(newDate: Date) {
-  console.log('updateDueDate', newDate)
-  console.log(dueDateProps.todo)
-  let newTodo = Object.assign({}, dueDateProps.todo)
-  newTodo.dueDate = newDate
-
+  const newTodo = Object.assign({}, dueDateProps.todo, { dueDate: newDate })
   emit('setDate', newDate, newTodo)
 }
 
@@ -27,7 +23,7 @@ function updateDueDate(newDate: Date) {
       <v-btn v-else v-bind="props" icon="mdi-calendar" variant="text" @click="open = !open" />
     </template>
     <v-list>
-      <v-date-picker @update:model-value="(val) => updateDueDate(val)" rounded="lg" @click:save="open = !open"
+      <v-date-picker rounded="lg" @update:model-value="(val: Date) => updateDueDate(val)" @click:save="open = !open"
         @click:cancel="open = !open" />
     </v-list>
   </v-menu>
