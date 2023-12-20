@@ -75,15 +75,15 @@ const newTodoTitle = ref("");
 const customSortBy = ref([])
 
 
-function addSort (key: string) {
-    const index = customSortBy.value.findIndex(item => item.key === key);
-    if (index === -1) {
-      customSortBy.value.push({ key, order: 'asc' });
-    } else {
-      const order = customSortBy.value[index].order;
-      customSortBy.value[index].order = order === 'asc' ? 'desc' : 'asc';
-    }
-    
+function addSort(key: string) {
+  const index = customSortBy.value.findIndex(item => item.key === key);
+  if (index === -1) {
+    customSortBy.value.push({ key, order: 'asc' });
+  } else {
+    const order = customSortBy.value[index].order;
+    customSortBy.value[index].order = order === 'asc' ? 'desc' : 'asc';
+  }
+
 }
 
 async function createTodo(status: string) {
@@ -96,7 +96,7 @@ async function createTodo(status: string) {
     };
     await store.addTodo(newTodo);
     newTodoTitle.value = ''
-    
+
   } else {
     openNewTodo.value = ''
   }
@@ -107,37 +107,27 @@ onUpdated(() => {
   if (openNewTodo.value) {
     newTodo.value.focus()
   }
-    
+
 })
 </script>
 
 <template>
-  <v-data-table
-    :expanded="expanded"
-    :headers="headers"
-    :items="store.currentList.todos"
-    :group-by="group"
-    multi-sort
-    hover
-    :sort-by="customSortBy"
-    show-expand
-    item-value="_id"
-    items-per-page="-1"
-  >
+  <v-data-table :expanded="expanded" :headers="headers" :items="store.currentList.todos" :group-by="group" multi-sort
+    hover :sort-by="customSortBy" show-expand item-value="_id" items-per-page="-1">
     <template #top>
       <v-toolbar flat>
         <v-toolbar-title :text="store.currentList.name" />
         <v-spacer />
       </v-toolbar>
     </template>
-
+    <!-- 
     <template #headers="{sortBy, columns}" >
       {{ columns }}
       {{ sortBy }}
 
       {{ customSortBy }}
       
-      </template>
+      </template> -->
     <template #item.dueDate="{ item }">
       <td>
         {{ formatDate(item.dueDate) }}
@@ -145,35 +135,15 @@ onUpdated(() => {
     </template>
     <template #group-header="{ item, columns, toggleGroup, isGroupOpen }">
       <tr>
-        <td
-          :colspan="columns.length"
-          style="width: 0;"
-        >
-          <VBtn
-            size="small"
-            variant="text"
-            :icon="isGroupOpen(item) ? '$expand' : '$next'"
-            @click="toggleGroup(item)"
-          />
-          <VBtn
-            size="x-small"
-            :color="getStatusColor(item.value)"
-            variant="tonal"
-            :text="item.value"
-            @click="toggleGroup(item)"
-          />
+        <td :colspan="columns.length" style="width: 0;">
+          <VBtn size="small" variant="text" :icon="isGroupOpen(item) ? '$expand' : '$next'" @click="toggleGroup(item)" />
+          <VBtn size="x-small" :color="getStatusColor(item.value)" variant="tonal" :text="item.value"
+            @click="toggleGroup(item)" />
         </td>
       </tr>
       <tr v-if="isGroupOpen(item)">
-        <template
-          v-for="column in columns"
-          :key="column.title"
-        >
-          <th
-            v-if="column.title === 'Group'"
-            width="0px"
-            style="display: none;"
-          >
+        <template v-for="column in columns" :key="column.title">
+          <th v-if="column.title === 'Group'" width="0px" style="display: none;">
             Status
           </th>
           <th v-else @click="addSort(column.key)">
@@ -185,22 +155,12 @@ onUpdated(() => {
 
     <template #item="{ item, columns }">
       <tr @click="showModal(item)">
-        <template
-          v-for="col in columns"
-          :key="col.key"
-        >
+        <template v-for="col in columns" :key="col.key">
           <td v-if="col.key === 'dueDate'">
             {{ formatDate(item[col.key]) }}
           </td>
           <td v-else-if="col.key === 'actions'">
-            <v-btn
-              icon="mdi-delete"
-              variant="text"
-              rounded="lg"
-              elevation="0"
-              small
-              @click.stop="deleteItem(item)"
-            />
+            <v-btn icon="mdi-delete" variant="text" rounded="lg" elevation="0" small @click.stop="deleteItem(item)" />
           </td>
           <td v-else-if="col.key !== 'data-table-group'">
             {{ item[col.key] }}
@@ -208,38 +168,24 @@ onUpdated(() => {
         </template>
       </tr>
 
-      <AppDialog
-        :open="dialog"
-        @close="dialog = false"
-      >
+      <AppDialog :open="dialog" @close="dialog = false">
         <TodoDetail />
       </AppDialog>
     </template>
     <template #expanded-row="{ item }">
       <tr v-if="openNewTodo === '' || openNewTodo !== item.status">
         <td colspan="5">
-          <v-btn
-            :variant="newTodoVariant"
-            size="x-small"
-            elevation="0"
-            @click="openNewTodo = item.status; console.log(item)"
-            @mouseover="newTodoVariant = 'outlined'"
-            @mouseleave="newTodoVariant = 'text'"
-          >
+          <v-btn :variant="newTodoVariant" size="x-small" elevation="0"
+            @click="openNewTodo = item.status; console.log(item)" @mouseover="newTodoVariant = 'outlined'"
+            @mouseleave="newTodoVariant = 'text'">
             Add Todo
           </v-btn>
         </td>
       </tr>
       <tr v-else-if="openNewTodo === item.status">
         <td>
-          <v-text-field
-            ref="newTodo"  
-            v-model="newTodoTitle"
-            variant="plain"
-            placeholder="new todo"
-            @blur="createTodo(item['status'])"
-            @keyup.enter="$event.target.blur()"
-          />
+          <v-text-field ref="newTodo" v-model="newTodoTitle" variant="plain" placeholder="new todo"
+            @blur="createTodo(item['status'])" @keyup.enter="$event.target.blur()" />
         </td>
       </tr>
     </template>
@@ -248,7 +194,7 @@ onUpdated(() => {
       {{props, count, item}}
     </template> -->
 
-    <template #colgroup="{}">
+    <template #colgroup="{ }">
       col group
     </template>
 

@@ -13,7 +13,7 @@ const myCustomDarkTheme = {
 
 export default defineNuxtConfig({
   modules: [
-    '@invictus.codes/nuxt-vuetify',
+    'vuetify-nuxt-module',
     '@pinia/nuxt',
     '@nuxt/devtools',
     '@vueuse/nuxt',
@@ -58,9 +58,6 @@ export default defineNuxtConfig({
           myCustomLightTheme
         }
       }
-    },
-    moduleOptions: {
-      useVuetifyLabs: true
     }
   },
   typescript: {
