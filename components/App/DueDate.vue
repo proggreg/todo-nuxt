@@ -2,11 +2,6 @@
 const emit = defineEmits(['setDate'])
 const open = ref(false)
 const dueDateProps = defineProps<{ todoDueDate?: Date | string, todo: Todo, showDetail?: boolean }>()
-const dueDate = ref([''])
-
-watch(dueDate, (dueDate) => {
-  emit('setDate', dueDate, dueDateProps.todo)
-})
 
 const formattedDate = computed(() => {
   if (dueDateProps.todoDueDate) {
@@ -14,14 +9,13 @@ const formattedDate = computed(() => {
   }
 })
 
-// TODO updateDueDate
-// eslint-disable-next-line @typescript-eslint/no-unused-vars
-function updateDueDate(newDate: Date, todo: Todo) {
-  todo.dueDate = newDate
-  $fetch(`/api/list/todo/${todo._id}`, {
-    method: 'PUT',
-    body: todo
-  })
+function updateDueDate(newDate: Date) {
+  console.log('updateDueDate', newDate)
+  console.log(dueDateProps.todo)
+  let newTodo = Object.assign({}, dueDateProps.todo)
+  newTodo.dueDate = newDate
+
+  emit('setDate', newDate, newTodo)
 }
 
 </script>
@@ -33,7 +27,8 @@ function updateDueDate(newDate: Date, todo: Todo) {
       <v-btn v-else v-bind="props" icon="mdi-calendar" variant="text" @click="open = !open" />
     </template>
     <v-list>
-      <v-date-picker v-model="dueDate" rounded="lg" @click:save="open = !open" @click:cancel="open = !open" />
+      <v-date-picker @update:model-value="(val) => updateDueDate(val)" rounded="lg" @click:save="open = !open"
+        @click:cancel="open = !open" />
     </v-list>
   </v-menu>
 </template>
