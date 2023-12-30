@@ -1,5 +1,5 @@
 <script setup lang="ts">
-const date = useDate()
+// const date = useDate()
 const emit = defineEmits(['setDate'])
 const open = ref(false)
 const dueDateProps = defineProps<{todoDueDate?: Date | string, todo: Todo, showDetail?: boolean}>()
