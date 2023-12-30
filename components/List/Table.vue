@@ -66,12 +66,12 @@ const expanded = ref(['root_status_Open'])
         <v-spacer />
       </v-toolbar>
     </template>
-    <template #item.dueDate="{ item }">
+    <!-- <template #item.dueDate="{ item }">
       <td>
         {{ formatDate(item.dueDate) }}
       </td>
-    </template>
-    <template #group-header="{ item, columns, toggleGroup, isGroupOpen }">
+    </template> -->
+    <template #group-header="{ item, columns, toggleGroup, isGroupOpen, isExpanded }">
       <tr>
         <td :colspan="columns.length">
           <VBtn
@@ -101,15 +101,20 @@ const expanded = ref(['root_status_Open'])
       </tr>
     </template>
 
-    <template #item.actions="{ item }">
-      <v-icon small class="mr-2" @click="editItem(item)">
-        mdi-pencil
-      </v-icon>
-      <v-icon small @click="deleteItem(item)">
-        mdi-delete
-      </v-icon>
+    <template #item="{item}">
+      <tr>
+        <td><ListStatus :todo="item" /></td>
+        <td>{{ item.name }}</td>
+        <td>{{ item.desc }}</td>
+        <td>
+          {{ formatDate(item.dueDate) }}
+        </td>
+        <td />
+      </tr>
     </template>
 
     <template #bottom />
+
+    <template #no-data />
   </v-data-table>
 </template>
