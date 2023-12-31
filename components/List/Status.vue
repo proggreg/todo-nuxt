@@ -7,16 +7,42 @@ function getStatusColor (todoStatus: string) {
     return status[0].color
   }
 }
+
 </script>
 <template>
-  <v-btn
-    class=""
-    size="x-small"
-    rounded="xl"
-    :style="{
-      backgroundColor: getStatusColor(statusProps.todo.status)
-    }"
-  />
+  <v-menu>
+    <template #activator="{props}">
+      <v-btn
+        v-bind="props"
+        size="x-small"
+        rounded="xl"
+        :style="{
+          backgroundColor: getStatusColor(statusProps.todo.status)
+        }"
+      />
+    </template>
+    <v-list min-width="200px">
+      <v-list-item
+        v-for="(status, index) in statuses"
+        :key="index"
+        :value="status.name"
+      >
+        <template #prepend>
+          <v-btn
+            size="x-small"
+            rounded="xl"
+            :style="{
+              backgroundColor: status.color,
+              marginRight: '8px'
+            }"
+          />
+        </template>
+        <v-list-item-title class="text-body-2">
+          {{ status.name }}
+        </v-list-item-title>
+      </v-list-item>
+    </v-list>
+  </v-menu>
 </template>
 <style scoped>
 .status-icon {
