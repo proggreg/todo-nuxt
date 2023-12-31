@@ -1,11 +1,18 @@
 <script setup lang="ts">
-const { statuses } = useSettingsStore()
+const { statuses } = useSettingsStore() 
+const store = useListsStore()
 const statusProps = defineProps<{todo: Todo}>()
 function getStatusColor (todoStatus: string) {
   const status = statuses.filter(status => status.name === todoStatus)
   if (status.length > 0) {
     return status[0].color
   }
+}
+
+const updateStatus = (status: string) => {
+  const updatedTodo = statusProps.todo
+  updatedTodo.status = status
+  store.updateTodo(updatedTodo)
 }
 
 </script>
@@ -26,6 +33,7 @@ function getStatusColor (todoStatus: string) {
         v-for="(status, index) in statuses"
         :key="index"
         :value="status.name"
+        @click="updateStatus(status.name)"
       >
         <template #prepend>
           <v-btn
