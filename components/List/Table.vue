@@ -13,13 +13,17 @@ const headers = [
   { title: "Description", key: "desc", sortable: true },
   { title: "Date", key: "dueDate", sortable: true },
   { title: "", key: "actions", sortable: false },
+  { title: "Status", key: "status", sortable: true, sort: (a, b) => {
+      return statuses.findIndex(status => status.name === a) - statuses.findIndex(status => status.name === b)
+    }
+  }, 
 ];
 
 const group = ref([
   {
     key: "status",
-    order: false,
-    title: "Status",
+    order: true, 
+    title: "Status"
   },
 ]);
 
@@ -100,9 +104,9 @@ async function createTodo(status: string) {
       </v-toolbar>
     </template>
 
-    <template #headers="{ sortBy, columns }" />
+    <template #headers="{ }" />
 
-    <template #body="{ headers, columns, groupedItems, toggleGroup, isGroupOpen, sortBy, toggleSort }">
+    <template #body="{ columns, groupedItems, toggleGroup, isGroupOpen, sortBy, toggleSort }">
       <template
         v-for="groupItem in groupedItems"
         :key="groupItem.key"
