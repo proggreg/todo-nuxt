@@ -1,4 +1,8 @@
-# Nuxt Example
+# Tickup
+
+A simple Todo app that has been inspired by Clickup and Ticktick.
+
+Built with Nuxt 3, Vuetify and MongoDB. 
 
 Deploy your [Nuxt](https://nuxt.com) project to Vercel with zero configuration.
 

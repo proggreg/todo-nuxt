@@ -2,12 +2,7 @@
 // const date = useDate()
 const emit = defineEmits(['setDate'])
 const open = ref(false)
-const dueDateProps = defineProps<{todoDueDate?: Date | string, todo: Todo, showDetail?: boolean}>()
-const dueDate = ref([''])
-
-watch(dueDate, (dueDate) => {
-  emit('setDate', dueDate, dueDateProps.todo)
-})
+const dueDateProps = defineProps<{ todoDueDate?: Date | string, todo: Todo, showDetail?: boolean }>()
 
 const formattedDate = computed(() => {
   if (dueDateProps.todoDueDate) {
@@ -15,35 +10,22 @@ const formattedDate = computed(() => {
   }
 })
 
-// TODO updateDueDate
-// eslint-disable-next-line @typescript-eslint/no-unused-vars
-function updateDueDate (newDate: Date, todo: Todo) {
-  todo.dueDate = newDate
-  $fetch(`/api/list/todo/${todo._id}`, {
-    method: 'PUT',
-    body: todo
-  })
+function updateDueDate(newDate: Date) {
+  const newTodo = Object.assign({}, dueDateProps.todo, { dueDate: newDate })
+  emit('setDate', newDate, newTodo)
 }
 
 </script>
 <template>
   <v-menu :close-on-content-click="false" :model-value="open">
-    <template #activator="{props}">
-      <v-text-field
-        v-if="dueDateProps.showDetail"
-        v-bind="props"
-        style="min-width: 160px"
-        placeholder="date"
-        class="text-h6"
-        :value="formattedDate"
-        append-icon="mdi-calendar"
-        hide-details
-        @click="open = !open"
-      />
+    <template #activator="{ props }">
+      <v-text-field v-if="dueDateProps.showDetail" v-bind="props" style="min-width: 160px" placeholder="date"
+        class="text-h6" :value="formattedDate" append-icon="mdi-calendar" hide-details @click="open = !open" />
       <v-btn v-else v-bind="props" icon="mdi-calendar" variant="text" @click="open = !open" />
     </template>
     <v-list>
-      <v-date-picker v-model="dueDate" rounded="lg" @click:save="open = !open" @click:cancel="open = !open" />
+      <v-date-picker rounded="lg" @update:model-value="(val: Date) => updateDueDate(val)" @click:save="open = !open"
+        @click:cancel="open = !open" />
     </v-list>
   </v-menu>
 </template>

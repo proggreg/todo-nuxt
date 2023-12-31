@@ -9,11 +9,11 @@ const newTodo = ref<Todo>({
 })
 const emit = defineEmits(['newTodo'])
 
-async function addTodo () {
+async function addTodo () { 
   newTodo.value.list_id = props.listId
-
-  await listsStore.addTodo(newTodo)
-  console.log('add to do')
+  console.log('add to do', newTodo.value)
+  await listsStore.addTodo(newTodo.value)
+  
   emit('newTodo', newTodo)
 
   newTodo.value.name = ''
@@ -22,7 +22,10 @@ async function addTodo () {
 
 </script>
 <template>
-  <v-row v-if="listsStore.currentList" no-gutters>
+  <v-row
+    v-if="listsStore.currentList"
+    no-gutters
+  >
     <v-col cols="12">
       <v-text-field
         v-if="listsStore.currentList"
@@ -34,9 +37,19 @@ async function addTodo () {
         @keyup.enter="addTodo"
       >
         <template #append-inner>
-          <AppDueDate :todo="newTodo" :date="newTodo.dueDate" @set-date="(newDate: Date) => newTodo.dueDate = newDate" />
+          <AppDueDate
+            :todo="newTodo"
+            :date="newTodo.dueDate"
+            @set-date="(newDate: Date) => newTodo.dueDate = newDate"
+          />
 
-          <v-btn :disabled="!newTodo.name" rounded="lg" variant="text" icon="mdi-plus" @click="addTodo" />
+          <v-btn
+            :disabled="!newTodo.name"
+            rounded="lg"
+            variant="text"
+            icon="mdi-plus"
+            @click="addTodo"
+          />
         </template>
       </v-text-field>
       <slot />
