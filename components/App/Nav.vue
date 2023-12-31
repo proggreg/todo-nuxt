@@ -29,12 +29,7 @@ function closeDrawer () {
           mdi-format-list-bulleted
         </v-icon>
       </v-btn>
-
-      <app-profile />
     </template>
-
-    <!-- <AppSearch /> -->
-    <!-- <v-spacer /> -->
 
     <template #append>
       <AppDarkMode />
