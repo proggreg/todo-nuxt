@@ -18,7 +18,7 @@ const headers = [
 const group = ref([
   {
     key: "status",
-    order: true,
+    order: false,
     title: "Status",
   },
 ]);
