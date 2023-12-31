@@ -4,7 +4,7 @@ const { statuses } = useSettingsStore();
 const props = defineProps<{ list_id: string }>();
 const newTodo = ref(null)
 const dialog = ref(false);
-const newTodoVariant = ref("text");
+const newTodoVariant = ref<'text' | 'outlined'>("text");
 const openNewTodo = ref('');
 const newTodoTitle = ref("");
 
@@ -22,8 +22,6 @@ const group = ref([
     title: "Status",
   },
 ]);
-
-
 
 function showModal(todo: any) {
   store.setCurrentTodo(todo.raw);
@@ -85,8 +83,16 @@ async function createTodo(status: string) {
 </script>
 
 <template>
-  <v-data-table :headers="headers" :items="store.currentList.todos" :group-by="group" multi-sort hover show-expand
-    item-value="_id" items-per-page="-1">
+  <v-data-table
+    :headers="headers"
+    :items="store.currentList.todos"
+    :group-by="group"
+    multi-sort
+    hover
+    show-expand
+    item-value="_id"
+    items-per-page="-1"
+  >
     <template #top>
       <v-toolbar flat>
         <v-toolbar-title :text="store.currentList.name" />
@@ -97,40 +103,79 @@ async function createTodo(status: string) {
     <template #headers="{ sortBy, columns }" />
 
     <template #body="{ headers, columns, groupedItems, toggleGroup, isGroupOpen, sortBy, toggleSort }">
-
-      <template v-for="groupItem in groupedItems" :key="groupItem.key">
+      <template
+        v-for="groupItem in groupedItems"
+        :key="groupItem.key"
+      >
         <tr v-if="groupItem.key === 'status'">
           <th :colspan="columns.length">
-            <v-btn size="x-small" :color="getStatusColor(groupItem.value)" variant="tonal" :text="groupItem.value"
-              @click="toggleGroup(groupItem)" />
+            <VBtn
+              size="small"
+              variant="text"
+              :icon="isGroupOpen(groupItem) ? '$expand' : '$next'"
+              @click="toggleGroup(groupItem)"
+            />
+            <VBtn
+              size="x-small"
+              :color="getStatusColor(groupItem.value)"
+              variant="tonal"
+              :text="groupItem.value"
+              @click="toggleGroup(groupItem)"
+            />
           </th>
         </tr>
         <template v-if="isGroupOpen(groupItem)">
-
           <tr>
-
-
-            <template v-for="column in columns" :key="column.key">
+            <template
+              v-for="column in columns"
+              :key="column.key"
+            >
               <v-hover v-if="column.key !== 'data-table-group' && column.key !== 'data-table-expand'">
-                <template v-slot:default="{ isHovering, props }">
-                  <th @click="toggleSort(column)" :style="isHovering ? 'cursor: pointer' : ''" v-bind="props" colspan="1">
+                <template #default="{ isHovering, props }">
+                  <th
+                    :style="isHovering ? 'cursor: pointer' : ''"
+                    v-bind="props"
+                    colspan="1"
+                    @click="toggleSort(column)"
+                  >
                     {{ column.title }}
 
-                    <v-icon v-if="isHovering && !isSorted(sortBy, column)">mdi-arrow-up-down</v-icon>
+                    <v-icon v-if="isHovering && !isSorted(sortBy, column)">
+                      mdi-arrow-up-down
+                    </v-icon>
 
-                    <template v-for="sort in sortBy" :key="sort.key">
-                      <v-icon v-if="sort.key === column.key && sort.order === 'asc'">mdi-arrow-up</v-icon>
-                      <v-icon v-if="sort.key === column.key && sort.order === 'desc'">mdi-arrow-down</v-icon>
+                    <template
+                      v-for="sort in sortBy"
+                      :key="sort.key"
+                    >
+                      <v-icon v-if="sort.key === column.key && sort.order === 'asc'">
+                        mdi-arrow-up
+                      </v-icon>
+                      <v-icon v-if="sort.key === column.key && sort.order === 'desc'">
+                        mdi-arrow-down
+                      </v-icon>
                     </template>
-                    <div v-if="isSortedIndex(sortBy, column)" class="v-data-table-header__sort-badge">{{
-                      isSortedIndex(sortBy, column) }}</div>
+                    <div
+                      v-if="isSortedIndex(sortBy, column)"
+                      class="v-data-table-header__sort-badge"
+                    >
+                      {{
+                        isSortedIndex(sortBy, column) }}
+                    </div>
                   </th>
                 </template>
               </v-hover>
             </template>
           </tr>
-          <tr v-for="item in groupItem.items" :key="item.key" @click="showModal(item)">
-            <template v-for="column in columns" :key="column.key">
+          <tr
+            v-for="item in groupItem.items"
+            :key="item.key"
+            @click="showModal(item)"
+          >
+            <template
+              v-for="column in columns"
+              :key="column.key"
+            >
               <template v-if="column.key !== 'data-table-group'">
                 <td v-if="column.key === 'name' || column.key === 'desc'">
                   {{ item.columns[column.key] }}
@@ -139,28 +184,49 @@ async function createTodo(status: string) {
                   {{ formatDate(item.columns[column.key]) }}
                 </td>
                 <td v-else-if="column.key === 'actions'">
-                  <v-btn icon="mdi-delete" variant="text" rounded="lg" elevation="0" small
-                    @click.stop="deleteItem(item)" />
+                  <v-btn
+                    icon="mdi-delete"
+                    variant="text"
+                    rounded="lg"
+                    elevation="0"
+                    small
+                    @click.stop="deleteItem(item)"
+                  />
                 </td>
               </template>
             </template>
           </tr>
-          <AppDialog :open="dialog" @close="dialog = false">
+          <AppDialog
+            :open="dialog"
+            @close="dialog = false"
+          >
             <TodoDetail />
           </AppDialog>
 
           <tr v-if="openNewTodo === '' || openNewTodo !== groupItem.value">
             <td colspan="5">
-              <v-btn :variant="newTodoVariant" size="x-small" elevation="0" @click="openNewTodo = groupItem.value"
-                @mouseover="newTodoVariant = 'outlined'" @mouseleave="newTodoVariant = 'text'">
+              <v-btn
+                :variant="newTodoVariant"
+                size="x-small"
+                elevation="0"
+                @click="openNewTodo = groupItem.value"
+                @mouseover="newTodoVariant = 'outlined'"
+                @mouseleave="newTodoVariant = 'text'"
+              >
                 Add Todo
               </v-btn>
             </td>
           </tr>
           <tr v-else-if="groupItem.value === openNewTodo">
             <td colspan="5">
-              <v-text-field ref="newTodo" v-model="newTodoTitle" variant="plain" placeholder="new todo"
-                @blur="createTodo(groupItem.value)" @keyup.enter="$event.target.blur()" />
+              <v-text-field
+                ref="newTodo"
+                v-model="newTodoTitle"
+                variant="plain"
+                placeholder="new todo"
+                @blur="createTodo(groupItem.value)"
+                @keyup.enter="$event.target.blur()"
+              />
             </td>
           </tr>
         </template>
