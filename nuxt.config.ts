@@ -17,10 +17,7 @@ export default defineNuxtConfig({
     '@nuxt/devtools',
     '@vueuse/nuxt',
     'nuxt-mongoose',
-    'nuxt-vitest',
-    'vuetify-nuxt-module'
-    'nuxt-mongoose',
-    // '@vite-pwa/nuxt',
+    'vuetify-nuxt-module',
     '@nuxtjs/eslint-module'
   ],
 
