@@ -10,7 +10,9 @@ async function selectList (list: List) {
     navOpen.value = false
   }
 }
-
+// onMounted(() => {
+//   listsStore.getLists() // TODO get on server (useFetch)
+// })
 </script>
 
 <template>
