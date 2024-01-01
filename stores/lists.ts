@@ -60,17 +60,18 @@ export const useListsStore = defineStore('lists', {
       if (!this.currentList) { return }
       this.currentList.todos = this.currentList.todos.filter(todo => todo._id !== todoId)
     },
-    setCurrentList (currentList: List) {
-      this.currentList = currentList
+    setListName (newName: string) {
+      this.currentList.name = newName
     },
     setListTodos (todos: Todo[]) {
-      this.currentList.todos = todos
+      this.currentList.todos = todos || []
     },
     async addTodo (newTodo: Todo) {
       const todo = await $fetch<Todo>('/api/list/todo', {
         method: 'POST',
-        body: newTodo.value
+        body: newTodo
       })
+      this.currentList.todos.push(todo)
       return todo
     },
     async getListTodos (listId: string) {
@@ -119,6 +120,24 @@ export const useListsStore = defineStore('lists', {
         body: todo
       })
       this.setCurrentTodo(updatedTodo)
+    },
+    sortByDate (newDirection: string) {
+      this.currentList.todos
+        .sort((a, b) => {
+          const dateA = a.dueDate ? new Date(a.dueDate) : null
+          const dateB = b.dueDate ? new Date(b.dueDate) : null
+
+          if (!dateA && !dateB) {
+            return 0
+          }
+          if (!dateA) {
+            return -1
+          }
+          if (!dateB) { return -1 }
+          const result = dateA - dateB
+
+          return newDirection === 'ascending' ? result : -result
+        })
     }
   }
 })

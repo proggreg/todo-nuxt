@@ -1,11 +1,11 @@
 <script lang="ts" setup>
 const listsStore = useListsStore()
 const { statuses } = useSettingsStore()
+const { smAndDown } = useDisplay()
 const itemProps = defineProps<{
   todos: Todo[],
   status: string
 }>()
-const todos = reactive(itemProps.todos)
 
 const emit = defineEmits(['TodoClicked', 'updateTodos'])
 
@@ -24,6 +24,7 @@ function editTodo (todo: Todo, status: Status) {
 function deleteTodo (todo: Todo) {
   if (todo._id) {
     listsStore.deleteTodo(todo._id)
+    emit('updateTodos')
   }
 }
 
@@ -63,7 +64,7 @@ function deleteTodo (todo: Todo) {
         </v-list-item-title>
 
         <template #append>
-          <AppDueDate :date="todo.dueDate" />
+          <AppDueDate :todo="todo" :todo-due-date="todo.dueDate" :show-detail="!smAndDown" />
 
           <v-list-item-action end>
             <v-btn
@@ -71,7 +72,7 @@ function deleteTodo (todo: Todo) {
               size="x-small"
               rounded="lg"
               icon="mdi-delete"
-              @click="deleteTodo(todo)"
+              @click.stop="deleteTodo(todo)"
             />
           </v-list-item-action>
         </template>

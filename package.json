@@ -34,17 +34,16 @@
     "playwright-core": "^1.40.1",
     "prettier": "^3.0.3",
     "typescript": "^5.0.4",
-    "vitest": "^1.1.1",
-    "vuetify-nuxt-module": "^0.7.1"
+    "vitest": "0.34.6",
+    "vuetify-nuxt-module": "^0.7.3"
   },
   "dependencies": {
-    "@invictus.codes/nuxt-vuetify": "^0.3.0",
     "@pinia/nuxt": "^0.5.1",
     "@vite-pwa/nuxt": "^0.1.1",
     "@vuepic/vue-datepicker": "^7.0.0",
     "mongoose": "^7.5.0",
     "nuxt-mongoose": "^1.0.2",
     "nuxt-time": "^0.1.1",
-    "pinia": "^2.1.4"
+    "pinia": "^2.1.7"
   }
 }

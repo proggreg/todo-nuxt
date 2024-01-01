@@ -1,15 +1,18 @@
 <script setup lang="ts">
 const listsStore = useListsStore()
 
-function updateDueDate (newDate: Date) {
+function updateDueDate(newDate: Date) {
+  console.log('updateDueDate', newDate)
   listsStore.currentTodo.dueDate = newDate
   listsStore.updateTodo(listsStore.currentTodo)
 }
-function updateName () {
-  listsStore.updateTodo(listsStore.currentTodo)
+function updateName() {
+  if (listsStore.currentTodo.name) {
+    listsStore.updateTodo(listsStore.currentTodo)
+  }
 }
 
-function updateDesc () {
+function updateDesc() {
   listsStore.currentTodo.desc = desc.value
   listsStore.updateTodo(listsStore.currentTodo)
 }
@@ -23,21 +26,14 @@ const desc = ref(listsStore.currentTodo.desc)
       <TodoStatus />
     </template>
     <template #append>
-      <AppDueDate :date="listsStore.currentTodo.dueDate" :todo="listsStore.currentTodo" :show-detail="true" @set-date="updateDueDate" />
+      <AppDueDate :todo-due-date="listsStore.currentTodo.dueDate" :todo="listsStore.currentTodo" :show-detail="true"
+        @set-date="updateDueDate" />
     </template>
     <v-card-title>
-      <v-text-field
-        v-model="listsStore.currentTodo.name"
-        @blur="updateName"
-      />
+      <v-text-field v-model="listsStore.currentTodo.name" @blur="updateName" />
     </v-card-title>
     <v-card-item>
-      <v-textarea
-        v-model="desc"
-        label="description"
-        variant="solo-inverted"
-        @blur="updateDesc"
-      />
+      <v-textarea v-model="desc" label="description" variant="solo-inverted" @blur="updateDesc" />
     </v-card-item>
 
     <v-card-actions>
@@ -57,6 +53,7 @@ const desc = ref(listsStore.currentTodo.desc)
 .v-file-input {
   flex-grow: 0;
 }
+
 :deep(.v-file-input .v-input__control) {
   display: none;
 }
